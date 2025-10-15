@@ -70,4 +70,7 @@ Debe integrarse con servicios de videollamada y con los sistemas de historia cl�
 
 - Algoritmo de asignación de citas según prioridad médica.
 - Módulo de facturación automática por sesión.
-- Panel de gestión de listas de espera y redistribución de
+- Panel de gestión de listas de espera y redistribución de citas.
+- Análisis de datos para predecir cancelaciones y _no-shows_.
+
+  

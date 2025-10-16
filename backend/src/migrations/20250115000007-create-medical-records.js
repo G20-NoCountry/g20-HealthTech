@@ -34,7 +34,7 @@ module.exports = {
         allowNull: false,
       },
       content: {
-        type: Sequelize.JSON,
+        type: Sequelize.TEXT("long"),
         allowNull: false,
       },
       created_at: {

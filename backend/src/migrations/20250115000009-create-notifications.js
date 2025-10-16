@@ -39,7 +39,7 @@ module.exports = {
         defaultValue: "queued",
       },
       payload: {
-        type: Sequelize.JSON,
+        type: Sequelize.TEXT("long"),
         allowNull: false,
       },
       created_at: {

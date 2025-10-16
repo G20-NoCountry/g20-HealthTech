@@ -6,7 +6,7 @@ interface MedicalRecordAttributes {
   patient_id: number;
   doctor_id: number;
   record_type: string;
-  content: object;
+  content: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -25,7 +25,7 @@ class MedicalRecord
   public patient_id!: number;
   public doctor_id!: number;
   public record_type!: string;
-  public content!: object;
+  public content!: string;
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -62,7 +62,7 @@ MedicalRecord.init(
       allowNull: false,
     },
     content: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT("long"),
       allowNull: false,
     },
     created_at: {

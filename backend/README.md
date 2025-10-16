@@ -102,6 +102,11 @@ Se crean las siguientes tablas:
 - Las teleconsultas pertenecen a las citas
 - Las notificaciones pertenecen a Usuarios y opcionalmente a Citas
 
+## Importante!
+
+`medical_records.content` tiene tipo de dato `TEXT('long')` originalmente erá `JSON`, lo mismo para `notifications.payload`.
+Cuando trabajen con estos datos , simplemente usen JSON.parse() para convertir las cadenas de vuelta a objetos JavaScript.
+
 ## Desarrollo
 
 Cuando se ejecuta en modo desarrollo (`NODE_ENV=development`), la base de datos sincronizará automáticamente los modelos con el esquema de la base de datos. Esto es útil para el desarrollo, pero no debe utilizarse en producción.

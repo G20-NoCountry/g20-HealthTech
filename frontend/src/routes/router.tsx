@@ -1,14 +1,13 @@
-import type { FC } from "react";
 import { RouterLayout } from './common/RouterLayout.tsx';
 import { Route, Routes } from 'react-router';
-import { Login } from '../pages/Login/Login.tsx';
+import { LoginPage } from '../pages/LoginPage.tsx';
 
 
-export const AppRouter: FC = () => {
+export const AppRouter= () => {
   return (
     <Routes>
       <Route path="/" element={<RouterLayout />}>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
       </Route>
     </Routes>
   );

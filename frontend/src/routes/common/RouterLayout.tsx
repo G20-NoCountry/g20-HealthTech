@@ -1,11 +1,9 @@
-import type { FC } from 'react';
 import { Outlet } from 'react-router';
 
-export const RouterLayout: FC = () => {
+export const RouterLayout = () => {
   return (
-    <div>
-      {/* Aquí podrías agregar un header o sidebar si luego lo necesitas */}
-      <Outlet />
+    <div className="h-full w-full">
+      <Outlet /> {/* 👈 aquí se renderiza tu Login */}
     </div>
   );
 };

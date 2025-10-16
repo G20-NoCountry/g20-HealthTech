@@ -8,4 +8,6 @@ export interface Medic {
   especialidad: string;
   matricula: number;
   telefono: number;
+  schedule_from: Date;
+  schedule_to: Date;
 }

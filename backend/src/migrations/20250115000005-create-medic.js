@@ -33,6 +33,14 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      schedule_from: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      schedule_to: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -14,12 +14,17 @@ interface MedicAttributes {
     | "psiquiatria"
     | "medicina_general";
   licence_num: number;
+  schedule_from: Date;
+  schedule_to: Date;
   created_at: Date;
   updated_at: Date;
 }
 
 interface MedicCreationAttributes
-  extends Optional<MedicAttributes, "id" | "created_at" | "updated_at"> {}
+  extends Optional<
+    MedicAttributes,
+    "id" | "schedule_from" | "schedule_to" | "created_at" | "updated_at"
+  > {}
 
 class Medic
   extends Model<MedicAttributes, MedicCreationAttributes>
@@ -37,6 +42,8 @@ class Medic
     | "psiquiatria"
     | "medicina_general";
   public licence_num!: number;
+  public schedule_from!: Date;
+  public schedule_to!: Date;
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -74,6 +81,14 @@ Medic.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,
+    },
+    schedule_from: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    schedule_to: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,

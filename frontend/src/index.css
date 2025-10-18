@@ -3,3 +3,10 @@
 body {
   background-color: #FDF5FF;
 }
+@theme {
+    --color-main: #fcf8fc;
+    --color-form: #f5eaf7;
+    --color-button-primary: #eabaff;
+}
+
+

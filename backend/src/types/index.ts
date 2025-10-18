@@ -1,11 +1,10 @@
-export interface Medic {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  gender: string;
-  image: string;
-  especialidad: string;
-  matricula: number;
-  telefono: number;
-}
+export type Specialities =
+    | "oftalmologia"
+    | "cardiologia"
+    | "neurologia"
+    | "dermatologia"
+    | "pediatria"
+    | "ginecologia"
+    | "traumatologia"
+    | "psiquiatria"
+    | "medicina_general";

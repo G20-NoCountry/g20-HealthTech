@@ -4,7 +4,18 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/app.js",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "db:migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
+    "db:seed": "npx sequelize-cli db:seed:all",
+    "db:seed:undo": "npx sequelize-cli db:seed:undo:all",
+    "seed": "npm run db:seed",
+    "seed:demo": "node scripts/seed-demo-data.js",
+    "db:create": "npx sequelize-cli db:create",
+    "db:drop": "npx sequelize-cli db:drop"
   },
   "keywords": [],
   "author": "",
@@ -22,9 +33,11 @@
     "express-session": "^1.18.2",
     "express-validator": "^7.2.1",
     "morgan": "^1.10.0",
+    "mysql2": "^3.15.2",
     "nodemon": "^3.1.10",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "sequelize": "^6.37.7",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -33,7 +46,9 @@
     "@types/node": "^24.0.13",
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
+    "@types/sequelize": "^4.28.20",
     "nodemon": "^3.1.10",
+    "sequelize-cli": "^6.6.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

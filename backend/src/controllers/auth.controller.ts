@@ -1,23 +1,22 @@
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { UserService } from "../services/user.service";
+import { RegisterUserDto } from "../dto/user/registerUser.dto";
+import { User } from "../models";
 
 export class AuthController {
 
+    private userService: UserService;
+
+    constructor() {
+        this.userService = new UserService;
+    }
+
     public login = async (request: Request, response: Response) => {
         try {
-            const errors = validationResult(request);
-            if (!errors.isEmpty()) {
-                console.log(errors.array());
-                
-                return response.status(400).json({
-                    errors: errors.array()
-                });
-            }
-
             return response.status(200).json({
                 success: true,
                 message: 'Inicio de sesión exitoso!',
-                data: {},
+                data: null,
             });
         } catch (error: any) {
             return response.status(500).json({
@@ -30,20 +29,24 @@ export class AuthController {
 
     public register = async (request: Request, response: Response) => {
         try {
-            const dto = new Object();
+            const body = request.body;
+            const user = await this.userService.registerUser(new RegisterUserDto(
+                body.first_name, body.last_name, body.email, body.password, body.role_id, body.phone ?? null, body.data
+            ));
+
+            if (!user) {
+                throw new Error("No se registro el usuario");
+            }
 
             return response.status(200).json({
                 success: true,
-                message: 'Login exitoso!',
-                data: {
-                    user: request.user,
-                },
+                message: 'Registro exitoso!',
+                data: user,
             });
         } catch (error: any) {
-            console.log(error);
             return response.status(500).json({
                 success: false,
-                message: "Error al iniciar sesión!",
+                message: "Ocurrió un error al registrar!",
                 data: null,
             });
         }
@@ -51,14 +54,16 @@ export class AuthController {
 
     public user = async (request: Request, response: Response) => {
         try {
-            if (!request.user) {
+            const user = request.user;
+            if (!user) {
                 throw new Error();
             }
+
             return response.status(200).json({
                 success: true,
                 message: 'Usuario encontrado!',
                 data: {
-                    user: request.user,
+                    user: user,
                 },
             });
         } catch (error: any) {
@@ -74,10 +79,9 @@ export class AuthController {
     public logout = async (request: Request, response: Response) => {
         try {
             request.logout(err => {
-                // if (err) return next(err);
                 request.session.destroy(err => {
                     if (err) {
-                        return response.status(200).json({
+                        return response.status(500).json({
                             success: true,
                             message: "Error al cerrar sesión!",
                         });
@@ -85,7 +89,7 @@ export class AuthController {
                     response.clearCookie('connect.sid');
                     return response.status(204).json({
                         success: true,
-                        message: 'Sesión eliminada correctamente',
+                        message: 'Cierre de sesión exitoso',
                         data: null,
                     });
                 });

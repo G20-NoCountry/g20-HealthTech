@@ -1,6 +1,7 @@
 import session from "express-session";
 import { env } from "process";
 import dotenv from "dotenv";
+import { appConfig } from "./app.config";
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ export const sessionConfig = session(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            secure: env.APP_ENV == "local" ? false : true,
+            secure: appConfig.nodeEnv == "development" ? false : true,
             httpOnly: true,
             sameSite: 'strict'
         }

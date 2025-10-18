@@ -1,6 +1,6 @@
-import { env } from "process";
-import cors from "cors";
+import { appConfig } from "../config/app.config";
 
-export const corsConfig = cors({
-
-});
+export const corsConfig = {
+    origin: appConfig.frontendUrl,
+    credentials: true,
+};

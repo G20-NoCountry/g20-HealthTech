@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 export function isNotAuthenticated(req: Request, res: Response, next: NextFunction) {
-  if (!req.isAuthenticated()) {    
+  if (req.isUnauthenticated()) {    
     return next();
   }
 

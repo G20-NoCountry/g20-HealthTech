@@ -16,7 +16,7 @@ export const AppointmentStep1=  ({ onNext }: Step1Props) => {
   return (
     <div className="min-h-screen w-full  p-4 flex items-center justify-center">
       
-      <div className="w-full h-full max-w-6xl rounded-3xl border border-[#AFAAAA] shadow-lg  p-8 md:p-12 space-y-6 overflow-y-auto">
+      <div className="w-full max-w-6xl rounded-3xl border border-[#AFAAAA] shadow-lg  p-8 md:p-12 space-y-6 overflow-y-auto">
         
         <AppointmentHeader />
         <AppointmentStepper currentStep={1} />

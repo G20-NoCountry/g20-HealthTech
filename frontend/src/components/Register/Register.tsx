@@ -3,16 +3,72 @@ import type { SubmitHandler, FieldError, UseFormRegister, Path } from 'react-hoo
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
+
+const isValidDate = (dateString: string): boolean => {
+  const parts = dateString.split('/');
+  if (parts.length !== 3) return false;
+
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
+
+
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+
+
+  const date = new Date(year, month - 1, day);
+
+
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+};
+
+const passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
+
+const nameRegex = new RegExp("^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$");
+
 const userTypes = ['Doctor', 'Paciente'] as const;
 
 const registrationSchema = z.object({
-  nombreCompleto: z.string().min(3, 'El nombre completo es requerido.'),
-  fechaNacimiento: z.string().regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Formato DD/MM/AAAA requerido.'),
-  direccion: z.string().min(5, 'La dirección es requerida.'),
-  telefono: z.string().regex(/^\d+$/, 'El teléfono debe contener solo números.'),
-  obraSocialParticular: z.string().min(1, 'El campo de Obra Social es requerido.'),
-  email: z.string().email('Email inválido.').min(1, 'El email es requerido.'),
-  contrasena: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres.'),
+
+  nombreCompleto: z.string()
+    .trim()
+    .min(3, 'El nombre completo debe tener al menos 3 caracteres.')
+    .regex(nameRegex, 'El nombre solo puede contener letras y espacios.'),
+
+
+  fechaNacimiento: z.string()
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Formato DD/MM/AAAA requerido.')
+    .refine(isValidDate, { message: 'Fecha inválida o imposible.' }),
+
+
+  direccion: z.string()
+    .trim()
+    .min(5, 'La dirección es requerida.'),
+
+
+  telefono: z.string()
+    .min(7, 'Mínimo 7 dígitos.')
+    .max(15, 'Máximo 15 dígitos.')
+    .regex(/^\d+$/, 'El teléfono debe contener solo números.'),
+
+
+  obraSocialParticular: z.string()
+    .trim()
+    .min(1, 'El campo de Obra Social es requerido.'),
+
+  email: z.string()
+    .trim()
+    .email('Email inválido.')
+    .min(1, 'El email es requerido.'),
+
+  contrasena: z.string()
+    .min(8, 'Mínimo 8 caracteres.')
+    .regex(passwordRegex, 'Debe incluir Mayúscula, Minúscula, Número y Carácter especial (!@#$%^&*).'),
+
   tipoUsuario: z.enum(userTypes, 'Debe seleccionar un tipo de usuario.'),
 });
 
@@ -64,7 +120,6 @@ export const RegistrationForm = () => {
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log('Formulario de REGISTRO enviado con éxito:', data);
-
     alert(`Registro Exitoso! Tipo de Usuario: ${data.tipoUsuario}`);
   };
 

@@ -2,7 +2,7 @@ import express from "express";
 import { appConfig } from "./config/app.config";
 import { sessionConfig } from "./config/session.config";
 import { passportConfig } from "./config/passport.config";
-import authRoutes from "./routes/auth.routes";
+import router from "./routes/index";
 import cors from "cors";
 import dotenv from "dotenv";
 import { corsConfig } from "./config/cors.config";
@@ -51,7 +51,7 @@ const startServer = async () => {
   });
 };
 
-app.use('/api/auth', authRoutes);
+app.use('/api', router);
 
 startServer().catch((error) => {
   console.error("❌ Failed to start server:", error);

@@ -1,21 +1,23 @@
+import { hashSync } from "bcrypt";
 import { RegisterMedicDto } from "../dto/user/registerMedic.dto";
 import { RegisterPatientDto } from "../dto/user/registerPatient.dto";
-import { MedicData, PatientData, RegisterUserDto } from "../dto/user/registerUser.dto";
+import { RegisterUserDto } from "../dto/user/registerUser.dto";
 import { Medic, Patient, Role, User } from "../models";
 
 export class UserService {
 
-    public async registerUser(dto: RegisterUserDto) {
+    public async registerUser(dto: RegisterPatientDto | RegisterMedicDto) {
         try {
-            const newUser = this.createUser(dto);
-            await newUser.save();
-            const role = await Role.findOne({ where: { id: dto.role_id } });
-            if (role) {
-                const newUserByRole = this.createUserByRole(newUser.id, role.rol, dto.data);
-                if (!newUserByRole) {
-                    throw new Error("error de registro");
+            const newUser = await this.createUser(dto);
+            if (newUser) {
+                const role = await Role.findOne({ where: { id: dto.role_id } });
+                if (role) {
+                    const newUserByRole = this.createUserByRole(newUser.id, dto);
+                    if (!newUserByRole) {
+                        throw new Error("Error en registro");
+                    }
+                    return newUserByRole;
                 }
-                return newUserByRole;
             }
             return newUser;
         } catch (error: any) {
@@ -23,29 +25,19 @@ export class UserService {
         }
     }
 
-    private createUserByRole(userId: number, rolName: string, data: PatientData | MedicData) {
-        if (rolName == "patient") {
-            const patientData = data as PatientData;
-            const newPatient = this.createPatient(new RegisterPatientDto(
-                userId,
-                patientData.id_health_insurance,
-                patientData.location
-            ));
+    private createUserByRole(userId: number, dto: RegisterMedicDto | RegisterPatientDto) {
+        if ("id_health_insurance" in dto) {
+            dto.patient_id = userId;
+            const newPatient = this.createPatient(dto);
             return newPatient;
         }
-
-        const medicData = data as MedicData;
-        const newMedic = this.createMedic(new RegisterMedicDto(
-            userId,
-            medicData.speciality,
-            medicData.license_num,
-            medicData.schedule_from,
-            medicData.schedule_to,
-        ));
+        dto.medic_id = userId;
+        const newMedic = this.createMedic(dto);
         return newMedic;
     }
 
-    private createUser(dto: RegisterUserDto): User {
+    private async createUser(dto: RegisterUserDto) {
+        dto.password = hashSync(dto.password, 10);
         const user: User = User.build({
             first_name: dto.first_name,
             last_name: dto.last_name,
@@ -54,6 +46,7 @@ export class UserService {
             role_id: dto.role_id,
             phone: dto.phone ?? null,
         });
+        await user.save();
         return user;
     }
 

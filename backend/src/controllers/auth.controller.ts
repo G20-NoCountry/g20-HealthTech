@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
-import { RegisterUserDto } from "../dto/user/registerUser.dto";
-import { User } from "../models";
+import { RegisterPatientDto } from "../dto/user/registerPatient.dto";
+import { RegisterMedicDto } from "../dto/user/registerMedic.dto";
 
 export class AuthController {
 
@@ -27,18 +27,39 @@ export class AuthController {
         }
     }
 
-    public register = async (request: Request, response: Response) => {
+    public registerPatient = async (request: Request, response: Response) => {
         try {
-            const body = request.body;
-            const user = await this.userService.registerUser(new RegisterUserDto(
-                body.first_name, body.last_name, body.email, body.password, body.role_id, body.phone ?? null, body.data
-            ));
+            const body = request.body as RegisterPatientDto;
+            const user = await this.userService.registerUser(body);
 
             if (!user) {
                 throw new Error("No se registro el usuario");
             }
 
-            return response.status(200).json({
+            return response.status(201).json({
+                success: true,
+                message: 'Registro exitoso!',
+                data: user,
+            });
+        } catch (error: any) {
+            return response.status(500).json({
+                success: false,
+                message: "Ocurrió un error al registrar!",
+                data: null,
+            });
+        }
+    }
+    
+    public registerMedic = async (request: Request, response: Response) => {
+        try {
+            const body = request.body as RegisterMedicDto;
+            const user = await this.userService.registerUser(body);
+
+            if (!user) {
+                throw new Error("No se registro el usuario");
+            }
+
+            return response.status(201).json({
                 success: true,
                 message: 'Registro exitoso!',
                 data: user,

@@ -1,17 +1,17 @@
-import { RouterLayout } from './common/RouterLayout.tsx';
+
 import { Route, Routes } from 'react-router';
-import { AppointmentScheduler } from "../components/appointment-scheduler/AppointmentScheduler.tsx";
 import { LoginPage } from '../pages/LoginPage.tsx';
+import { RegisterPage } from '../pages/RegisterPage.tsx';
+import { RouterLayout } from './common/RouterLayout.tsx';
+import { AppointmentScheduler } from '../components/appointment-scheduler/AppointmentScheduler.tsx';
 
-
-
-export const AppRouter= () => {
+export const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<RouterLayout />}>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/appointment" element={<AppointmentScheduler />} />
-      </Route>
+      <Route path="/" element={<RouterLayout />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/appointment" element={<AppointmentScheduler />} />
+      <Route path="/register" element={<RegisterPage />} />
     </Routes>
   );
 };

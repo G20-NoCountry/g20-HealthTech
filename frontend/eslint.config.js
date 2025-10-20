@@ -1,24 +1,50 @@
-import js from '@eslint/js';
 import globals from 'globals';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import tseslint from 'typescript-eslint';
-import { defineConfig, globalIgnores } from 'eslint/config';
+import { defineConfig } from '@eslint/config-helpers';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+import prettier from 'eslint-config-prettier/flat';
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  {
+    ignores: ['dist'],
+  },
   {
     files: ['**/*.{ts,tsx}'],
+    plugins: {
+      '@typescript-eslint': typescriptEslint,
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+      'react-refresh': reactRefreshPlugin,
+    },
     extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-      'eslint-config-prettier',
+      'eslint:recommended',
+      typescriptEslint.configs.recommended,
+      reactPlugin.configs['jsx-runtime'],
+      reactHooksPlugin.configs.recommended,
+      reactRefreshPlugin.configs.recommended,
     ],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parserOptions: {
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+        // project: './tsconfig.json', // Descomenta si quieres type-aware linting
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-uses-react': 'off',
     },
   },
+  prettier,
 ]);

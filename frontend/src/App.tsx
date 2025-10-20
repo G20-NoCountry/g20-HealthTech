@@ -5,7 +5,7 @@ import { Toast } from 'primereact/toast';
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="bg-primary min-h-dvh w-full p-3 uppercase md:p-10">
+      <div className="bg-primary font-kanit min-h-dvh w-full uppercase">
         <AppRouter />
       </div>
       <Toast />

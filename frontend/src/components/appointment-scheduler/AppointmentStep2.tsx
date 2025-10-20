@@ -100,11 +100,11 @@ export const AppointmentStep2 = ({ onNext, onPrev, data, setData }: Step2Props) 
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FDF5FF] p-4">
-      <div className="flex h-full w-full max-w-6xl flex-col space-y-6 overflow-y-auto rounded-3xl border border-[#AFAAAA] bg-white p-8 shadow-lg md:p-12">
+      <div className="flex h-full w-full max-w-6xl flex-col space-y-6 overflow-y-auto rounded-3xl border border-[#AFAAAA] p-8 shadow-lg md:p-12">
         <AppointmentHeader />
         <AppointmentStepper currentStep={2} />
 
-        <div className="flex flex-grow flex-col gap-8 pt-6 md:flex-row">
+        <div className="flex flex-grow flex-col gap-8 rounded-3xl border border-[#AFAAAA] p-8 pt-6 md:flex-row">
           <div className="flex-1">
             <label className="mb-2 block font-semibold">FECHA</label>
             <div className="w-full">

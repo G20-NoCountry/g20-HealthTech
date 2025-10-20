@@ -14,9 +14,9 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      specialty: {
+      speciality: {
         type: Sequelize.ENUM(
-          "oftamologia",
+          "oftalmologia",
           "cardiologia",
           "neurologia",
           "dermatologia",
@@ -28,7 +28,7 @@ module.exports = {
         ),
         allowNull: false,
       },
-      licence_num: {
+      license_num: {
         type: Sequelize.INTEGER,
         allowNull: false,
         unique: true,

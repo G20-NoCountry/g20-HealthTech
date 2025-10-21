@@ -40,14 +40,14 @@ export default function SidebarNav() {
               <Ripple />
             </NavLink>
             <NavLink
-              to="/medical-records"
+              to="/clinical-records"
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-folder-open mr-3"></i>
               <span className="font-medium">Historial Médico</span>
               <Ripple />
             </NavLink>
             <NavLink
-              to="/medical-records"
+              to="/payments"
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-credit-card mr-3"></i>
               <span className="font-medium">Pagos</span>

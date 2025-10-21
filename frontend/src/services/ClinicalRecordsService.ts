@@ -1,4 +1,4 @@
-export interface MedicalRecord {
+export interface ClinicalRecord {
   id: number;
   fecha: string;
   medico: { id: string; name: string };
@@ -6,7 +6,7 @@ export interface MedicalRecord {
   diagnostico: { titulo: string; descripcion: string; tratamiento: string };
 }
 
-const mockMedicalRecords: MedicalRecord[] = [
+const mockClinicalRecords: ClinicalRecord[] = [
   {
     id: 1,
     fecha: '2025-10-01',
@@ -75,11 +75,11 @@ const mockMedicalRecords: MedicalRecord[] = [
   },
 ];
 
-export const MedicalRecordsService = {
-  getMedicalRecords(): Promise<MedicalRecord[]> {
+export const ClinicalRecordsService = {
+  getClinicalRecords(): Promise<ClinicalRecord[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(mockMedicalRecords);
+        resolve(mockClinicalRecords);
       }, 500);
     });
   },

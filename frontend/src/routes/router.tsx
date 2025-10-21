@@ -3,7 +3,7 @@ import { RouterLayout } from './common/RouterLayout.tsx';
 import { LoginPage } from '../pages/LoginPage.tsx';
 import { RegisterPage } from '../pages/RegisterPage.tsx';
 import { AppointmentScheduler } from '../components/appointment-scheduler/AppointmentScheduler.tsx';
-import MedicalRecordsPage from '../pages/MedicalRecordsPage.tsx';
+import ClinicalRecordsPage from '../pages/ClinicalRecordsPage.tsx';
 import HomePage from '../pages/HomePage.tsx';
 
 export const AppRouter = () => {
@@ -13,7 +13,7 @@ export const AppRouter = () => {
       <Route path="/" element={<RouterLayout />}>
         <Route index element={<HomePage />} />
         <Route path="appointment" element={<AppointmentScheduler />} />
-        <Route path="medical-records" element={<MedicalRecordsPage />} />
+        <Route path="clinical-records" element={<ClinicalRecordsPage />} />
       </Route>
 
       {/* Rutas sin sidebar */}

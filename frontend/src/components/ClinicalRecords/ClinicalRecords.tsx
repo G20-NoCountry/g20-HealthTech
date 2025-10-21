@@ -8,12 +8,12 @@ import {
 } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
-import { MedicalRecordsService, type MedicalRecord } from '../../services/MedicalRecordsService';
+import { ClinicalRecordsService, type ClinicalRecord } from '../../services/ClinicalRecordsService';
 
-export default function MedicalRecords() {
+export default function ClinicalRecords() {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
+  const [clinicalRecords, setClinicalRecords] = useState<ClinicalRecord[]>([]);
   const [expandedRows, setExpandedRows] = useState<
     DataTableExpandedRows | DataTableValueArray | undefined
   >(undefined);
@@ -47,7 +47,7 @@ export default function MedicalRecords() {
   ];
 
   useEffect(() => {
-    MedicalRecordsService.getMedicalRecords().then((data) => setMedicalRecords(data));
+    ClinicalRecordsService.getClinicalRecords().then((data) => setClinicalRecords(data));
   }, []);
 
   // Aplicar filtros al seleccionar médico
@@ -72,10 +72,10 @@ export default function MedicalRecords() {
   };
 
   const allowExpansion = () => {
-    return medicalRecords!.length > 0;
+    return clinicalRecords!.length > 0;
   };
 
-  const rowExpansionTemplate = (data: MedicalRecord) => {
+  const rowExpansionTemplate = (data: ClinicalRecord) => {
     return (
       <div className="flex flex-col gap-2">
         <p className="text-accent">{data.diagnostico.descripcion}</p>
@@ -120,7 +120,7 @@ export default function MedicalRecords() {
       {/* Tabla */}
       <div className="mt-5">
         <DataTable
-          value={medicalRecords}
+          value={clinicalRecords}
           filters={filters}
           filterDisplay="menu"
           paginator

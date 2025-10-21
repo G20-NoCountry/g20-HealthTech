@@ -1,12 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import 'tailwindcss';
 
-body {
-  background-color: #FDF5FF;
-}
 @theme {
-    --color-main: #fcf8fc;
-    --color-form: #f5eaf7;
-    --color-button-primary: #eabaff;
+  /* Principal */
+  --color-primary: #fdf5ff;
+  /* Secundario */
+  --color-secondary: #f5eaf7;
+  /* Subtitulos, párrafos, días seleccionados */
+  --color-accent: #734f96;
+  /* Trazos */
+  --color-success: #afaaaa;
+  /* Recuadros, sidebar */
+  --color-info: #d6a6f5;
+  /* Fondos suaves como el de la tabla */
+  --color-muted: #fcf8fc;
+  /* Botones principales */
+  --color-button-primary: #eabaff;
+  /* Cuadros, botones, iconos */
+  --color-button-secondary: #e8def8;
+  /* Fuente principal */
+  --font-kanit: 'Kanit', sans-serif;
 }
 
+/** Estilos PrimeReact **/
 
+/* Tablas */
+.p-datatable {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Filas */
+.p-datatable-tbody > tr {
+  background-color: var(--color-muted);
+}
+
+/* Header */
+.p-datatable-thead > tr > th {
+  background-color: var(--color-secondary);
+  color: var(--color-accent);
+}
+
+/* Paginador */
+.p-paginator {
+  background-color: var(--color-secondary);
+  border-radius: 0 0 12px 12px;
+}
+
+.p-paginator .p-paginator-current {
+  color: var(--color-accent);
+}
+
+.p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover {
+  background: var(--color-primary);
+}
+
+/* Dropdown */
+.p-dropdown {
+  border-radius: 1.5rem;
+}

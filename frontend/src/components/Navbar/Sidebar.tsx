@@ -43,7 +43,7 @@ export default function SidebarNav() {
               to="/clinical-records"
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-folder-open mr-3"></i>
-              <span className="font-medium">Historial Médico</span>
+              <span className="font-medium">Historial Clínico</span>
               <Ripple />
             </NavLink>
             <NavLink

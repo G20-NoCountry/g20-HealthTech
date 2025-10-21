@@ -102,5 +102,9 @@ span.p-button-icon.p-c.pi.pi-bars {
 
 /* Imagen avatar */
 .p-avatar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  max-width: 100%;
   object-fit: cover;
 }

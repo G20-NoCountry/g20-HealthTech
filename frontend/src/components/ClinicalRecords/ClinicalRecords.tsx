@@ -13,6 +13,7 @@ import { ClinicalRecordsService, type ClinicalRecord } from '../../services/Clin
 export default function ClinicalRecords() {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
   const [clinicalRecords, setClinicalRecords] = useState<ClinicalRecord[]>([]);
   const [expandedRows, setExpandedRows] = useState<
     DataTableExpandedRows | DataTableValueArray | undefined
@@ -21,6 +22,7 @@ export default function ClinicalRecords() {
   const [filters, setFilters] = useState<DataTableFilterMeta>({
     medico: { value: null, matchMode: FilterMatchMode.EQUALS },
     fecha: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    especialidad: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
 
   const doctor = [
@@ -30,6 +32,7 @@ export default function ClinicalRecords() {
     { id: 'paula-torres', name: 'Dra. Paula Torres' },
     { id: 'julius-hibbert', name: 'Dr. Julius Hibbert' },
     { id: 'nick-rivera', name: 'Dr. Nick Riviera' },
+    { id: 'mariana-salinas', name: 'Dra. Mariana Salinas' },
   ];
   const months = [
     { name: 'Enero', code: '01' },
@@ -44,6 +47,13 @@ export default function ClinicalRecords() {
     { name: 'Octubre', code: '10' },
     { name: 'Noviembre', code: '11' },
     { name: 'Diciembre', code: '12' },
+  ];
+  const specialties = [
+    { id: 'medicina-general', name: 'Medicina General' },
+    { id: 'oftalmologia', name: 'Oftalmología' },
+    { id: 'dermatologia', name: 'Dermatología' },
+    { id: 'pediatria', name: 'Pediatría' },
+    { id: 'cardiologia', name: 'Cardiología' },
   ];
 
   useEffect(() => {
@@ -68,6 +78,15 @@ export default function ClinicalRecords() {
         value: e.value?.code || null,
         matchMode: FilterMatchMode.CONTAINS, // porque la fecha es "2025-10-01"
       },
+    }));
+  };
+
+  // Aplicar filtros al seleccionar especialidad
+  const onSpecialtyChange = (e: DropdownChangeEvent) => {
+    setSelectedSpecialty(e.value);
+    setFilters((prev) => ({
+      ...prev,
+      'especialidad.id': { value: e.value?.id || null, matchMode: FilterMatchMode.EQUALS },
     }));
   };
 
@@ -116,6 +135,19 @@ export default function ClinicalRecords() {
             showClear
           />
         </div>
+        <div className="flex w-full flex-col gap-2 sm:max-w-md">
+          <label htmlFor="specialtyFilter">Filtrar por especialidad</label>
+          <Dropdown
+            inputId="specialtyFilter"
+            value={selectedSpecialty}
+            onChange={onSpecialtyChange}
+            options={specialties}
+            optionLabel="name"
+            placeholder="Todas las especialidades"
+            className="w-full md:w-md"
+            showClear
+          />
+        </div>
       </div>
       {/* Tabla */}
       <div className="mt-5">
@@ -146,7 +178,7 @@ export default function ClinicalRecords() {
             style={{ width: '20%' }}
             filterPlaceholder="Buscar por médico"
           />
-          <Column field="especialidad" header="Especialidad" style={{ width: '23%' }}></Column>
+          <Column field="especialidad.name" header="Especialidad" style={{ width: '23%' }}></Column>
           <Column field="diagnostico.titulo" header="Diagnóstico" style={{ width: '23%' }}></Column>
           <Column expander={allowExpansion} style={{ width: '8' }}></Column>
         </DataTable>

@@ -8,12 +8,13 @@ import {
 } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
-import { MedicalRecordsService, type MedicalRecord } from '../../services/MedicalRecordsService';
+import { ClinicalRecordsService, type ClinicalRecord } from '../../services/ClinicalRecordsService';
 
-export default function MedicalRecords() {
+export default function ClinicalRecords() {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
+  const [clinicalRecords, setClinicalRecords] = useState<ClinicalRecord[]>([]);
   const [expandedRows, setExpandedRows] = useState<
     DataTableExpandedRows | DataTableValueArray | undefined
   >(undefined);
@@ -21,6 +22,7 @@ export default function MedicalRecords() {
   const [filters, setFilters] = useState<DataTableFilterMeta>({
     medico: { value: null, matchMode: FilterMatchMode.EQUALS },
     fecha: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    especialidad: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
 
   const doctor = [
@@ -30,6 +32,7 @@ export default function MedicalRecords() {
     { id: 'paula-torres', name: 'Dra. Paula Torres' },
     { id: 'julius-hibbert', name: 'Dr. Julius Hibbert' },
     { id: 'nick-rivera', name: 'Dr. Nick Riviera' },
+    { id: 'mariana-salinas', name: 'Dra. Mariana Salinas' },
   ];
   const months = [
     { name: 'Enero', code: '01' },
@@ -45,9 +48,16 @@ export default function MedicalRecords() {
     { name: 'Noviembre', code: '11' },
     { name: 'Diciembre', code: '12' },
   ];
+  const specialties = [
+    { id: 'medicina-general', name: 'Medicina General' },
+    { id: 'oftalmologia', name: 'Oftalmología' },
+    { id: 'dermatologia', name: 'Dermatología' },
+    { id: 'pediatria', name: 'Pediatría' },
+    { id: 'cardiologia', name: 'Cardiología' },
+  ];
 
   useEffect(() => {
-    MedicalRecordsService.getMedicalRecords().then((data) => setMedicalRecords(data));
+    ClinicalRecordsService.getClinicalRecords().then((data) => setClinicalRecords(data));
   }, []);
 
   // Aplicar filtros al seleccionar médico
@@ -71,11 +81,20 @@ export default function MedicalRecords() {
     }));
   };
 
-  const allowExpansion = () => {
-    return medicalRecords!.length > 0;
+  // Aplicar filtros al seleccionar especialidad
+  const onSpecialtyChange = (e: DropdownChangeEvent) => {
+    setSelectedSpecialty(e.value);
+    setFilters((prev) => ({
+      ...prev,
+      'especialidad.id': { value: e.value?.id || null, matchMode: FilterMatchMode.EQUALS },
+    }));
   };
 
-  const rowExpansionTemplate = (data: MedicalRecord) => {
+  const allowExpansion = () => {
+    return clinicalRecords!.length > 0;
+  };
+
+  const rowExpansionTemplate = (data: ClinicalRecord) => {
     return (
       <div className="flex flex-col gap-2">
         <p className="text-accent">{data.diagnostico.descripcion}</p>
@@ -116,11 +135,24 @@ export default function MedicalRecords() {
             showClear
           />
         </div>
+        <div className="flex w-full flex-col gap-2 sm:max-w-md">
+          <label htmlFor="specialtyFilter">Filtrar por especialidad</label>
+          <Dropdown
+            inputId="specialtyFilter"
+            value={selectedSpecialty}
+            onChange={onSpecialtyChange}
+            options={specialties}
+            optionLabel="name"
+            placeholder="Todas las especialidades"
+            className="w-full md:w-md"
+            showClear
+          />
+        </div>
       </div>
       {/* Tabla */}
       <div className="mt-5">
         <DataTable
-          value={medicalRecords}
+          value={clinicalRecords}
           filters={filters}
           filterDisplay="menu"
           paginator
@@ -146,7 +178,7 @@ export default function MedicalRecords() {
             style={{ width: '20%' }}
             filterPlaceholder="Buscar por médico"
           />
-          <Column field="especialidad" header="Especialidad" style={{ width: '23%' }}></Column>
+          <Column field="especialidad.name" header="Especialidad" style={{ width: '23%' }}></Column>
           <Column field="diagnostico.titulo" header="Diagnóstico" style={{ width: '23%' }}></Column>
           <Column expander={allowExpansion} style={{ width: '8' }}></Column>
         </DataTable>

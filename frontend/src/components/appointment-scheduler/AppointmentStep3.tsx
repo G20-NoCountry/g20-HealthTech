@@ -31,7 +31,7 @@ export const AppointmentStep3 = ({ onPrev, onConfirm, data }: Step3Props) => {
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FDF5FF] p-4">
-      <div className="flex h-full w-full max-w-6xl flex-col space-y-6 overflow-y-auto rounded-3xl border border-[#AFAAAA] bg-white p-8 shadow-lg md:p-12">
+      <div className="flex h-full w-full max-w-6xl flex-col space-y-6 overflow-y-auto rounded-3xl border border-[#AFAAAA] p-8 shadow-lg md:p-12">
         <AppointmentHeader />
         <AppointmentStepper currentStep={3} />
         <div className="flex flex-grow flex-col items-center justify-center space-y-6 pt-8">

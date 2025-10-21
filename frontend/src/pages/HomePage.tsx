@@ -1,3 +1,3 @@
 export default function HomePage() {
-  return <div>HomePage</div>;
+  return <section className="p-3 md:p-10">HomePage</section>;
 }

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Lemonada&display=swap');
 @import 'tailwindcss';
 
 @theme {
@@ -20,6 +20,8 @@
   --color-button-secondary: #e8def8;
   /* Fuente principal */
   --font-kanit: 'Kanit', sans-serif;
+  /* Fuente logo */
+  --font-lemonada: 'Lemonada', sans-serif;
 }
 
 /** Estilos PrimeReact **/
@@ -61,4 +63,48 @@
 /* Dropdown */
 .p-dropdown {
   border-radius: 1.5rem;
+}
+
+/* Sidebar */
+.p-sidebar {
+  background-color: var(--color-button-secondary);
+  color: black;
+}
+
+/* Menú sidebar */
+.p-button.p-button-icon-only.sidebar-button {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background-color: transparent;
+  color: black;
+  border-color: var(--color-primary);
+}
+.p-button.p-button-icon-only.sidebar-button:hover {
+  background-color: var(--color-button-secondary);
+}
+
+/* Icono menú */
+span.p-button-icon.p-c.pi.pi-bars {
+  font-size: 24px;
+}
+
+/* Button close sidebar */
+.p-sidebar .p-sidebar-header .p-sidebar-close,
+.p-sidebar .p-sidebar-header .p-sidebar-icon {
+  color: black;
+}
+
+.p-sidebar .p-sidebar-header .p-sidebar-close:enabled:hover,
+.p-sidebar .p-sidebar-header .p-sidebar-icon:enabled:hover {
+  background: var(--color-muted);
+}
+
+/* Imagen avatar */
+.p-avatar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  max-width: 100%;
+  object-fit: cover;
 }

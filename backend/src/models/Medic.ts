@@ -3,8 +3,8 @@ import { sequelize } from "../config/database.config";
 
 interface MedicAttributes {
   id: number;
-  specialty:
-    | "oftamologia"
+  speciality:
+    | "oftalmologia"
     | "cardiologia"
     | "neurologia"
     | "dermatologia"
@@ -13,7 +13,7 @@ interface MedicAttributes {
     | "traumatologia"
     | "psiquiatria"
     | "medicina_general";
-  licence_num: number;
+  license_num: number;
   schedule_from: Date;
   schedule_to: Date;
   created_at: Date;
@@ -31,8 +31,8 @@ class Medic
   implements MedicAttributes
 {
   public id!: number;
-  public specialty!:
-    | "oftamologia"
+  public speciality!:
+    | "oftalmologia"
     | "cardiologia"
     | "neurologia"
     | "dermatologia"
@@ -41,7 +41,7 @@ class Medic
     | "traumatologia"
     | "psiquiatria"
     | "medicina_general";
-  public licence_num!: number;
+  public license_num!: number;
   public schedule_from!: Date;
   public schedule_to!: Date;
   public created_at!: Date;
@@ -63,9 +63,9 @@ Medic.init(
         key: "id",
       },
     },
-    specialty: {
+    speciality: {
       type: DataTypes.ENUM(
-        "oftamologia",
+        "oftalmologia",
         "cardiologia",
         "neurologia",
         "dermatologia",
@@ -77,7 +77,7 @@ Medic.init(
       ),
       allowNull: false,
     },
-    licence_num: {
+    license_num: {
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,

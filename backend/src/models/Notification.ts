@@ -7,7 +7,7 @@ interface NotificationAttributes {
   appointment_id?: number;
   type: "email" | "sms";
   status: "queued" | "sent" | "failed";
-  payload: string;
+  payload: object;
   created_at: Date;
   updated_at: Date;
 }
@@ -27,7 +27,7 @@ class Notification
   public appointment_id?: number;
   public type!: "email" | "sms";
   public status!: "queued" | "sent" | "failed";
-  public payload!: string;
+  public payload!: object;
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -69,7 +69,7 @@ Notification.init(
       defaultValue: "queued",
     },
     payload: {
-      type: DataTypes.TEXT("long"),
+      type: DataTypes.JSON,
       allowNull: false,
     },
     created_at: {

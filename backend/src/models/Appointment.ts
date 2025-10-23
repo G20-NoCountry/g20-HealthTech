@@ -6,8 +6,8 @@ interface AppointmentAttributes {
   patient_id: number;
   doctor_id: number;
   start_at: Date;
-  end_at: Date;
-  status: "scheduled" | "confirmed" | "completed" | "cancelled" | "no_show";
+  symptoms: string;
+  diagnostic: string;
   type: "in_person" | "virtual";
   location?: string;
   created_at: Date;
@@ -28,13 +28,8 @@ class Appointment
   public patient_id!: number;
   public doctor_id!: number;
   public start_at!: Date;
-  public end_at!: Date;
-  public status!:
-    | "scheduled"
-    | "confirmed"
-    | "completed"
-    | "cancelled"
-    | "no_show";
+  public symptoms!: string;
+  public diagnostic!: string;
   public type!: "in_person" | "virtual";
   public location?: string;
   public created_at!: Date;
@@ -72,20 +67,13 @@ Appointment.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    end_at: {
-      type: DataTypes.DATE,
+    symptoms: {
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
-    status: {
-      type: DataTypes.ENUM(
-        "scheduled",
-        "confirmed",
-        "completed",
-        "cancelled",
-        "no_show"
-      ),
+    diagnostic: {
+      type: DataTypes.STRING(100),
       allowNull: false,
-      defaultValue: "scheduled",
     },
     type: {
       type: DataTypes.ENUM("in_person", "virtual"),

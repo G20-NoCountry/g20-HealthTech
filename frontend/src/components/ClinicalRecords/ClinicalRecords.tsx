@@ -8,7 +8,8 @@ import {
 } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
-import { ClinicalRecordsService, type ClinicalRecord } from '../../services/ClinicalRecordsService';
+import { ClinicalRecordsService } from '../../services/ClinicalRecordsService';
+import type { ClinicalRecord } from '../../models/clinicalRecords';
 
 export default function ClinicalRecords() {
   const [selectedDoctor, setSelectedDoctor] = useState(null);

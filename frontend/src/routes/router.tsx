@@ -1,12 +1,15 @@
 import { Route, Routes } from 'react-router';
 import { RouterLayout } from './common/RouterLayout.tsx';
 import { LoginPage } from '../pages/LoginPage.tsx';
-import { RegisterPage } from '../pages/RegisterPage.tsx';
-import { AppointmentScheduler } from '../components/appointment-scheduler/AppointmentScheduler.tsx';
+import { RegisterPage } from '../pages/RegisterPage.tsx'
 import ClinicalRecordsPage from '../pages/ClinicalRecordsPage.tsx';
 import HomePage from '../pages/HomePage.tsx';
 import { DoctorDashboardPage } from '../pages/DoctorDashboardPage.tsx';
 import { RouterLayoutMedico } from './common/RoutherLayoutMedico.tsx';
+import { MedicalProfilePage } from '../pages/MedicalProfilePage.tsx';
+import DashboardPage from '../pages/DashboardPage.tsx';
+import AppointmentStepperPage from '../pages/AppointmentStepperPage.tsx';
+import DoctorProfilePage from '../pages/DoctorProfilePage.tsx';
 
 export const AppRouter = () => {
   return (
@@ -14,12 +17,15 @@ export const AppRouter = () => {
       {/* Layout que incluye sidebar */}
       <Route path="/" element={<RouterLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="appointment" element={<AppointmentScheduler />} />
+        <Route path="appointment" element={<AppointmentStepperPage/>} />
         <Route path="clinical-records" element={<ClinicalRecordsPage />} />
+        <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="medical-profile" element={<MedicalProfilePage/>} />
       </Route>
 
       <Route path="/" element={<RouterLayoutMedico />}>
-        <Route path='/dasboardMedico' element={<DoctorDashboardPage />} />
+        <Route path='dasboardMedico' element={<DoctorDashboardPage />} />
+        <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
       </Route>
 
       {/* Rutas sin sidebar */}

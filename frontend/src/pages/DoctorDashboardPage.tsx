@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { AppointmentListItem } from '../components/DasboardMedico/AppointmentListItem';
 import { nextAppointment, stats, todayAppointments } from '../components/DasboardMedico/mockDoctorData';
 import { NextAppointmentCard } from '../components/DasboardMedico/NextAppointmentCard';
@@ -20,7 +21,15 @@ export const DoctorDashboardPage = () => {
         <div className="bg-white/50 p-6 mt-5 rounded-3xl border shadow-lg border-[#AFAAAA] mb-8">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold ">CITAS DE HOY</h3>
-          <button className="rounded-3xl border shadow-lg border-[#AFAAAA] p-2 ">VER AGENDA COMPLETA</button>
+
+          <Link
+              to="/" //AGREGAR RUTA DE AGENDA COMPLETA CUANDO ESTE LISTA
+              className="rounded-3xl border shadow-lg border-[#AFAAAA] p-3 hover:bg-gray-200 transition-colors" 
+            >
+              <i className="pi pi-calendar text-[#734F96]"></i>
+              <span className="p-2">VER AGENDA COMPLETA</span>
+            </Link> 
+                
           </div>
           <div className="max-h-[23rem] overflow-y-auto pr-4 custom-scrollbar">
             <div className="space-y-3">

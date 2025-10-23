@@ -1,9 +1,12 @@
+import { Link } from "react-router";
+
 export interface Appointment {
   id: number;
   time: string;
   patientName: string;
   type: 'Presencial' | 'Virtual';
   status: 'Finalizada' | 'Pendiente';
+  patientId?: string;
 }
 
 interface AppointmentListItemProps {
@@ -27,12 +30,25 @@ export const AppointmentListItem = ({ appointment }: AppointmentListItemProps) =
           <p className="text-sm text-gray-500">{appointment.type}</p>
         </div>
       </div>
+
       <div className="flex gap-2 ">
         {isPending && appointment.type === 'Virtual' && (
-      <button className='bg-[#734F96] text-white rounded-full px-5 py-3 inline-block'>MEET</button>
+          <a
+            href="https://meet.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className='bg-[#734F96] text-white rounded-full px-5 py-3 inline-block hover:bg-[#EABAFF] transition-colors'
+          >
+            MEET
+          </a>
         )}
-      <button className='bg-[#734F96] text-white rounded-full px-5 py-3 inline-block'>VER PERFIL</button>
-      </div>
+        <Link
+          to={`/pacientes/${appointment.patientId || ''}`}
+          className='bg-[#734F96] text-white rounded-full px-5 py-3 inline-block hover:bg-[#EABAFF] transition-colors'
+        >
+          VER PERFIL
+        </Link>      </div>
     </div>
+    
   );
 };

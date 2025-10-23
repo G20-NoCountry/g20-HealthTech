@@ -1,14 +1,13 @@
 import { useNavigate } from "react-router";
 import { nextAppointment } from "./mockDoctorData";
 
-// Definimos la "forma" de los datos que espera este componente
 interface NextAppointment {
   patientName: string;
   reason: string;
   time: string;
   isToday: boolean;
-  meetLink?: string; // Opcional: un link para la videollamada
-  patientId?: string; // Opcional: un ID para ir al perfil
+  meetLink?: string; //  un link para la videollamada
+  patientId?: string; //  un ID para ir al perfil
 }
 
 interface NextAppointmentCardProps {
@@ -16,22 +15,16 @@ interface NextAppointmentCardProps {
 }
 
 export const NextAppointmentCard = ({ appointment }: NextAppointmentCardProps) => {
-  // 2. Usamos el hook de navegación
   const navigate = useNavigate();
-
-  // --- FUNCIONES PARA LOS BOTONES ---
-
-
   // Botón "Ver Perfil"
   const handleVerPerfil = () => {
-    // Navegamos a la ruta del perfil del paciente.
-    // El ID del paciente vendría en los datos del turno.
     if (appointment.patientId) {
       navigate(`/pacientes/${appointment.patientId}`);
     } else {
       alert('ID del paciente no encontrado.');
     }
   };
+
   return (
     <div className="bg-[#734F96]  p-6 rounded-3xl border   flex flex-col md:flex-row justify-between items-center ">
               <div className="mb-4 md:mb-0 text-white">

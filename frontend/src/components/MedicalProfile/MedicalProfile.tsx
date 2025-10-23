@@ -1,6 +1,6 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Toast } from 'primereact/toast';
 import * as z from 'zod';
@@ -98,14 +98,20 @@ interface FormFieldProps {
   type?: string;
   register: UseFormRegister<ProfileData>;
   error?: FieldError;
+  disabled?: boolean;
 }
 
-const FormField = ({ label, name, icon, type = 'text', register, error }: FormFieldProps) => (
+const FormField = ({ label, name, icon, type = 'text', register, error, disabled }: FormFieldProps) => (
   <div className="flex flex-col space-y-3">
     <label className="text-2xl font-semibold text-gray-800 uppercase tracking-wide opacity-95">{label}</label>
     <div className={`flex items-center space-x-4 border-2 rounded-[2rem] p-6 bg-white transition duration-150 h-20 ${error ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'}`}>
       <div className="flex-shrink-0 text-purple-500 opacity-80">{icon}</div>
-      <input type={type} {...register(name)} className="w-full text-2xl focus:outline-none bg-transparent" />
+      <input
+        type={type}
+        {...register(name)}
+        disabled={disabled}
+        className={`w-full text-2xl bg-transparent focus:outline-none ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
+      />
     </div>
     {error?.message && <p className="text-sm text-red-600 mt-1">{error.message}</p>}
   </div>
@@ -113,6 +119,7 @@ const FormField = ({ label, name, icon, type = 'text', register, error }: FormFi
 
 export const MedicalProfile = () => {
   const toast = useRef<Toast>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, control, reset } = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
@@ -121,6 +128,7 @@ export const MedicalProfile = () => {
 
   const onSubmit: SubmitHandler<ProfileData> = (data) => {
     console.log('Datos actualizados:', data);
+    setIsEditing(false);
     toast.current?.show({
       severity: 'success',
       summary: '¡Éxito!',
@@ -131,6 +139,7 @@ export const MedicalProfile = () => {
 
   const handleCancel = () => {
     reset(defaultValues);
+    setIsEditing(false);
     toast.current?.show({
       severity: 'info',
       summary: 'Cancelado',
@@ -148,17 +157,33 @@ export const MedicalProfile = () => {
         <div className="bg-pink-50 rounded-[2.5rem] p-8 sm:p-16 md:p-24 shadow-[0_30px_60px_rgba(0,0,0,0.08)]">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800">DATOS PERSONALES</h2>
-            <button type="button" className="p-4 border border-gray-300 rounded-full hover:bg-white transition">
-              <svg className="w-8 h-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+
+            <button
+              type="button"
+              onClick={() => setIsEditing((prev) => !prev)}
+              className="p-4 border border-gray-300 rounded-full hover:bg-white transition"
+            >
+              <svg
+                className={`w-8 h-8 ${isEditing ? 'text-purple-400' : 'text-purple-600'}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
               </svg>
             </button>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
             <div className="col-span-1 space-y-10">
-              <FormField label="NOMBRE COMPLETO" name="nombreCompleto" register={register} error={errors.nombreCompleto} icon={<i className="pi pi-user text-purple-600 text-3xl" />} />
+              <FormField label="NOMBRE COMPLETO" name="nombreCompleto" register={register} error={errors.nombreCompleto} icon={<i className="pi pi-user text-purple-600 text-3xl" />} disabled={!isEditing} />
 
-              <FormField label="DIRECCIÓN" name="direccion" register={register} error={errors.direccion} icon={<i className="pi pi-map-marker text-purple-600 text-3xl" />} />
+              <FormField label="DIRECCIÓN" name="direccion" register={register} error={errors.direccion} icon={<i className="pi pi-map-marker text-purple-600 text-3xl" />} disabled={!isEditing} />
 
               <div className="flex flex-col space-y-3">
                 <label className="text-2xl font-semibold text-gray-800 uppercase tracking-wide opacity-95">OBRA SOCIAL / PARTICULAR</label>
@@ -168,17 +193,15 @@ export const MedicalProfile = () => {
                   render={({ field }) => (
                     <div className={`flex items-center space-x-4 border-2 rounded-[2rem] p-6 bg-white transition duration-150 h-20 ${errors.obraSocialParticular ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'}`}>
                       <i className="pi pi-briefcase text-purple-600 text-3xl opacity-80" />
-                      <select {...field} className="w-full text-2xl bg-transparent focus:outline-none">
+                      <select {...field} disabled={!isEditing} className="w-full text-2xl bg-transparent focus:outline-none">
                         <option value="">Selecciona obra social...</option>
                         {socialOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                       </select>
                     </div>
                   )}
                 />
-                {errors.obraSocialParticular?.message && <p className="text-sm text-red-600 mt-1">{errors.obraSocialParticular.message}</p>}
               </div>
             </div>
-
             <div className="col-span-1 space-y-10">
               <div className="flex flex-col space-y-3">
                 <label className="text-2xl font-semibold text-gray-800 uppercase tracking-wide opacity-95">FECHA DE NACIMIENTO</label>
@@ -189,6 +212,7 @@ export const MedicalProfile = () => {
                     <div className={`flex items-center border-2 rounded-[2rem] p-4 bg-white transition duration-150 h-20 ${errors.fechaNacimiento ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'}`}>
                       <Calendar
                         {...field}
+                        disabled={!isEditing}
                         value={field.value ? (() => {
                           const [day, month, year] = field.value.split('/');
                           return new Date(Number(year), Number(month) - 1, Number(day));
@@ -214,18 +238,14 @@ export const MedicalProfile = () => {
                     </div>
                   )}
                 />
-                {errors.fechaNacimiento?.message && <p className="text-sm text-red-600 mt-1">{errors.fechaNacimiento.message}</p>}
               </div>
-
-              <FormField label="TELÉFONO" name="telefono" register={register} error={errors.telefono} icon={<i className="pi pi-phone text-purple-600 text-3xl" />} />
-
-              <FormField label="EMAIL" name="email" register={register} error={errors.email} icon={<i className="pi pi-envelope text-purple-600 text-3xl" />} />
+              <FormField label="TELÉFONO" name="telefono" register={register} error={errors.telefono} icon={<i className="pi pi-phone text-purple-600 text-3xl" />} disabled={!isEditing} />
+              <FormField label="EMAIL" name="email" register={register} error={errors.email} icon={<i className="pi pi-envelope text-purple-600 text-3xl" />} disabled={!isEditing} />
             </div>
           </div>
         </div>
         <div className="bg-pink-50 rounded-[2.5rem] p-8 sm:p-16 md:p-24 shadow-[0_30px_60px_rgba(0,0,0,0.08)]">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-8">INFORMACIÓN MÉDICA</h2>
-
           <div className="grid grid-cols-1 gap-y-8">
             <div className="flex flex-col space-y-3">
               <label className="text-2xl font-semibold text-gray-800 uppercase tracking-wide opacity-95">TIPO DE SANGRE</label>
@@ -235,26 +255,28 @@ export const MedicalProfile = () => {
                 render={({ field }) => (
                   <div className={`flex items-center space-x-4 border-2 rounded-[2rem] p-6 bg-white transition duration-150 h-20 ${errors.tipoSangre ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'}`}>
                     <i className="pi pi-heart-fill text-purple-600 text-3xl opacity-80" />
-                    <select {...field} className="w-full text-2xl bg-transparent focus:outline-none">
+                    <select {...field} disabled={!isEditing} className="w-full text-2xl bg-transparent focus:outline-none">
                       <option value="">Selecciona tipo de sangre...</option>
                       {bloodTypes.map(bt => <option key={bt} value={bt}>{bt}</option>)}
                     </select>
                   </div>
                 )}
               />
-              {errors.tipoSangre?.message && <p className="text-sm text-red-600 mt-1">{errors.tipoSangre.message}</p>}
             </div>
-
-            <FormField label="ALERGIAS" name="alergias" register={register} error={errors.alergias} icon={<i className="pi pi-exclamation-circle text-purple-600 text-3xl" />} />
-            <FormField label="CONDICIONES CRÓNICAS" name="condicionesCronicas" register={register} error={errors.condicionesCronicas} icon={<i className="pi pi-heart text-purple-600 text-3xl" />} />
-            <FormField label="MEDICAMENTOS ACTUALES" name="medicamentosActuales" register={register} error={errors.medicamentosActuales} icon={<i className="pi pi-briefcase text-purple-600 text-3xl" />} />
+            <FormField label="ALERGIAS" name="alergias" register={register} error={errors.alergias} icon={<i className="pi pi-exclamation-circle text-purple-600 text-3xl" />} disabled={!isEditing} />
+            <FormField label="CONDICIONES CRÓNICAS" name="condicionesCronicas" register={register} error={errors.condicionesCronicas} icon={<i className="pi pi-heart text-purple-600 text-3xl" />} disabled={!isEditing} />
+            <FormField label="MEDICAMENTOS ACTUALES" name="medicamentosActuales" register={register} error={errors.medicamentosActuales} icon={<i className="pi pi-briefcase text-purple-600 text-3xl" />} disabled={!isEditing} />
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row justify-center sm:space-x-8 space-y-6 sm:space-y-0 pt-6 w-full">
-          <button type="submit" className="w-full sm:w-80 h-20 rounded-3xl text-white font-extrabold shadow-2xl bg-purple-500 hover:bg-purple-600 transition-all text-2xl">GUARDAR CAMBIOS</button>
-          <button type="button" onClick={handleCancel} className="w-full sm:w-80 h-20 rounded-3xl text-gray-800 font-extrabold shadow-md bg-white border-2 border-gray-200 hover:bg-gray-50 transition-all text-2xl">CANCELAR</button>
-        </div>
+
+        {isEditing && (
+          <div className="flex flex-col sm:flex-row justify-center sm:space-x-8 space-y-6 sm:space-y-0 pt-6 w-full">
+            <button type="submit" className="w-full sm:w-80 h-20 rounded-3xl text-white font-extrabold shadow-2xl bg-purple-500 hover:bg-purple-600 transition-all text-2xl">GUARDAR CAMBIOS</button>
+            <button type="button" onClick={handleCancel} className="w-full sm:w-80 h-20 rounded-3xl text-gray-800 font-extrabold shadow-md bg-white border-2 border-gray-200 hover:bg-gray-50 transition-all text-2xl">CANCELAR</button>
+          </div>
+        )}
       </form>
     </div>
   );
 };
+

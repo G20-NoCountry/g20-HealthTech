@@ -3,19 +3,10 @@ import { sequelize } from "../config/database.config";
 
 interface MedicAttributes {
   id: number;
-  speciality:
-    | "oftalmologia"
-    | "cardiologia"
-    | "neurologia"
-    | "dermatologia"
-    | "pediatria"
-    | "ginecologia"
-    | "traumatologia"
-    | "psiquiatria"
-    | "medicina_general";
-  license_num: number;
+  specialty: "oftamologia" | "etc";
+  licence_num: number;
   schedule_from: Date;
-  schedule_to: Date;
+  schedule_at: Date;
   created_at: Date;
   updated_at: Date;
 }
@@ -23,7 +14,7 @@ interface MedicAttributes {
 interface MedicCreationAttributes
   extends Optional<
     MedicAttributes,
-    "id" | "schedule_from" | "schedule_to" | "created_at" | "updated_at"
+    "id" | "schedule_from" | "schedule_at" | "created_at" | "updated_at"
   > {}
 
 class Medic
@@ -31,19 +22,10 @@ class Medic
   implements MedicAttributes
 {
   public id!: number;
-  public speciality!:
-    | "oftalmologia"
-    | "cardiologia"
-    | "neurologia"
-    | "dermatologia"
-    | "pediatria"
-    | "ginecologia"
-    | "traumatologia"
-    | "psiquiatria"
-    | "medicina_general";
-  public license_num!: number;
+  public specialty!: "oftamologia" | "etc";
+  public licence_num!: number;
   public schedule_from!: Date;
-  public schedule_to!: Date;
+  public schedule_at!: Date;
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -63,30 +45,19 @@ Medic.init(
         key: "id",
       },
     },
-    speciality: {
-      type: DataTypes.ENUM(
-        "oftalmologia",
-        "cardiologia",
-        "neurologia",
-        "dermatologia",
-        "pediatria",
-        "ginecologia",
-        "traumatologia",
-        "psiquiatria",
-        "medicina_general"
-      ),
+    specialty: {
+      type: DataTypes.ENUM("oftamologia", "etc"),
       allowNull: false,
     },
-    license_num: {
+    licence_num: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
     },
     schedule_from: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    schedule_to: {
+    schedule_at: {
       type: DataTypes.DATE,
       allowNull: false,
     },

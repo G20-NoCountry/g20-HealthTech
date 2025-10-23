@@ -1,9 +1,10 @@
 import { Calendar } from 'primereact/calendar';
 import { useEffect, useState } from 'react';
-import { AppointmentsService, type Appointment } from '../../services/AppointmentService';
+import { AppointmentsService } from '../../services/AppointmentService';
 import type { Nullable } from 'primereact/ts-helpers';
 import AppointmentCard from './AppointmentCard';
 import { isSameDay } from '../../utils/date';
+import type { Appointment } from '../../models/appointment.model';
 
 type CalendarDateTemplateEvent = {
   year: number;
@@ -82,14 +83,16 @@ export default function Dashboard() {
       />
 
       {/* Lista de citas */}
-      <div className="border-info scrollable flex flex-col gap-5 overflow-y-auto rounded-xl border-2 border-dashed p-3 md:max-h-105">
-        {filtered.length === 0 ? (
-          <p className="py-10 text-center text-gray-500">No se encontraron citas</p>
-        ) : (
-          filtered.map((a) => (
-            <AppointmentCard key={a.id} appointment={a} isNext={a.id === nextAppointmentId} />
-          ))
-        )}
+      <div className="border-success overflow-hidden rounded-xl border">
+        <div className="scrollable flex flex-col gap-5 overflow-y-auto p-3 md:max-h-105">
+          {filtered.length === 0 ? (
+            <p className="py-10 text-center text-gray-500">No se encontraron citas</p>
+          ) : (
+            filtered.map((a) => (
+              <AppointmentCard key={a.id} appointment={a} isNext={a.id === nextAppointmentId} />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

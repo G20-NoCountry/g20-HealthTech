@@ -6,6 +6,7 @@ import ClinicalRecordsPage from '../pages/ClinicalRecordsPage.tsx';
 import HomePage from '../pages/HomePage.tsx';
 import DashboardPage from '../pages/DashboardPage.tsx';
 import AppointmentStepperPage from '../pages/AppointmentStepperPage.tsx';
+import DoctorProfilePage from '../pages/DoctorProfilePage.tsx';
 
 export const AppRouter = () => {
   return (
@@ -16,6 +17,7 @@ export const AppRouter = () => {
         <Route path="appointment" element={<AppointmentStepperPage />} />
         <Route path="clinical-records" element={<ClinicalRecordsPage />} />
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
       </Route>
 
       {/* Rutas sin sidebar */}

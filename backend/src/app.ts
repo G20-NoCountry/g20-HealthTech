@@ -8,6 +8,8 @@ import dotenv from "dotenv";
 import { corsConfig } from "./config/cors.config";
 import { sequelize } from "./config/database.config";
 import models from "./models";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger.config";
 
 // Load environment variables
 dotenv.config();
@@ -23,13 +25,29 @@ app.use(sessionConfig);
 app.use(passportConfig.initialize());
 app.use(passportConfig.session());
 
+// Swagger documentation
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    customCss: ".swagger-ui .topbar { display: none }",
+    customSiteTitle: "HealthTech API Documentation",
+  })
+);
+
+// Serve Swagger JSON
+app.get("/api-docs.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
 
 // Database connection and synchronization
 const initializeDatabase = async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ Database connection established successfully.");
-    
+
     // Sync models with database (in development)
     if (appConfig.nodeEnv === "development") {
       await sequelize.sync({ alter: true });
@@ -44,14 +62,20 @@ const initializeDatabase = async () => {
 // Initialize database and start server
 const startServer = async () => {
   await initializeDatabase();
-  
+
   app.listen(appConfig.port, () => {
     console.log(`🚀 Server listening on port: ${appConfig.port}`);
     console.log(`🌍 Environment: ${appConfig.nodeEnv}`);
+    console.log(
+      `📚 API Documentation: http://localhost:${appConfig.port}/api-docs`
+    );
+    console.log(
+      `📄 Swagger JSON: http://localhost:${appConfig.port}/api-docs.json`
+    );
   });
 };
 
-app.use('/api', router);
+app.use("/api", router);
 
 startServer().catch((error) => {
   console.error("❌ Failed to start server:", error);

@@ -17,8 +17,8 @@ export const AppointmentListItem = ({ appointment }: AppointmentListItemProps) =
   const isPending = appointment.status === 'Pendiente';
 
   return (
-    <div className="bg-white p-4 rounded-3xl border shadow-lg border-[#AFAAAA] flex items-center justify-between">
-      <div className="flex items-center gap-4">
+<div className="bg-white p-4 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex items-center gap-4">
         <div className="text-center w-20"> {/* Ancho fijo para alinear */}
           <p className="font-bold text-[#734F96]">{appointment.time}</p>
           <p className={`text-xs font-semibold ${isPending ? 'text-yellow-500' : 'text-green-500'}`}>

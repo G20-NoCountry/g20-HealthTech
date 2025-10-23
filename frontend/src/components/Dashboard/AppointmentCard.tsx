@@ -1,5 +1,5 @@
 import VirtualAppointmentActions from './VirtualAppointmentActions';
-import { isAppointmentEditable } from '../../utils/appointments';
+import { isAppointmentEditable } from './appointments';
 import type { Appointment } from '../../services/AppointmentService';
 import { formatDateTime } from '../../utils/date';
 

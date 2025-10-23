@@ -108,3 +108,33 @@ span.p-button-icon.p-c.pi.pi-bars {
   max-width: 100%;
   object-fit: cover;
 }
+
+/* Calendario */
+.p-datepicker {
+  border-radius: 0.75rem;
+}
+
+/* Contenedor con scroll */
+.scrollable {
+  overflow-y: auto;
+}
+
+/* Personalizar la barra de scroll (WebKit) */
+.scrollable::-webkit-scrollbar {
+  width: 12px; /* ancho de la barra */
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: var(--color-primary); /* color del fondo */
+  border-radius: 8px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: var(--color-secondary); /* color del "pulgar" */
+  border-radius: 8px;
+  border: 2px solid var(--color-primary); /* borde para simular espacio */
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent);
+}

@@ -72,4 +72,28 @@ export class UserService {
         return medic;
     }
 
+    public async getPatient(id: number) {
+        try {
+            const patient = Patient.findOne({ where: { id: id } });
+            if (!patient) {
+                throw new Error("No se encontro");
+            }
+            return patient;
+        } catch (error: any) {
+            return null;
+        }
+    }
+
+    public async getMedic(id: number) {
+        try {
+            const medic = Medic.findOne({ where: { id: id } });
+            if (!medic) {
+                throw new Error("No se encontro");
+            }
+            return medic;
+        } catch (error: any) {
+            return null;
+        }
+    }
+
 }

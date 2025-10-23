@@ -8,3 +8,7 @@ export type Specialities =
     | "traumatologia"
     | "psiquiatria"
     | "medicina_general";
+
+export type UserType =
+    | "patient"
+    | "medic";

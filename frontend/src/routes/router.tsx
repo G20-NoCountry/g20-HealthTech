@@ -5,6 +5,8 @@ import { RegisterPage } from '../pages/RegisterPage.tsx';
 import { AppointmentScheduler } from '../components/appointment-scheduler/AppointmentScheduler.tsx';
 import ClinicalRecordsPage from '../pages/ClinicalRecordsPage.tsx';
 import HomePage from '../pages/HomePage.tsx';
+import { DoctorDashboardPage } from '../pages/DoctorDashboardPage.tsx';
+import { RouterLayoutMedico } from './common/RoutherLayoutMedico.tsx';
 
 export const AppRouter = () => {
   return (
@@ -14,6 +16,10 @@ export const AppRouter = () => {
         <Route index element={<HomePage />} />
         <Route path="appointment" element={<AppointmentScheduler />} />
         <Route path="clinical-records" element={<ClinicalRecordsPage />} />
+      </Route>
+
+      <Route path="/" element={<RouterLayoutMedico />}>
+        <Route path='/dasboardMedico' element={<DoctorDashboardPage />} />
       </Route>
 
       {/* Rutas sin sidebar */}

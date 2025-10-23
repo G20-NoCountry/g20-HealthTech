@@ -1,7 +1,6 @@
 import { Avatar } from 'primereact/avatar';
 import SidebarNav from './Sidebar';
 import Logo from '../../assets/logoMedicalApp.png';
-import { SidebarMedico } from './SidebarMedico';
 
 export default function Navbar() {
   return (

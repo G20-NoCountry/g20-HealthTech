@@ -3,7 +3,7 @@ import { sequelize } from "../config/database.config";
 
 interface UserAttributes {
   id: number;
-  role_id: number;
+  rol: "medico" | "paciente";
   first_name: string;
   last_name: string;
   email: string;
@@ -25,7 +25,7 @@ class User
   implements UserAttributes
 {
   public id!: number;
-  public role_id!: number;
+  public rol!: "medico" | "paciente";
   public first_name!: string;
   public last_name!: string;
   public email!: string;
@@ -47,13 +47,9 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    role_id: {
-      type: DataTypes.INTEGER,
+    rol: {
+      type: DataTypes.ENUM("medico", "paciente"),
       allowNull: false,
-      references: {
-        model: "roles",
-        key: "id",
-      },
     },
     first_name: {
       type: DataTypes.STRING(100),

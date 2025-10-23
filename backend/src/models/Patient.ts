@@ -4,6 +4,10 @@ import { sequelize } from "../config/database.config";
 interface PatientAttributes {
   id: number;
   id_health_insurance: number;
+  blood_type: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+  alergias: string;
+  cronicas_condition: string;
+  actual_medication: string;
   location: string;
   created_at: Date;
   updated_at: Date;
@@ -18,6 +22,10 @@ class Patient
 {
   public id!: number;
   public id_health_insurance!: number;
+  public blood_type!: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+  public alergias!: string;
+  public cronicas_condition!: string;
+  public actual_medication!: string;
   public location!: string;
   public created_at!: Date;
   public updated_at!: Date;
@@ -45,6 +53,22 @@ Patient.init(
         model: "health_insurance",
         key: "id",
       },
+    },
+    blood_type: {
+      type: DataTypes.ENUM("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"),
+      allowNull: false,
+    },
+    alergias: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    cronicas_condition: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    actual_medication: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
     location: {
       type: DataTypes.STRING(100),

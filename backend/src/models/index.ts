@@ -1,5 +1,4 @@
 import { sequelize } from "../config/database.config";
-import Role from "./Role";
 import User from "./User";
 import HealthInsurance from "./HealthInsurance";
 import Patient from "./Patient";
@@ -11,10 +10,6 @@ import Notification from "./Notification";
 
 // Define associations
 const setupAssociations = () => {
-  // Role associations
-  Role.hasMany(User, { foreignKey: "role_id", as: "users" });
-  User.belongsTo(Role, { foreignKey: "role_id", as: "role" });
-
   // HealthInsurance associations
   HealthInsurance.hasMany(Patient, {
     foreignKey: "id_health_insurance",
@@ -85,7 +80,6 @@ setupAssociations();
 // Export models and sequelize instance
 export {
   sequelize,
-  Role,
   User,
   HealthInsurance,
   Patient,
@@ -98,7 +92,6 @@ export {
 
 export default {
   sequelize,
-  Role,
   User,
   HealthInsurance,
   Patient,

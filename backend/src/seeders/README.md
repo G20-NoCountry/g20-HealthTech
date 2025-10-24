@@ -5,11 +5,10 @@ Este directorio contiene seeders para poblar la base de datos con datos de prueb
 ## Archivos de Seeder
 
 ### Datos básicos
-- `20250115000001-demo-roles.js` - Roles del sistema (admin, doctor, patient)
-- `20250115000002-demo-health-insurance.js` - Obras sociales y seguros médicos
+- `20250115000002-demo-health-insurance.js` - Obras sociales (OSDE, UOM, Otros, etc)
 
 ### Usuarios y perfiles
-- `20250115000003-demo-users.js` - Usuarios del sistema (1 admin, 4 doctores, 7 pacientes)
+- `20250115000003-demo-users.js` - Usuarios del sistema (4 médicos, 7 pacientes)
 - `20250115000004-demo-patients.js` - Datos específicos de pacientes
 - `20250115000005-demo-medics.js` - Datos específicos de médicos con especialidades
 
@@ -24,13 +23,12 @@ Este directorio contiene seeders para poblar la base de datos con datos de prueb
 ## Datos de Prueba Incluidos
 
 ### Usuarios
-- **Admin**: admin@healthtech.com (password: password123)
-- **Doctores**: 
-  - Dr. María García (Cardióloga)
-  - Dr. Juan Rodríguez (Neurólogo)
-  - Dra. Ana López (Pediatra)
-  - Dr. Carlos Martínez (Oftalmólogo)
-- **Pacientes**: 7 pacientes con diferentes obras sociales
+- **Médicos**: 
+  - Dr. María García (Cardióloga) - maria.garcia@healthtech.com
+  - Dr. Juan Rodríguez (Neurólogo) - juan.rodriguez@healthtech.com
+  - Dra. Ana López (Pediatra) - ana.lopez@healthtech.com
+  - Dr. Carlos Martínez (Oftalmólogo) - carlos.martinez@healthtech.com
+- **Pacientes**: 7 pacientes con diferentes obras sociales (OSDE, UOM, Otros, etc)
 
 ### Citas
 - Citas completadas (historial)
@@ -58,9 +56,9 @@ npm run seed
 
 ### Opción 3: Ejecutar seeders específicos
 ```bash
-npx sequelize-cli db:seed --seed 20250115000001-demo-roles.js
 npx sequelize-cli db:seed --seed 20250115000002-demo-health-insurance.js
 npx sequelize-cli db:seed --seed 20250115000003-demo-users.js
+npx sequelize-cli db:seed --seed 20250115000004-demo-patients.js
 # ... y así sucesivamente
 ```
 
@@ -86,15 +84,14 @@ npx sequelize-cli db:seed:undo:all
 Todos los usuarios de prueba tienen la contraseña: `password123`
 
 ### Accesos principales:
-- **Admin**: admin@healthtech.com
-- **Doctor**: maria.garcia@healthtech.com
+- **Médico**: maria.garcia@healthtech.com
 - **Paciente**: laura.fernandez@gmail.com
 
 ## Estructura de Datos
 
 Los seeders respetan las relaciones entre tablas:
-1. Primero se crean roles y obras sociales
-2. Luego usuarios (con roles asignados)
+1. Primero se crean obras sociales
+2. Luego usuarios (con rol médico o paciente)
 3. Después perfiles específicos (pacientes/médicos)
 4. Finalmente citas, historiales y notificaciones
 

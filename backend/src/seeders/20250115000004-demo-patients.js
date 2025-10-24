@@ -6,50 +6,50 @@ module.exports = {
       "patients",
       [
         {
-          id: 6, // Laura Fernández
+          id: 5, // Laura Fernández
           id_health_insurance: 1, // OSDE
           location: "Buenos Aires, CABA",
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          id: 7, // Roberto Silva
-          id_health_insurance: 2, // Swiss Medical
+          id: 6, // Roberto Silva
+          id_health_insurance: 2, // UOM
           location: "Córdoba, Córdoba",
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          id: 8, // Carmen González
-          id_health_insurance: 3, // Galeno
+          id: 7, // Carmen González
+          id_health_insurance: 3, // Otros
           location: "Rosario, Santa Fe",
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          id: 9, // Diego Pérez
-          id_health_insurance: 4, // Medicus
+          id: 8, // Diego Pérez
+          id_health_insurance: 4, // etc
           location: "Mendoza, Mendoza",
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          id: 10, // Sofía Hernández
+          id: 9, // Sofía Hernández
           id_health_insurance: 1, // OSDE
           location: "La Plata, Buenos Aires",
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          id: 11, // Miguel Torres
-          id_health_insurance: 5, // Sin seguro
+          id: 10, // Miguel Torres
+          id_health_insurance: 3, // Otros
           location: "Tucumán, Tucumán",
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          id: 12, // Elena Vargas
-          id_health_insurance: 2, // Swiss Medical
+          id: 11, // Elena Vargas
+          id_health_insurance: 2, // UOM
           location: "Salta, Salta",
           created_at: new Date(),
           updated_at: new Date(),

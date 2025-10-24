@@ -241,6 +241,142 @@ const swaggerDefinition: SwaggerDefinition = {
           },
         },
       },
+      Appointment: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          patient_id: {
+            type: "integer",
+            example: 1,
+          },
+          medic_id: {
+            type: "integer",
+            example: 2,
+          },
+          start_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:00:00Z",
+          },
+          end_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T11:00:00Z",
+          },
+          symptoms: {
+            type: "string",
+            example: "Dolor de cabeza y fiebre",
+          },
+          diagnostic: {
+            type: "string",
+            example: "Gripe común",
+          },
+          type: {
+            type: "string",
+            enum: ["in_person", "virtual"],
+            example: "in_person",
+          },
+          location: {
+            type: "string",
+            example: "Consultorio 1",
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+        },
+      },
+      CreateAppointmentRequest: {
+        type: "object",
+        required: ["start_at", "end_at", "type"],
+        properties: {
+          patient_id: {
+            type: "integer",
+            example: 1,
+            description: "ID del paciente (opcional si se infiere del JWT)",
+          },
+          medic_id: {
+            type: "integer",
+            example: 2,
+            description: "ID del médico (opcional si se infiere del JWT)",
+          },
+          start_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:00:00Z",
+            description: "Fecha y hora de inicio de la cita",
+          },
+          end_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T11:00:00Z",
+            description: "Fecha y hora de fin de la cita",
+          },
+          type: {
+            type: "string",
+            enum: ["in_person", "virtual"],
+            example: "in_person",
+            description: "Tipo de cita",
+          },
+          location: {
+            type: "string",
+            example: "Consultorio 1",
+            description: "Ubicación de la cita (opcional)",
+          },
+          symptoms: {
+            type: "string",
+            example: "Dolor de cabeza",
+            description: "Síntomas del paciente (opcional)",
+          },
+        },
+      },
+      UpdateAppointmentRequest: {
+        type: "object",
+        properties: {
+          start_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:00:00Z",
+            description: "Fecha y hora de inicio de la cita",
+          },
+          end_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T11:00:00Z",
+            description: "Fecha y hora de fin de la cita",
+          },
+          type: {
+            type: "string",
+            enum: ["in_person", "virtual"],
+            example: "virtual",
+            description: "Tipo de cita",
+          },
+          location: {
+            type: "string",
+            example: "Consultorio 2",
+            description: "Ubicación de la cita",
+          },
+          symptoms: {
+            type: "string",
+            example: "Dolor de cabeza y fiebre",
+            description: "Síntomas del paciente",
+          },
+          diagnostic: {
+            type: "string",
+            example: "Gripe común",
+            description: "Diagnóstico (solo para médicos)",
+          },
+        },
+      },
     },
   },
   security: [

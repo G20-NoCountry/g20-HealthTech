@@ -11,22 +11,17 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: "Swiss Medical",
+          name: "UOM",
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          name: "Galeno",
+          name: "Otros",
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          name: "Medicus",
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          name: "Sin seguro",
+          name: "etc",
           created_at: new Date(),
           updated_at: new Date(),
         },

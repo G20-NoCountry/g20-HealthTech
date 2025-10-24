@@ -6,7 +6,7 @@ module.exports = {
       "medic",
       [
         {
-          id: 2, // Dr. María García
+          id: 1, // Dr. María García
           speciality: "cardiologia",
           license_num: 12345,
           schedule_from: new Date(),
@@ -15,7 +15,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 3, // Dr. Juan Rodríguez
+          id: 2, // Dr. Juan Rodríguez
           speciality: "neurologia",
           license_num: 12346,
           schedule_from: new Date(),
@@ -24,7 +24,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 4, // Dra. Ana López
+          id: 3, // Dra. Ana López
           speciality: "pediatria",
           license_num: 12347,
           schedule_from: new Date(),
@@ -33,7 +33,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 5, // Dr. Carlos Martínez
+          id: 4, // Dr. Carlos Martínez
           speciality: "oftalmologia",
           license_num: 12348,
           schedule_from: new Date(),

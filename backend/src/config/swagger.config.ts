@@ -241,6 +241,79 @@ const swaggerDefinition: SwaggerDefinition = {
           },
         },
       },
+      UpdateMedicRequest: {
+        type: "object",
+        properties: {
+          first_name: {
+            type: "string",
+            example: "Dr. María",
+          },
+          last_name: {
+            type: "string",
+            example: "González",
+          },
+          email: {
+            type: "string",
+            format: "email",
+            example: "medico_mod@ejemplo.com",
+          },
+          phone: {
+            type: "string",
+            example: "+5491122334455",
+          },
+          licence_num: {
+            type: "integer",
+            example: 123456,
+          },
+        },
+      },
+      UpdatePatientRequest: {
+        type: "object",
+        properties: {
+          first_name: {
+            type: "string",
+            example: "Juan",
+          },
+          last_name: {
+            type: "string",
+            example: "Pérez",
+          },
+          email: {
+            type: "string",
+            format: "email",
+            example: "paciente_mod@ejemplo.com",
+          },
+          phone: {
+            type: "string",
+            example: "+5491122334455",
+          },
+          id_health_insurance: {
+            type: "integer",
+            example: 1,
+          },
+          blood_type: {
+            type: "string",
+            enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+            example: "A+",
+          },
+          alergias: {
+            type: "string",
+            example: "Ninguna",
+          },
+          cronicas_condition: {
+            type: "string",
+            example: "Ninguna",
+          },
+          actual_medication: {
+            type: "string",
+            example: "Ninguna",
+          },
+          location: {
+            type: "string",
+            example: "Buenos Aires, Argentina",
+          },
+        },
+      },
     },
   },
   security: [

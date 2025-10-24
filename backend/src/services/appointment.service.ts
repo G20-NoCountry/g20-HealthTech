@@ -125,7 +125,7 @@ export class AppointmentService {
       // Restrict certain fields based on user role
       if (userRole === "patient") {
         // Patients can only update time, type, and symptoms
-        const allowedFields = ["start_at", "end_at", "type", "symptoms"];
+        const allowedFields = ["start_at", "type", "symptoms"];
         const filteredData: any = {};
         Object.keys(updateData).forEach((key) => {
           if (allowedFields.includes(key)) {

@@ -1,6 +1,5 @@
 import { sequelize } from "../config/database.config";
 import User from "./User";
-import HealthInsurance from "./HealthInsurance";
 import Patient from "./Patient";
 import Medic from "./Medic";
 import Appointment from "./Appointment";
@@ -10,16 +9,6 @@ import Notification from "./Notification";
 
 // Define associations
 const setupAssociations = () => {
-  // HealthInsurance associations
-  HealthInsurance.hasMany(Patient, {
-    foreignKey: "id_health_insurance",
-    as: "patients",
-  });
-  Patient.belongsTo(HealthInsurance, {
-    foreignKey: "id_health_insurance",
-    as: "healthInsurance",
-  });
-
   // User associations with Patient and Medic (inheritance-like relationship)
   User.hasOne(Patient, { foreignKey: "id", as: "patient" });
   Patient.belongsTo(User, { foreignKey: "id", as: "user" });
@@ -81,7 +70,6 @@ setupAssociations();
 export {
   sequelize,
   User,
-  HealthInsurance,
   Patient,
   Medic,
   Appointment,
@@ -93,7 +81,6 @@ export {
 export default {
   sequelize,
   User,
-  HealthInsurance,
   Patient,
   Medic,
   Appointment,

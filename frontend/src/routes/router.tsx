@@ -24,7 +24,7 @@ export const AppRouter = () => {
       </Route>
 
       <Route path="/" element={<RouterLayoutMedico />}>
-        <Route path='dasboardMedico' element={<DoctorDashboardPage />} />
+        <Route path='dashboardMedico' element={<DoctorDashboardPage />} />
         <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
       </Route>
 

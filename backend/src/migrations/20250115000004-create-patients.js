@@ -14,15 +14,20 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      id_health_insurance: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "health_insurance",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "RESTRICT",
+      health_insurance: {
+        type: Sequelize.ENUM(
+          "OSECAC",
+          "OSPRERA",
+          "UPCN",
+          "OBSBA",
+          "OSDEPYM",
+          "OSUTHGRA",
+          "OSPE",
+          "OSPECON",
+          "OSIAD",
+          "OSSEG"
+        ),
+        allowNull: true,
       },
       location: {
         type: Sequelize.STRING(100),
@@ -37,6 +42,22 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
+      },
+      blood_type: {
+        type: Sequelize.ENUM("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"),
+        allowNull: false,
+      },
+      alergias: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+      },
+      cronicas_condition: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+      },
+      actual_medication: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
       },
     });
   },

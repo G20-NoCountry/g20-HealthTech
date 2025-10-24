@@ -101,6 +101,221 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "boolean",
             example: true,
           },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+        },
+      },
+      Patient: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          health_insurance: {
+            type: "string",
+            enum: [
+              "OSECAC",
+              "OSPRERA",
+              "UPCN",
+              "OBSBA",
+              "OSDEPYM",
+              "OSUTHGRA",
+              "OSPE",
+              "OSPECON",
+              "OSIAD",
+              "OSSEG",
+            ],
+            example: "OSECAC",
+          },
+          blood_type: {
+            type: "string",
+            enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+            example: "A+",
+          },
+          alergias: {
+            type: "string",
+            example: "Ninguna",
+          },
+          cronicas_condition: {
+            type: "string",
+            example: "Ninguna",
+          },
+          actual_medication: {
+            type: "string",
+            example: "Ninguna",
+          },
+          location: {
+            type: "string",
+            example: "Buenos Aires, Argentina",
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+        },
+      },
+      Medic: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          specialty: {
+            type: "string",
+            enum: ["oftamologia", "etc"],
+            example: "oftamologia",
+          },
+          licence_num: {
+            type: "integer",
+            example: 123456,
+          },
+          schedule_from: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T09:00:00Z",
+          },
+          schedule_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T17:00:00Z",
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+        },
+      },
+      MedicalRecord: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          patient_id: {
+            type: "integer",
+            example: 1,
+          },
+          doctor_id: {
+            type: "integer",
+            example: 2,
+          },
+          record_type: {
+            type: "string",
+            example: "Consulta general",
+          },
+          content: {
+            type: "string",
+            example: "Paciente presenta síntomas de gripe común...",
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+        },
+      },
+      Teleconsultation: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          appointment_id: {
+            type: "integer",
+            example: 1,
+          },
+          session_url: {
+            type: "string",
+            example: "https://meet.example.com/session123",
+          },
+          status: {
+            type: "string",
+            enum: ["pending", "started", "ended"],
+            example: "pending",
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+        },
+      },
+      Notification: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          user_id: {
+            type: "integer",
+            example: 1,
+          },
+          appointment_id: {
+            type: "integer",
+            example: 1,
+          },
+          type: {
+            type: "string",
+            enum: ["email", "sms"],
+            example: "email",
+          },
+          status: {
+            type: "string",
+            enum: ["queued", "sent", "failed"],
+            example: "queued",
+          },
+          payload: {
+            type: "object",
+            example: {
+              subject: "Recordatorio de cita",
+              message: "Tienes una cita mañana a las 10:00 AM",
+            },
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
         },
       },
       LoginRequest: {
@@ -127,7 +342,7 @@ const swaggerDefinition: SwaggerDefinition = {
           "first_name",
           "last_name",
           "phone",
-          "id_health_insurance",
+          "health_insurance",
           "blood_type",
           "alergias",
           "cronicas_condition",
@@ -157,9 +372,21 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "string",
             example: "+1234567890",
           },
-          id_health_insurance: {
-            type: "integer",
-            example: 1,
+          health_insurance: {
+            type: "string",
+            enum: [
+              "OSECAC",
+              "OSPRERA",
+              "UPCN",
+              "OBSBA",
+              "OSDEPYM",
+              "OSUTHGRA",
+              "OSPE",
+              "OSPECON",
+              "OSIAD",
+              "OSSEG",
+            ],
+            example: "OSECAC",
           },
           blood_type: {
             type: "string",
@@ -238,6 +465,274 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "string",
             format: "date-time",
             example: "2024-01-01T17:00:00Z",
+          },
+        },
+      },
+      Appointment: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          patient_id: {
+            type: "integer",
+            example: 1,
+          },
+          medic_id: {
+            type: "integer",
+            example: 2,
+          },
+          start_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:00:00Z",
+          },
+          end_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T11:00:00Z",
+          },
+          symptoms: {
+            type: "string",
+            example: "Dolor de cabeza y fiebre",
+          },
+          diagnostic: {
+            type: "string",
+            example: "Gripe común",
+          },
+          type: {
+            type: "string",
+            enum: ["in_person", "virtual"],
+            example: "in_person",
+          },
+          location: {
+            type: "string",
+            example: "Consultorio 1",
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+        },
+      },
+      CreateAppointmentRequest: {
+        type: "object",
+        required: ["start_at", "type"],
+        properties: {
+          patient_id: {
+            type: "integer",
+            example: 1,
+            description: "ID del paciente (opcional si se infiere del JWT)",
+          },
+          medic_id: {
+            type: "integer",
+            example: 2,
+            description: "ID del médico (opcional si se infiere del JWT)",
+          },
+          start_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:00:00Z",
+            description: "Fecha y hora de inicio de la cita",
+          },
+          type: {
+            type: "string",
+            enum: ["in_person", "virtual"],
+            example: "in_person",
+            description: "Tipo de cita",
+          },
+          location: {
+            type: "string",
+            example: "Consultorio 1",
+            description: "Ubicación de la cita (opcional)",
+          },
+          symptoms: {
+            type: "string",
+            example: "Dolor de cabeza",
+            description: "Síntomas del paciente (opcional)",
+          },
+        },
+      },
+      UpdateAppointmentRequest: {
+        type: "object",
+        properties: {
+          start_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:00:00Z",
+            description: "Fecha y hora de inicio de la cita",
+          },
+          type: {
+            type: "string",
+            enum: ["in_person", "virtual"],
+            example: "virtual",
+            description: "Tipo de cita",
+          },
+          location: {
+            type: "string",
+            example: "Consultorio 2",
+            description: "Ubicación de la cita",
+          },
+          symptoms: {
+            type: "string",
+            example: "Dolor de cabeza y fiebre",
+            description: "Síntomas del paciente",
+          },
+          diagnostic: {
+            type: "string",
+            example: "Gripe común",
+            description: "Diagnóstico (solo para médicos)",
+          },
+        },
+      },
+      CreateMedicalRecordRequest: {
+        type: "object",
+        required: ["patient_id", "record_type", "content"],
+        properties: {
+          patient_id: {
+            type: "integer",
+            example: 1,
+            description: "ID del paciente",
+          },
+          record_type: {
+            type: "string",
+            example: "Consulta general",
+            description: "Tipo de registro médico",
+          },
+          content: {
+            type: "string",
+            example: "Paciente presenta síntomas de gripe común...",
+            description: "Contenido del registro médico",
+          },
+        },
+      },
+      CreateTeleconsultationRequest: {
+        type: "object",
+        required: ["appointment_id", "session_url"],
+        properties: {
+          appointment_id: {
+            type: "integer",
+            example: 1,
+            description: "ID de la cita",
+          },
+          session_url: {
+            type: "string",
+            example: "https://meet.example.com/session123",
+            description: "URL de la sesión de teleconsulta",
+          },
+        },
+      },
+      CreateNotificationRequest: {
+        type: "object",
+        required: ["user_id", "type", "payload"],
+        properties: {
+          user_id: {
+            type: "integer",
+            example: 1,
+            description: "ID del usuario",
+          },
+          appointment_id: {
+            type: "integer",
+            example: 1,
+            description: "ID de la cita (opcional)",
+          },
+          type: {
+            type: "string",
+            enum: ["email", "sms"],
+            example: "email",
+            description: "Tipo de notificación",
+          },
+          payload: {
+            type: "object",
+            example: {
+              subject: "Recordatorio de cita",
+              message: "Tienes una cita mañana a las 10:00 AM",
+            },
+            description: "Datos de la notificación",
+          },
+        },
+      },
+      UserWithDetails: {
+        type: "object",
+        properties: {
+          user: {
+            $ref: "#/components/schemas/User",
+          },
+          patient: {
+            $ref: "#/components/schemas/Patient",
+          },
+          medic: {
+            $ref: "#/components/schemas/Medic",
+          },
+        },
+      },
+      AppointmentWithDetails: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          patient_id: {
+            type: "integer",
+            example: 1,
+          },
+          doctor_id: {
+            type: "integer",
+            example: 2,
+          },
+          start_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:00:00Z",
+          },
+          end_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T11:00:00Z",
+          },
+          symptoms: {
+            type: "string",
+            example: "Dolor de cabeza y fiebre",
+          },
+          diagnostic: {
+            type: "string",
+            example: "Gripe común",
+          },
+          type: {
+            type: "string",
+            enum: ["in_person", "virtual"],
+            example: "in_person",
+          },
+          location: {
+            type: "string",
+            example: "Consultorio 1",
+          },
+          patient: {
+            $ref: "#/components/schemas/User",
+          },
+          doctor: {
+            $ref: "#/components/schemas/User",
+          },
+          teleconsultation: {
+            $ref: "#/components/schemas/Teleconsultation",
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T00:00:00Z",
           },
         },
       },

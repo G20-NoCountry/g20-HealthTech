@@ -30,13 +30,17 @@ Appointment.init({
         type: sequelize_1.DataTypes.DATE,
         allowNull: false,
     },
+    end_at: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: false,
+    },
     symptoms: {
         type: sequelize_1.DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
     },
     diagnostic: {
         type: sequelize_1.DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
     },
     type: {
         type: sequelize_1.DataTypes.ENUM("in_person", "virtual"),

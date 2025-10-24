@@ -10,24 +10,9 @@ module.exports = {
     await queryInterface.bulkInsert(
       "users",
       [
-        // Admin
+        // Médicos
         {
-          id: 1,
-          role_id: 1, // admin
-          first_name: "Carlos",
-          last_name: "Administrador",
-          email: "admin@healthtech.com",
-          phone: "+54 11 1234-5678",
-          password: hashedPassword,
-          is_active: true,
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-
-        // Doctores
-        {
-          id: 2,
-          role_id: 2, // doctor
+          rol: "medico",
           first_name: "Dr. María",
           last_name: "García",
           email: "maria.garcia@healthtech.com",
@@ -38,8 +23,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 3,
-          role_id: 2, // doctor
+          rol: "medico",
           first_name: "Dr. Juan",
           last_name: "Rodríguez",
           email: "juan.rodriguez@healthtech.com",
@@ -50,8 +34,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 4,
-          role_id: 2, // doctor
+          rol: "medico",
           first_name: "Dra. Ana",
           last_name: "López",
           email: "ana.lopez@healthtech.com",
@@ -62,8 +45,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 5,
-          role_id: 2, // doctor
+          rol: "medico",
           first_name: "Dr. Carlos",
           last_name: "Martínez",
           email: "carlos.martinez@healthtech.com",
@@ -76,8 +58,7 @@ module.exports = {
 
         // Pacientes
         {
-          id: 6,
-          role_id: 3, // patient
+          rol: "paciente",
           first_name: "Laura",
           last_name: "Fernández",
           email: "laura.fernandez@gmail.com",
@@ -88,8 +69,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 7,
-          role_id: 3, // patient
+          rol: "paciente",
           first_name: "Roberto",
           last_name: "Silva",
           email: "roberto.silva@hotmail.com",
@@ -100,8 +80,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 8,
-          role_id: 3, // patient
+          rol: "paciente",
           first_name: "Carmen",
           last_name: "González",
           email: "carmen.gonzalez@yahoo.com",
@@ -112,8 +91,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 9,
-          role_id: 3, // patient
+          rol: "paciente",
           first_name: "Diego",
           last_name: "Pérez",
           email: "diego.perez@gmail.com",
@@ -124,8 +102,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 10,
-          role_id: 3, // patient
+          rol: "paciente",
           first_name: "Sofía",
           last_name: "Hernández",
           email: "sofia.hernandez@outlook.com",
@@ -136,8 +113,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 11,
-          role_id: 3, // patient
+          rol: "paciente",
           first_name: "Miguel",
           last_name: "Torres",
           email: "miguel.torres@gmail.com",
@@ -148,8 +124,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 12,
-          role_id: 3, // patient
+          rol: "paciente",
           first_name: "Elena",
           last_name: "Vargas",
           email: "elena.vargas@hotmail.com",

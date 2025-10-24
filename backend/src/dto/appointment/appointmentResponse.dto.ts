@@ -3,7 +3,6 @@ export interface AppointmentResponseDto {
   patient_id: number;
   medic_id: number;
   start_at: Date;
-  end_at: Date;
   symptoms?: string;
   diagnostic?: string;
   type: "in_person" | "virtual";

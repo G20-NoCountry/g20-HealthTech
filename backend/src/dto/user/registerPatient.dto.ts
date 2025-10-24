@@ -8,7 +8,17 @@ export class RegisterPatientDto extends RegisterUserDto {
     password: string,
     rol: "medico" | "paciente",
     phone: string,
-    public id_health_insurance: number,
+    public health_insurance:
+      | "OSECAC"
+      | "OSPRERA"
+      | "UPCN"
+      | "OBSBA"
+      | "OSDEPYM"
+      | "OSUTHGRA"
+      | "OSPE"
+      | "OSPECON"
+      | "OSIAD"
+      | "OSSEG",
     public blood_type: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-",
     public alergias: string,
     public cronicas_condition: string,

@@ -23,7 +23,7 @@ module.exports = {
         },
         {
           id: users[1].id, // Roberto Silva
-          health_insurance: "UOM", // UOM
+          health_insurance: "OSPRERA", // OSPRERA
           location: "Córdoba, Córdoba",
           blood_type: "O+",
           alergias: "Penicilina",
@@ -34,7 +34,7 @@ module.exports = {
         },
         {
           id: users[2].id, // Carmen González
-          health_insurance: "Otros", // Otros
+          health_insurance: "OSPE", // OSPE
           location: "Rosario, Santa Fe",
           blood_type: "B+",
           alergias: "Ninguna",
@@ -45,7 +45,7 @@ module.exports = {
         },
         {
           id: users[3].id, // Diego Pérez
-          health_insurance: "etc", // etc
+          health_insurance: "OSSEG", // OSSEG
           location: "Mendoza, Mendoza",
           blood_type: "AB-",
           alergias: "Polen",
@@ -67,7 +67,7 @@ module.exports = {
         },
         {
           id: users[5].id, // Miguel Torres
-          health_insurance: "Otros", // Otros
+          health_insurance: "OSIAD", // OSIAD
           location: "Tucumán, Tucumán",
           blood_type: "O-",
           alergias: "Ninguna",
@@ -78,7 +78,7 @@ module.exports = {
         },
         {
           id: users[6].id, // Elena Vargas
-          health_insurance: "UOM", // UOM
+          health_insurance: "OSPECON", // OSPECON
           location: "Salta, Salta",
           blood_type: "B-",
           alergias: "Ninguna",

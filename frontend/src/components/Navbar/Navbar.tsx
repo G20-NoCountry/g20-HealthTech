@@ -1,7 +1,11 @@
 import { Avatar } from 'primereact/avatar';
 import SidebarNav from './Sidebar';
 import Logo from '../../assets/logoMedicalApp.png';
-import { Badge } from 'primereact/badge';
+import { NotificationBell } from '../Notifications/NotificationBell';
+import { patientNotifications } from '../../services/mockNotifications';
+
+
+
 
 export default function Navbar() {
   return (
@@ -14,11 +18,7 @@ export default function Navbar() {
         </div>
         <div className="flex items-center gap-3">
           <p className="hidden uppercase md:block">Susana Ramirez</p>
-          <button className="hover:bg-muted flex h-8 w-8 cursor-pointer items-center justify-center bg-transparent">
-            <i className="pi pi-bell p-overlay-badge" style={{ fontSize: '1.5rem' }}>
-              <Badge value="3" severity="danger"></Badge>
-            </i>
-          </button>
+          <NotificationBell notifications={patientNotifications} />
         </div>
       </div>
     </header>

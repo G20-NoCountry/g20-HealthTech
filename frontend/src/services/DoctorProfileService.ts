@@ -13,19 +13,19 @@ export const mockDoctorProfiles: DoctorProfile[] = [
     },
     academic_background: [
       {
-        id: 1,
+        id: '1',
         title: 'Médica Cirujana',
         institution: 'Universidad de Buenos Aires',
         year_completed: 2010,
       },
       {
-        id: 2,
+        id: '2',
         title: 'Especialización en Cardiología',
         institution: 'Hospital Italiano de Buenos Aires',
         year_completed: 2014,
       },
       {
-        id: 3,
+        id: '3',
         title: 'Diplomatura en Prevención Cardiovascular',
         institution: 'Universidad Austral',
         year_completed: 2018,
@@ -55,19 +55,19 @@ export const mockDoctorProfiles: DoctorProfile[] = [
     },
     academic_background: [
       {
-        id: 1,
+        id: '1',
         title: 'Médica',
         institution: 'Universidad Nacional de Córdoba',
         year_completed: 2012,
       },
       {
-        id: 2,
+        id: '2',
         title: 'Residencia en Dermatología',
         institution: 'Hospital Fernández',
         year_completed: 2016,
       },
       {
-        id: 3,
+        id: '3',
         title: 'Diplomatura en Dermatología Estética',
         institution: 'UBA',
         year_completed: 2019,

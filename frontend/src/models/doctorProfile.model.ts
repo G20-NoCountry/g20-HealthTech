@@ -10,7 +10,7 @@ export interface PersonalData {
 }
 
 export interface AcademicFormation {
-  id: number;
+  id: string;
   title: string; // Ej: "Especialización en Cardiología"
   institution: string; // Ej: "Universidad de Buenos Aires"
   year_completed?: number;

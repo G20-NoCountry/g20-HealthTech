@@ -1,6 +1,6 @@
 import { Avatar } from 'primereact/avatar';
 import SidebarNav from './Sidebar';
-import Logo from '../../assets/logoMedicalApp.png';
+import Logo from '../../assets/logo.png';
 import { Badge } from 'primereact/badge';
 
 export default function Navbar() {
@@ -16,7 +16,7 @@ export default function Navbar() {
           <p className="hidden uppercase md:block">Susana Ramirez</p>
           <button className="hover:bg-muted flex h-8 w-8 cursor-pointer items-center justify-center bg-transparent">
             <i className="pi pi-bell p-overlay-badge" style={{ fontSize: '1.5rem' }}>
-              <Badge value="3" severity="danger"></Badge>
+              <Badge severity="danger"></Badge>
             </i>
           </button>
         </div>

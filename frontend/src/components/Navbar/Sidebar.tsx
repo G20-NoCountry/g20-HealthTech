@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Ripple } from 'primereact/ripple';
 import { NavLink } from 'react-router';
-import Logo from '../../assets/logoMedicalApp.png';
+import Logo from '../../assets/logo.png';
 
 export default function SidebarNav() {
   const [visible, setVisible] = useState<boolean>(false);

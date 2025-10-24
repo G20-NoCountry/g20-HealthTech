@@ -12,7 +12,6 @@ module.exports = {
       [
         // Médicos
         {
-          id: 1,
           rol: "medico",
           first_name: "Dr. María",
           last_name: "García",
@@ -24,7 +23,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 2,
           rol: "medico",
           first_name: "Dr. Juan",
           last_name: "Rodríguez",
@@ -36,7 +34,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 3,
           rol: "medico",
           first_name: "Dra. Ana",
           last_name: "López",
@@ -48,7 +45,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 4,
           rol: "medico",
           first_name: "Dr. Carlos",
           last_name: "Martínez",
@@ -62,7 +58,6 @@ module.exports = {
 
         // Pacientes
         {
-          id: 5,
           rol: "paciente",
           first_name: "Laura",
           last_name: "Fernández",
@@ -74,7 +69,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 6,
           rol: "paciente",
           first_name: "Roberto",
           last_name: "Silva",
@@ -86,7 +80,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 7,
           rol: "paciente",
           first_name: "Carmen",
           last_name: "González",
@@ -98,7 +91,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 8,
           rol: "paciente",
           first_name: "Diego",
           last_name: "Pérez",
@@ -110,7 +102,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 9,
           rol: "paciente",
           first_name: "Sofía",
           last_name: "Hernández",
@@ -122,7 +113,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 10,
           rol: "paciente",
           first_name: "Miguel",
           last_name: "Torres",
@@ -134,7 +124,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 11,
           rol: "paciente",
           first_name: "Elena",
           last_name: "Vargas",

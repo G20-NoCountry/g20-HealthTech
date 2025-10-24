@@ -8,8 +8,8 @@ Este proyecto utiliza Swagger para documentar automáticamente la API REST. Swag
 
 Una vez que el servidor esté ejecutándose, puedes acceder a la documentación de Swagger en:
 
-- **Interfaz de Swagger UI**: `http://localhost:3000/api-docs`
-- **Especificación JSON**: `http://localhost:3000/api-docs.json`
+- **Interfaz de Swagger UI**: `http://localhost:3000/api`
+- **Especificación JSON**: `http://localhost:3000/api.json`
 
 ## Características Implementadas
 

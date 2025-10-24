@@ -66,12 +66,8 @@ const startServer = async () => {
   app.listen(appConfig.port, () => {
     console.log(`🚀 Server listening on port: ${appConfig.port}`);
     console.log(`🌍 Environment: ${appConfig.nodeEnv}`);
-    console.log(
-      `📚 API Documentation: http://localhost:${appConfig.port}/api-docs`
-    );
-    console.log(
-      `📄 Swagger JSON: http://localhost:${appConfig.port}/api-docs.json`
-    );
+    console.log(`📚 API Documentation: http://localhost:${appConfig.port}/api`);
+    console.log(`📄 Swagger JSON: http://localhost:${appConfig.port}/api.json`);
   });
 };
 

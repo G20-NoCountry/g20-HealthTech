@@ -12,7 +12,7 @@ module.exports = {
       [
         {
           id: users[0].id, // Laura Fernández
-          id_health_insurance: 1, // OSDE
+          health_insurance: "OSDE", // OSDE
           location: "Buenos Aires, CABA",
           blood_type: "A+",
           alergias: "Ninguna",
@@ -23,7 +23,7 @@ module.exports = {
         },
         {
           id: users[1].id, // Roberto Silva
-          id_health_insurance: 2, // UOM
+          health_insurance: "UOM", // UOM
           location: "Córdoba, Córdoba",
           blood_type: "O+",
           alergias: "Penicilina",
@@ -34,7 +34,7 @@ module.exports = {
         },
         {
           id: users[2].id, // Carmen González
-          id_health_insurance: 3, // Otros
+          health_insurance: "Otros", // Otros
           location: "Rosario, Santa Fe",
           blood_type: "B+",
           alergias: "Ninguna",
@@ -45,7 +45,7 @@ module.exports = {
         },
         {
           id: users[3].id, // Diego Pérez
-          id_health_insurance: 4, // etc
+          health_insurance: "etc", // etc
           location: "Mendoza, Mendoza",
           blood_type: "AB-",
           alergias: "Polen",
@@ -56,7 +56,7 @@ module.exports = {
         },
         {
           id: users[4].id, // Sofía Hernández
-          id_health_insurance: 1, // OSDE
+          health_insurance: "OSDE", // OSDE
           location: "La Plata, Buenos Aires",
           blood_type: "A-",
           alergias: "Ninguna",
@@ -67,7 +67,7 @@ module.exports = {
         },
         {
           id: users[5].id, // Miguel Torres
-          id_health_insurance: 3, // Otros
+          health_insurance: "Otros", // Otros
           location: "Tucumán, Tucumán",
           blood_type: "O-",
           alergias: "Ninguna",
@@ -78,7 +78,7 @@ module.exports = {
         },
         {
           id: users[6].id, // Elena Vargas
-          id_health_insurance: 2, // UOM
+          health_insurance: "UOM", // UOM
           location: "Salta, Salta",
           blood_type: "B-",
           alergias: "Ninguna",

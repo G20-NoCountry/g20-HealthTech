@@ -16,8 +16,7 @@ export class AppointmentService {
       // Check for overlapping appointments
       const overlappingAppointment = await this.checkForOverlappingAppointments(
         appointmentData.medic_id,
-        appointmentData.start_at,
-        appointmentData.end_at
+        appointmentData.start_at
       );
 
       if (overlappingAppointment) {
@@ -33,17 +32,16 @@ export class AppointmentService {
 
   public async getAppointmentsByMedic(
     medicId: number,
-    startDate?: string,
-    endDate?: string
+    startDate?: string
   ): Promise<Appointment[]> {
     try {
       const whereClause: any = {
         medic_id: medicId,
       };
 
-      if (startDate && endDate) {
+      if (startDate) {
         whereClause.start_at = {
-          [Op.between]: [new Date(startDate), new Date(endDate)],
+          [Op.between]: [new Date(startDate)],
         };
       }
 
@@ -60,17 +58,16 @@ export class AppointmentService {
 
   public async getAppointmentsByPatient(
     patientId: number,
-    startDate?: string,
-    endDate?: string
+    startDate?: string
   ): Promise<Appointment[]> {
     try {
       const whereClause: any = {
         patient_id: patientId,
       };
 
-      if (startDate && endDate) {
+      if (startDate) {
         whereClause.start_at = {
-          [Op.between]: [new Date(startDate), new Date(endDate)],
+          [Op.between]: [new Date(startDate)],
         };
       }
 
@@ -109,16 +106,14 @@ export class AppointmentService {
       }
 
       // If updating time, check for overlapping appointments
-      if (updateData.start_at || updateData.end_at) {
+      if (updateData.start_at) {
         const startTime =
           updateData.start_at || appointment.start_at.toISOString();
-        const endTime = updateData.end_at || appointment.end_at.toISOString();
 
         const overlappingAppointment =
           await this.checkForOverlappingAppointments(
             appointment.doctor_id,
             startTime,
-            endTime,
             appointmentId
           );
 
@@ -168,7 +163,6 @@ export class AppointmentService {
   private async checkForOverlappingAppointments(
     medicId: number,
     startAt: string | Date,
-    endAt: string | Date,
     excludeId?: number
   ): Promise<Appointment | null> {
     try {
@@ -177,19 +171,11 @@ export class AppointmentService {
         [Op.or]: [
           {
             start_at: {
-              [Op.between]: [new Date(startAt), new Date(endAt)],
+              [Op.between]: [new Date(startAt)],
             },
           },
           {
-            end_at: {
-              [Op.between]: [new Date(startAt), new Date(endAt)],
-            },
-          },
-          {
-            [Op.and]: [
-              { start_at: { [Op.lte]: new Date(startAt) } },
-              { end_at: { [Op.gte]: new Date(endAt) } },
-            ],
+            [Op.and]: [{ start_at: { [Op.lte]: new Date(startAt) } }],
           },
         ],
       };

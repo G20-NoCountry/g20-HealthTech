@@ -226,13 +226,12 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { start_date, end_date } = request.query;
+      const { start_date } = request.query;
       const medicId = (request.user as any).id;
 
       const appointments = await this.appointmentService.getAppointmentsByMedic(
         medicId,
-        start_date as string,
-        end_date as string
+        start_date as string
       );
 
       return response.status(200).json({
@@ -302,14 +301,13 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { start_date, end_date } = request.query;
+      const { start_date } = request.query;
       const patientId = (request.user as any).id;
 
       const appointments =
         await this.appointmentService.getAppointmentsByPatient(
           patientId,
-          start_date as string,
-          end_date as string
+          start_date as string
         );
 
       return response.status(200).json({

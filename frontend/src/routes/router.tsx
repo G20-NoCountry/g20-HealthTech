@@ -4,9 +4,9 @@ import { LoginPage } from '../pages/LoginPage.tsx';
 import { RegisterPage } from '../pages/RegisterPage.tsx'
 import ClinicalRecordsPage from '../pages/ClinicalRecordsPage.tsx';
 import HomePage from '../pages/HomePage.tsx';
+import { ProfilePage } from '../pages/ProfilePage.tsx';
 import { DoctorDashboardPage } from '../pages/DoctorDashboardPage.tsx';
 import { RouterLayoutMedico } from './common/RoutherLayoutMedico.tsx';
-import { MedicalProfilePage } from '../pages/MedicalProfilePage.tsx';
 import DashboardPage from '../pages/DashboardPage.tsx';
 import AppointmentStepperPage from '../pages/AppointmentStepperPage.tsx';
 import DoctorProfilePage from '../pages/DoctorProfilePage.tsx';
@@ -19,12 +19,12 @@ export const AppRouter = () => {
         <Route index element={<HomePage />} />
         <Route path="appointment" element={<AppointmentStepperPage/>} />
         <Route path="clinical-records" element={<ClinicalRecordsPage />} />
+        <Route path="profile" element={<ProfilePage/>} />
         <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="medical-profile" element={<MedicalProfilePage/>} />
       </Route>
 
       <Route path="/" element={<RouterLayoutMedico />}>
-        <Route path='dasboardMedico' element={<DoctorDashboardPage />} />
+        <Route path='dashboardMedico' element={<DoctorDashboardPage />} />
         <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
       </Route>
 

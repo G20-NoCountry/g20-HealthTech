@@ -3,11 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Notification = exports.Teleconsultation = exports.MedicalRecord = exports.Appointment = exports.Medic = exports.Patient = exports.HealthInsurance = exports.User = exports.Role = exports.sequelize = void 0;
+exports.Notification = exports.Teleconsultation = exports.MedicalRecord = exports.Appointment = exports.Medic = exports.Patient = exports.HealthInsurance = exports.User = exports.sequelize = void 0;
 const database_config_1 = require("../config/database.config");
 Object.defineProperty(exports, "sequelize", { enumerable: true, get: function () { return database_config_1.sequelize; } });
-const Role_1 = __importDefault(require("./Role"));
-exports.Role = Role_1.default;
 const User_1 = __importDefault(require("./User"));
 exports.User = User_1.default;
 const HealthInsurance_1 = __importDefault(require("./HealthInsurance"));
@@ -26,9 +24,6 @@ const Notification_1 = __importDefault(require("./Notification"));
 exports.Notification = Notification_1.default;
 // Define associations
 const setupAssociations = () => {
-    // Role associations
-    Role_1.default.hasMany(User_1.default, { foreignKey: "role_id", as: "users" });
-    User_1.default.belongsTo(Role_1.default, { foreignKey: "role_id", as: "role" });
     // HealthInsurance associations
     HealthInsurance_1.default.hasMany(Patient_1.default, {
         foreignKey: "id_health_insurance",
@@ -87,7 +82,6 @@ const setupAssociations = () => {
 setupAssociations();
 exports.default = {
     sequelize: database_config_1.sequelize,
-    Role: Role_1.default,
     User: User_1.default,
     HealthInsurance: HealthInsurance_1.default,
     Patient: Patient_1.default,

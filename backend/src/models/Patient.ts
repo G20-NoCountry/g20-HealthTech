@@ -3,7 +3,17 @@ import { sequelize } from "../config/database.config";
 
 interface PatientAttributes {
   id: number;
-  id_health_insurance: number;
+  health_insurance:
+    | "OSECAC"
+    | "OSPRERA"
+    | "UPCN"
+    | "OBSBA"
+    | "OSDEPYM"
+    | "OSUTHGRA"
+    | "OSPE"
+    | "OSPECON"
+    | "OSIAD"
+    | "OSSEG";
   blood_type: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   alergias: string;
   cronicas_condition: string;
@@ -21,7 +31,17 @@ class Patient
   implements PatientAttributes
 {
   public id!: number;
-  public id_health_insurance!: number;
+  public health_insurance!:
+    | "OSECAC"
+    | "OSPRERA"
+    | "UPCN"
+    | "OBSBA"
+    | "OSDEPYM"
+    | "OSUTHGRA"
+    | "OSPE"
+    | "OSPECON"
+    | "OSIAD"
+    | "OSSEG";
   public blood_type!: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   public alergias!: string;
   public cronicas_condition!: string;
@@ -46,13 +66,20 @@ Patient.init(
         key: "id",
       },
     },
-    id_health_insurance: {
-      type: DataTypes.INTEGER,
+    health_insurance: {
+      type: DataTypes.ENUM(
+        "OSECAC",
+        "OSPRERA",
+        "UPCN",
+        "OBSBA",
+        "OSDEPYM",
+        "OSUTHGRA",
+        "OSPE",
+        "OSPECON",
+        "OSIAD",
+        "OSSEG"
+      ),
       allowNull: false,
-      references: {
-        model: "health_insurance",
-        key: "id",
-      },
     },
     blood_type: {
       type: DataTypes.ENUM("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"),

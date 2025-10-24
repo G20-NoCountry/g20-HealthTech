@@ -9,15 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      role_id: {
-        type: Sequelize.INTEGER,
+      rol: {
+        type: Sequelize.ENUM("medico", "paciente"),
         allowNull: false,
-        references: {
-          model: "roles",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "RESTRICT",
+        defaultValue: "paciente",
       },
       first_name: {
         type: Sequelize.STRING(100),

@@ -30,7 +30,7 @@ export class UserService {
     userId: number,
     dto: RegisterMedicDto | RegisterPatientDto
   ) {
-    if ("id_health_insurance" in dto) {
+    if ("health_insurance" in dto) {
       const newPatient = this.createPatient(userId, dto);
       return newPatient;
     }
@@ -55,7 +55,7 @@ export class UserService {
   private createPatient(userId: number, dto: RegisterPatientDto) {
     const patient = Patient.build({
       id: userId,
-      id_health_insurance: dto.id_health_insurance,
+      health_insurance: dto.health_insurance,
       blood_type: dto.blood_type,
       alergias: dto.alergias,
       cronicas_condition: dto.cronicas_condition,

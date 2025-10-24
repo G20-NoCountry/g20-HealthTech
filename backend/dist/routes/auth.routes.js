@@ -1,24 +1,26 @@
-import { Router } from "express";
-import { AuthController } from "../controllers/auth.controller";
-import passport from "passport";
-import { isAuthenticated } from "../middlewares/auth/authenticated.middleware";
-import { isNotAuthenticated } from "../middlewares/auth/notAuthenticated.middleware";
-import { loginValidator } from "../validators/auth/login.validator";
-import { registerValidator } from "../validators/auth/register.validator";
-import { isAdmin } from "../middlewares/auth/admin.middleware";
-import { registerPatientValidator } from "../validators/auth/registerPatient.validator";
-import { registerMedicValidator } from "../validators/auth/registerMedic.validator";
-
-const router = Router();
-const authController = new AuthController();
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_controller_1 = require("../controllers/auth.controller");
+const passport_1 = __importDefault(require("passport"));
+const authenticated_middleware_1 = require("../middlewares/auth/authenticated.middleware");
+const notAuthenticated_middleware_1 = require("../middlewares/auth/notAuthenticated.middleware");
+const login_validator_1 = require("../validators/auth/login.validator");
+const register_validator_1 = require("../validators/auth/register.validator");
+const admin_middleware_1 = require("../middlewares/auth/admin.middleware");
+const registerPatient_validator_1 = require("../validators/auth/registerPatient.validator");
+const registerMedic_validator_1 = require("../validators/auth/registerMedic.validator");
+const router = (0, express_1.Router)();
+const authController = new auth_controller_1.AuthController();
 /**
  * @swagger
  * tags:
  *   name: Authentication
  *   description: Endpoints para autenticación de usuarios
  */
-
 /**
  * @swagger
  * /api/auth/login:
@@ -51,13 +53,7 @@ const authController = new AuthController();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post(
-  "/login",
-  isNotAuthenticated,
-  loginValidator,
-  passport.authenticate("local"),
-  authController.login
-);
+router.post("/login", notAuthenticated_middleware_1.isNotAuthenticated, login_validator_1.loginValidator, passport_1.default.authenticate("local"), authController.login);
 /**
  * @swagger
  * /api/auth/register/patient:
@@ -90,13 +86,7 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post(
-  "/register/patient",
-  isNotAuthenticated,
-  registerValidator,
-  registerPatientValidator,
-  authController.registerPatient
-);
+router.post("/register/patient", notAuthenticated_middleware_1.isNotAuthenticated, register_validator_1.registerValidator, registerPatient_validator_1.registerPatientValidator, authController.registerPatient);
 /**
  * @swagger
  * /api/auth/register/medic:
@@ -137,14 +127,7 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post(
-  "/register/medic",
-  isAuthenticated,
-  isAdmin,
-  registerValidator,
-  registerMedicValidator,
-  authController.registerMedic
-);
+router.post("/register/medic", authenticated_middleware_1.isAuthenticated, admin_middleware_1.isAdmin, register_validator_1.registerValidator, registerMedic_validator_1.registerMedicValidator, authController.registerMedic);
 /**
  * @swagger
  * /api/auth/user:
@@ -185,7 +168,7 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/user", isAuthenticated, authController.user);
+router.get("/user", authenticated_middleware_1.isAuthenticated, authController.user);
 /**
  * @swagger
  * /api/auth/logout:
@@ -224,6 +207,5 @@ router.get("/user", isAuthenticated, authController.user);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/logout", isAuthenticated, authController.logout);
-
-export default router;
+router.post("/logout", authenticated_middleware_1.isAuthenticated, authController.logout);
+exports.default = router;

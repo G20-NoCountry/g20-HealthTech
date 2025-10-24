@@ -1,7 +1,7 @@
 import VirtualAppointmentActions from './VirtualAppointmentActions';
 import { isAppointmentEditable } from './appointments';
-import type { Appointment } from '../../services/AppointmentService';
 import { formatDateTime } from '../../utils/date';
+import type { Appointment } from '../../models/appointment.model';
 
 interface AppointmentCardProps {
   appointment: Appointment;

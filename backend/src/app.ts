@@ -27,7 +27,7 @@ app.use(passportConfig.session());
 
 // Swagger documentation
 app.use(
-  "/api-docs",
+  "/api",
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, {
     explorer: true,
@@ -37,7 +37,7 @@ app.use(
 );
 
 // Serve Swagger JSON
-app.get("/api-docs.json", (req, res) => {
+app.get("/api.json", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.send(swaggerSpec);
 });

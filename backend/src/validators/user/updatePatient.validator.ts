@@ -1,10 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
-import { HealthInsurance } from "../../models";
 
-const validateHealthInsuranceId = async (id: number) => {
-    if (!await HealthInsurance.findOne({ where: { id: id } })) {
-        throw new Error('id_health_insurance no válido');
+const validateHealthInsuranceId = async (healthInsurance: string) => {
+    const healthInsurances = [
+        "OSECAC",
+        "OSPRERA",
+        "UPCN",
+        "OBSBA",
+        "OSDEPYM",
+        "OSUTHGRA",
+        "OSPE",
+        "OSPECON",
+        "OSIAD",
+        "OSSEG"
+    ];
+    if (!healthInsurances.includes(healthInsurance)) {
+        throw new Error('health_insurance no válido');
     }
 };
 
@@ -18,12 +29,12 @@ const validateBloodTypeExist = async (bloodType: string) => {
 };
 
 export const updatePatientValidator = [
-    body("id_health_insurance")
+    body("health_insurance")
         .optional()
-        .notEmpty().withMessage("id_health_insurance es obligatorio")
+        .notEmpty().withMessage("health_insurance es obligatorio")
         .bail()
-        .isNumeric().withMessage("id_health_insurance debe ser numerico")
-        .custom(validateHealthInsuranceId).withMessage("id_health_insurance no válido")
+        .isString().withMessage("health_insurance debe ser string")
+        .custom(validateHealthInsuranceId).withMessage("health_insurance no válido")
     ,
     body("location")
         .optional()

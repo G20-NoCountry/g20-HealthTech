@@ -10,7 +10,7 @@ export class PatientResource {
             rol: user.rol,
             phone: user.phone,
             is_active: user.is_active,
-            id_health_insurance: patient.id_health_insurance,
+            health_insurance: patient.health_insurance,
             blood_type: patient.blood_type,
             alergias: patient.alergias,
             cronicas_condition: patient.cronicas_condition,

@@ -148,7 +148,7 @@ export class UserService {
 
   private async updatePatient(dto: UpdatePatientDto) {
     const rows = await Patient.update({
-      id_health_insurance: dto.id_health_insurance,
+      health_insurance: dto.health_insurance,
       blood_type: dto.blood_type,
       alergias: dto.alergias,
       cronicas_condition: dto.cronicas_condition,

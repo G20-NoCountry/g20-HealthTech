@@ -11,6 +11,57 @@ export class UserController {
         this.userService = new UserService;
     }
 
+    /**
+    * @swagger
+    * /api/patients/{id}:
+    *   get:
+    *     summary: Obtener un paciente
+    *     tags: [Users]
+    *     security:
+    *       - sessionAuth: []
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         schema:
+    *           type: integer
+    *           minimum: 1
+    *         description: ID del paciente
+    *     responses:
+    *       200:
+    *         description: Obtención del paciente
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 success:
+    *                   type: boolean
+    *                   example: true
+    *                 message:
+    *                   type: string
+    *                   example: "Paciente obtenido exitosamente"
+    *                 data:
+    *                     $ref: '#/components/schemas/FullPatient'
+    *       401:
+    *         description: No autenticado
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Unauthorized'
+    *       403:
+    *         description: No permitido
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Forbidden'
+    *       500:
+    *         description: Error interno del servidor
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Error'
+    */
     public getPatient = async (request: Request, response: Response) => {
         try {
             const id = parseInt(request.params.id);
@@ -35,6 +86,57 @@ export class UserController {
         }
     }
 
+    /**
+    * @swagger
+    * /api/medics/{id}:
+    *   get:
+    *     summary: Obtener un medico
+    *     tags: [Users]
+    *     security:
+    *       - sessionAuth: []
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         schema:
+    *           type: integer
+    *           minimum: 1
+    *         description: ID del medico
+    *     responses:
+    *       200:
+    *         description: Obtención del paciente
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 success:
+    *                   type: boolean
+    *                   example: true
+    *                 message:
+    *                   type: string
+    *                   example: "Medico obtenido exitosamente"
+    *                 data:
+    *                   $ref: '#/components/schemas/FullMedic'
+    *       401:
+    *         description: No autenticado
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Unauthorized'
+    *       403:
+    *         description: No permitido
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Forbidden'
+    *       500:
+    *         description: Error interno del servidor
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Error'
+    */
     public getMedic = async (request: Request, response: Response) => {
         try {
             const id = parseInt(request.params.id);
@@ -59,6 +161,57 @@ export class UserController {
         }
     }
 
+    /**
+    * @swagger
+    * /api/medics/{id}:
+    *   patch:
+    *     summary: Actualizar un medico
+    *     tags: [Users]
+    *     security:
+    *       - sessionAuth: []
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         schema:
+    *           type: integer
+    *           minimum: 1
+    *         description: ID del medico
+    *     responses:
+    *       200:
+    *         description: Medico actualizado
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 success:
+    *                   type: boolean
+    *                   example: true
+    *                 message:
+    *                   type: string
+    *                   example: "Medico actualizado exitosamente"
+    *                 data:
+    *                   $ref: '#/components/schemas/FullMedic'
+    *       401:
+    *         description: No autenticado
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Unauthorized'
+    *       403:
+    *         description: No permitido
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Forbidden'
+    *       500:
+    *         description: Error interno del servidor
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Error'
+    */
     public updateMedic = async (request: Request, response: Response) => {
         try {
             const userId = parseInt(request.params.id);
@@ -84,6 +237,57 @@ export class UserController {
         }
     }
 
+    /**
+    * @swagger
+    * /api/patients/{id}:
+    *   patch:
+    *     summary: Actualizar un paciente
+    *     tags: [Users]
+    *     security:
+    *       - sessionAuth: []
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         schema:
+    *           type: integer
+    *           minimum: 1
+    *         description: ID del paciente
+    *     responses:
+    *       200:
+    *         description: Paciente actualizado
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 success:
+    *                   type: boolean
+    *                   example: true
+    *                 message:
+    *                   type: string
+    *                   example: "Paciente actualizado exitosamente"
+    *                 data:
+    *                   $ref: '#/components/schemas/FullPatient'
+    *       401:
+    *         description: No autenticado
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Unauthorized'
+    *       403:
+    *         description: No permitido
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Forbidden'
+    *       500:
+    *         description: Error interno del servidor
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Error'
+    */
     public updatePatient = async (request: Request, response: Response) => {
         try {
             const userId = parseInt(request.params.id);

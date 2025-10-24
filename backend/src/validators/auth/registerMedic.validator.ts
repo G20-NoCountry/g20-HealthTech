@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import Medic from "../../models/Medic";
 
-const validateSpeciality = async (speciality: string) => {
-    const specialities = [
+const validateSpeciality = async (specialty: string) => {
+    const specialties = [
         "oftalmologia",
         "cardiologia",
         "neurologia",
@@ -12,28 +12,30 @@ const validateSpeciality = async (speciality: string) => {
         "ginecologia",
         "traumatologia",
         "psiquiatria",
-        "medicina_general"
+        "medicina_general",
+        "otra",
+        "etc"
     ];
-    if (!specialities.includes(speciality)) {
+    if (!specialties.includes(specialty)) {
         throw new Error('speciality no válido');
     }
 };
 
 const validateLicenseNum = async (id: string) => {
-    if (await Medic.findOne({ where: { license_num: id } })) {
+    if (await Medic.findOne({ where: { licence_num: id } })) {
         throw new Error('license_num ya está registrado');
     }
 };
 
 export const registerMedicValidator = [
-    body('speciality')
+    body('specialty')
         .notEmpty()
-        .withMessage("speciality es obligatorio")
+        .withMessage("specialty es obligatorio")
         .bail()
         .custom(validateSpeciality),
-    body('license_num')
+    body('licence_num')
         .notEmpty()
-        .withMessage("license_num es obligatorio")
+        .withMessage("licence_num es obligatorio")
         .bail()
         .custom(validateLicenseNum),
     body('schedule_from')
@@ -42,12 +44,12 @@ export const registerMedicValidator = [
         .bail()
         .isISO8601()
         .withMessage("schedule_from debe ser una fecha"),
-    body('schedule_to')
+    body('schedule_at')
         .notEmpty()
-        .withMessage("schedule_to es obligatorio")
+        .withMessage("schedule_at es obligatorio")
         .bail()
         .isISO8601()
-        .withMessage("schedule_to debe ser una fecha"),
+        .withMessage("schedule_at debe ser una fecha"),
 
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);

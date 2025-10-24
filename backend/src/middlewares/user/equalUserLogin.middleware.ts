@@ -5,7 +5,7 @@ export async function isEqualUserLogin(req: Request, res: Response, next: NextFu
   const user = req.user as User;
   const id = parseInt(req.params.id);
 
-  if (id && user.id != id) {
+  if (user.id != id) {
     return res.status(403).json({
       success: false,
       message: 'No puede realizar esta acción',

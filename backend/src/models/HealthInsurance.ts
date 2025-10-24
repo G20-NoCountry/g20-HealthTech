@@ -3,7 +3,7 @@ import { sequelize } from "../config/database.config";
 
 interface HealthInsuranceAttributes {
   id: number;
-  name: string;
+  name: "OSDE" | "UOM" | "Otros" | "etc";
   created_at: Date;
   updated_at: Date;
 }
@@ -19,7 +19,7 @@ class HealthInsurance
   implements HealthInsuranceAttributes
 {
   public id!: number;
-  public name!: string;
+  public name!: "OSDE" | "UOM" | "Otros" | "etc";
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -36,7 +36,7 @@ HealthInsurance.init(
       primaryKey: true,
     },
     name: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.ENUM("OSDE", "UOM", "Otros", "etc"),
       allowNull: false,
     },
     created_at: {

@@ -30,7 +30,7 @@ app.use("/api", router);
 
 // Swagger documentation - Must be after API routes
 app.use(
-  "/api",
+  "/api/docs",
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, {
     explorer: true,

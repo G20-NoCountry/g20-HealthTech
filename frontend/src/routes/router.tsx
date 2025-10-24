@@ -4,7 +4,7 @@ import { LoginPage } from '../pages/LoginPage.tsx';
 import { RegisterPage } from '../pages/RegisterPage.tsx'
 import ClinicalRecordsPage from '../pages/ClinicalRecordsPage.tsx';
 import HomePage from '../pages/HomePage.tsx';
-import { MedicalProfilePage } from '../pages/MedicalProfilePage.tsx';
+import { ProfilePage } from '../pages/ProfilePage.tsx';
 import DashboardPage from '../pages/DashboardPage.tsx';
 import AppointmentStepperPage from '../pages/AppointmentStepperPage.tsx';
 import DoctorProfilePage from '../pages/DoctorProfilePage.tsx';
@@ -17,7 +17,7 @@ export const AppRouter = () => {
         <Route index element={<HomePage />} />
         <Route path="appointment" element={<AppointmentStepperPage/>} />
         <Route path="clinical-records" element={<ClinicalRecordsPage />} />
-        <Route path="medical-profile" element={<MedicalProfilePage/>} />
+        <Route path="profile" element={<ProfilePage/>} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
       </Route>

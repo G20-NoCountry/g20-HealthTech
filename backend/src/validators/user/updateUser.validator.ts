@@ -66,7 +66,6 @@ export const updateUserValidator = [
         .custom(validateEmailExist),
     body('phone')
         .optional()
-        .optional()
         .notEmpty()
         .withMessage('phone no puede estar vacío')
         .bail()

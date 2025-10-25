@@ -7,7 +7,7 @@ module.exports = {
       [
         // Notificaciones de confirmación de citas
         {
-          user_id: 8, // Carmen González
+          user_id: 7, // Carmen González
           appointment_id: 3, // Su cita de mañana
           type: "email",
           status: "sent",
@@ -24,7 +24,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          user_id: 9, // Diego Pérez
+          user_id: 8, // Diego Pérez
           appointment_id: 4, // Su cita de mañana
           type: "sms",
           status: "sent",
@@ -41,7 +41,7 @@ module.exports = {
 
         // Notificaciones de recordatorios
         {
-          user_id: 10, // Sofía Hernández
+          user_id: 9, // Sofía Hernández
           appointment_id: 5, // Su cita de la próxima semana
           type: "email",
           status: "queued",
@@ -58,7 +58,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          user_id: 11, // Miguel Torres
+          user_id: 10, // Miguel Torres
           appointment_id: 6, // Su cita de la próxima semana
           type: "sms",
           status: "queued",
@@ -75,7 +75,7 @@ module.exports = {
 
         // Notificaciones de resultados
         {
-          user_id: 6, // Laura Fernández
+          user_id: 5, // Laura Fernández
           appointment_id: 1, // Su cita completada
           type: "email",
           status: "sent",
@@ -93,7 +93,7 @@ module.exports = {
 
         // Notificaciones de cancelación
         {
-          user_id: 6, // Laura Fernández
+          user_id: 5, // Laura Fernández
           appointment_id: 8, // Su cita cancelada
           type: "email",
           status: "sent",
@@ -112,7 +112,7 @@ module.exports = {
 
         // Notificaciones generales del sistema
         {
-          user_id: 7, // Roberto Silva
+          user_id: 6, // Roberto Silva
           type: "email",
           status: "sent",
           payload: JSON.stringify({
@@ -125,7 +125,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          user_id: 12, // Elena Vargas
+          user_id: 11, // Elena Vargas
           type: "email",
           status: "queued",
           payload: JSON.stringify({
@@ -140,7 +140,7 @@ module.exports = {
 
         // Notificaciones fallidas
         {
-          user_id: 8, // Carmen González
+          user_id: 7, // Carmen González
           appointment_id: 3,
           type: "sms",
           status: "failed",

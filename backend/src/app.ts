@@ -25,9 +25,10 @@ app.use(sessionConfig);
 app.use(passportConfig.initialize());
 app.use(passportConfig.session());
 
-// Swagger documentation
+
+// Swagger documentation - Must be after API routes
 app.use(
-  "/api",
+  "/api/docs",
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, {
     explorer: true,
@@ -41,6 +42,9 @@ app.get("/api.json", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.send(swaggerSpec);
 });
+
+// API Routes - Must be before Swagger middleware
+app.use("/api", router);
 
 // Database connection and synchronization
 const initializeDatabase = async () => {
@@ -66,12 +70,12 @@ const startServer = async () => {
   app.listen(appConfig.port, () => {
     console.log(`🚀 Server listening on port: ${appConfig.port}`);
     console.log(`🌍 Environment: ${appConfig.nodeEnv}`);
-    console.log(`📚 API Documentation: http://localhost:${appConfig.port}/api`);
+    console.log(
+      `📚 API Documentation: http://localhost:${appConfig.port}/api/docs`
+    );
     console.log(`📄 Swagger JSON: http://localhost:${appConfig.port}/api.json`);
   });
 };
-
-app.use("/api", router);
 
 startServer().catch((error) => {
   console.error("❌ Failed to start server:", error);

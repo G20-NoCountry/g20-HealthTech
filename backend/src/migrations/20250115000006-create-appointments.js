@@ -33,23 +33,16 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      end_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      status: {
-        type: Sequelize.ENUM(
-          "scheduled",
-          "confirmed",
-          "completed",
-          "cancelled",
-          "no_show"
-        ),
-        allowNull: false,
-        defaultValue: "scheduled",
-      },
       type: {
         type: Sequelize.ENUM("in_person", "virtual"),
+        allowNull: false,
+      },
+      symptoms: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+      },
+      diagnostic: {
+        type: Sequelize.STRING(100),
         allowNull: false,
       },
       location: {

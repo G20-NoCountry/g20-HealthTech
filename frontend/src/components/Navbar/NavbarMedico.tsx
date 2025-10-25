@@ -1,8 +1,9 @@
-import { Badge } from 'primereact/badge';
 import Logo from '../../assets/logo.png';
 import { SidebarMedico } from './SidebarMedico';
 import { doctorInfo } from '../../components/DasboardMedico/mockDoctorData';
 import { Avatar } from 'primereact/avatar';
+import { doctorNotifications } from '../../services/mockNotifications';
+import { NotificationBell } from '../Notifications/NotificationBell';
 
 export default function Navbar() {
   return (
@@ -21,11 +22,7 @@ export default function Navbar() {
               {doctorInfo.specialty}
             </p>
           </div>
-          <button className="hover:bg-muted flex h-8 w-8 cursor-pointer items-center justify-center bg-transparent">
-            <i className="pi pi-bell p-overlay-badge" style={{ fontSize: '1.5rem' }}>
-              <Badge value="" severity="danger"></Badge>
-            </i>
-          </button>
+          <NotificationBell notifications={doctorNotifications} />
         </div>
       </div>
     </header>

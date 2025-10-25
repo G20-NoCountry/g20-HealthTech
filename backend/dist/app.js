@@ -34,13 +34,13 @@ app.use(session_config_1.sessionConfig);
 app.use(passport_config_1.passportConfig.initialize());
 app.use(passport_config_1.passportConfig.session());
 // Swagger documentation
-app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec, {
+app.use("/api", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec, {
     explorer: true,
     customCss: ".swagger-ui .topbar { display: none }",
     customSiteTitle: "HealthTech API Documentation",
 }));
 // Serve Swagger JSON
-app.get("/api-docs.json", (req, res) => {
+app.get("/api.json", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     res.send(swagger_config_1.swaggerSpec);
 });
@@ -66,8 +66,8 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     app.listen(app_config_1.appConfig.port, () => {
         console.log(`🚀 Server listening on port: ${app_config_1.appConfig.port}`);
         console.log(`🌍 Environment: ${app_config_1.appConfig.nodeEnv}`);
-        console.log(`📚 API Documentation: http://localhost:${app_config_1.appConfig.port}/api-docs`);
-        console.log(`📄 Swagger JSON: http://localhost:${app_config_1.appConfig.port}/api-docs.json`);
+        console.log(`📚 API Documentation: http://localhost:${app_config_1.appConfig.port}/api`);
+        console.log(`📄 Swagger JSON: http://localhost:${app_config_1.appConfig.port}/api.json`);
     });
 });
 app.use("/api", index_1.default);

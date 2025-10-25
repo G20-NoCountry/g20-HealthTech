@@ -2,11 +2,16 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // Obtener los IDs de los usuarios médicos
+    const [users] = await queryInterface.sequelize.query(
+      "SELECT id, email FROM users WHERE rol = 'medico' ORDER BY id"
+    );
+
     await queryInterface.bulkInsert(
       "medic",
       [
         {
-          id: 2, // Dr. María García
+          id: users[0].id, // Dr. María García
           speciality: "cardiologia",
           license_num: 12345,
           schedule_from: new Date(),
@@ -15,7 +20,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 3, // Dr. Juan Rodríguez
+          id: users[1].id, // Dr. Juan Rodríguez
           speciality: "neurologia",
           license_num: 12346,
           schedule_from: new Date(),
@@ -24,7 +29,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 4, // Dra. Ana López
+          id: users[2].id, // Dra. Ana López
           speciality: "pediatria",
           license_num: 12347,
           schedule_from: new Date(),
@@ -33,7 +38,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 5, // Dr. Carlos Martínez
+          id: users[3].id, // Dr. Carlos Martínez
           speciality: "oftalmologia",
           license_num: 12348,
           schedule_from: new Date(),

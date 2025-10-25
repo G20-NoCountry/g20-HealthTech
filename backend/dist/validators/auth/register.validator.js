@@ -15,68 +15,57 @@ const models_1 = require("../../models");
 const validateEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const existingUser = yield models_1.User.findOne({ where: { email } });
     if (existingUser) {
-        throw new Error('email ya está registrado');
-    }
-});
-const validateRoleId = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const existingRole = yield models_1.Role.findOne({ where: { id } });
-    if (!existingRole) {
-        throw new Error('role_id no válido');
+        throw new Error("email ya está registrado");
     }
 });
 exports.registerValidator = [
-    (0, express_validator_1.body)('first_name')
+    (0, express_validator_1.body)("first_name")
         .notEmpty()
-        .withMessage('first_name es obligatorio')
+        .withMessage("first_name es obligatorio")
         .isAlpha()
-        .withMessage('first_name de contener caracteres alfabeticos')
+        .withMessage("first_name de contener caracteres alfabeticos")
         .bail()
         .isLength({ min: 3 })
-        .withMessage('first_name debe tener mínimo 3 caracteres'),
-    (0, express_validator_1.body)('last_name')
+        .withMessage("first_name debe tener mínimo 3 caracteres"),
+    (0, express_validator_1.body)("last_name")
         .notEmpty()
-        .withMessage('last_name es obligatorio')
+        .withMessage("last_name es obligatorio")
         .isAlpha()
-        .withMessage('last_name debe contener caracteres alfabeticos')
+        .withMessage("last_name debe contener caracteres alfabeticos")
         .bail()
         .isLength({ min: 3 })
-        .withMessage('last_name debe tener mínimo 3 caracteres'),
-    (0, express_validator_1.body)('email')
+        .withMessage("last_name debe tener mínimo 3 caracteres"),
+    (0, express_validator_1.body)("email")
         .notEmpty()
-        .withMessage('email es obligatorio')
+        .withMessage("email es obligatorio")
         .isEmail()
-        .withMessage('email no válido')
+        .withMessage("email no válido")
         .bail()
         .custom(validateEmail),
-    (0, express_validator_1.body)('password')
+    (0, express_validator_1.body)("password")
         .notEmpty()
-        .withMessage('password es obligatorio')
+        .withMessage("password es obligatorio")
         .bail()
         .isString()
         .isLength({ min: 4 })
-        .withMessage('password debe tener mínimo 4 caracteres')
+        .withMessage("password debe tener mínimo 4 caracteres")
         .isLength({ max: 60 })
-        .withMessage('password debe tener máximo 60 caracteres'),
-    (0, express_validator_1.body)('phone')
+        .withMessage("password debe tener máximo 60 caracteres"),
+    (0, express_validator_1.body)("phone")
         .optional()
         .notEmpty()
-        .withMessage('phone no puede estar vacío')
+        .withMessage("phone no puede estar vacío")
         .bail()
-        .customSanitizer(value => value.replace(/\D/g, ''))
+        .customSanitizer((value) => value.replace(/\D/g, ""))
         .isMobilePhone("es-AR")
-        .withMessage('phone no válido'),
-    (0, express_validator_1.body)('role_id')
-        .isNumeric()
-        .withMessage('role_id debe ser numerico')
-        .bail()
-        .custom(validateRoleId),
+        .withMessage("phone no válido"),
     (req, res, next) => {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
-                errors: errors.array()
+                errors: errors.array(),
             });
         }
         next();
-    }
+    },
 ];

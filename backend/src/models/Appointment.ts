@@ -6,8 +6,9 @@ interface AppointmentAttributes {
   patient_id: number;
   doctor_id: number;
   start_at: Date;
-  symptoms: string;
-  diagnostic: string;
+  end_at: Date;
+  symptoms?: string;
+  diagnostic?: string;
   type: "in_person" | "virtual";
   location?: string;
   created_at: Date;
@@ -17,7 +18,7 @@ interface AppointmentAttributes {
 interface AppointmentCreationAttributes
   extends Optional<
     AppointmentAttributes,
-    "id" | "location" | "created_at" | "updated_at"
+    "id" | "symptoms" | "diagnostic" | "location" | "created_at" | "updated_at"
   > {}
 
 class Appointment
@@ -28,8 +29,9 @@ class Appointment
   public patient_id!: number;
   public doctor_id!: number;
   public start_at!: Date;
-  public symptoms!: string;
-  public diagnostic!: string;
+  public end_at!: Date;
+  public symptoms?: string;
+  public diagnostic?: string;
   public type!: "in_person" | "virtual";
   public location?: string;
   public created_at!: Date;
@@ -67,13 +69,17 @@ Appointment.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    end_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
     symptoms: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     diagnostic: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     type: {
       type: DataTypes.ENUM("in_person", "virtual"),

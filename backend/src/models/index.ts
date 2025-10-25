@@ -1,7 +1,5 @@
 import { sequelize } from "../config/database.config";
-import Role from "./Role";
 import User from "./User";
-import HealthInsurance from "./HealthInsurance";
 import Patient from "./Patient";
 import Medic from "./Medic";
 import Appointment from "./Appointment";
@@ -11,20 +9,6 @@ import Notification from "./Notification";
 
 // Define associations
 const setupAssociations = () => {
-  // Role associations
-  Role.hasMany(User, { foreignKey: "role_id", as: "users" });
-  User.belongsTo(Role, { foreignKey: "role_id", as: "role" });
-
-  // HealthInsurance associations
-  HealthInsurance.hasMany(Patient, {
-    foreignKey: "id_health_insurance",
-    as: "patients",
-  });
-  Patient.belongsTo(HealthInsurance, {
-    foreignKey: "id_health_insurance",
-    as: "healthInsurance",
-  });
-
   // User associations with Patient and Medic (inheritance-like relationship)
   User.hasOne(Patient, { foreignKey: "id", as: "patient" });
   Patient.belongsTo(User, { foreignKey: "id", as: "user" });
@@ -85,9 +69,7 @@ setupAssociations();
 // Export models and sequelize instance
 export {
   sequelize,
-  Role,
   User,
-  HealthInsurance,
   Patient,
   Medic,
   Appointment,
@@ -98,9 +80,7 @@ export {
 
 export default {
   sequelize,
-  Role,
   User,
-  HealthInsurance,
   Patient,
   Medic,
   Appointment,

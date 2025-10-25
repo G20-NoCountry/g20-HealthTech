@@ -28,6 +28,9 @@ export const registerMedicValidator = [
         .notEmpty()
         .withMessage("licence_num es obligatorio")
         .bail()
+        .isNumeric()
+        .withMessage("licence_num debe ser numerico")
+        .bail()
         .custom(validateLicenseNum),
     body('schedule_from')
         .notEmpty()

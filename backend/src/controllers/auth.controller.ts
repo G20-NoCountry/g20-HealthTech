@@ -45,14 +45,25 @@ export class AuthController {
    *                   type: string
    *                   example: "Inicio de sesión exitoso!"
    *                 data:
-   *                   type: null
-   *                   example: null
+   *                   $ref: '#/components/schemas/FullPatient'
+   *       400:
+   *         description: Datos de entrada inválidos
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/BadRequest'
    *       401:
    *         description: Credenciales inválidas
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/Unauthorized'
+   *       409:
+   *         description: Existe una sesión iniciada
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Authenticated'
    *       500:
    *         description: Error interno del servidor
    *         content:
@@ -109,13 +120,19 @@ export class AuthController {
    *                   type: string
    *                   example: "Registro exitoso!"
    *                 data:
-   *                   $ref: '#/components/schemas/UserWithDetails'
+   *                   $ref: '#/components/schemas/FullPatient'
    *       400:
    *         description: Datos de entrada inválidos
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/BadRequest'
+   *       409:
+   *         description: Existe una sesión iniciada
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Authenticated'
    *       500:
    *         description: Error interno del servidor
    *         content:
@@ -177,19 +194,25 @@ export class AuthController {
    *                   type: string
    *                   example: "Registro exitoso!"
    *                 data:
-   *                   $ref: '#/components/schemas/UserWithDetails'
+   *                   $ref: '#/components/schemas/FullMedic'
    *       400:
    *         description: Datos de entrada inválidos
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/BadRequest'
    *       401:
    *         description: No autorizado - requiere autenticación de administrador
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/Unauthorized'
+   *       403:
+   *         description: No permitido - requiere permiso de administrador
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Forbidden'
    *       500:
    *         description: Error interno del servidor
    *         content:
@@ -245,16 +268,13 @@ export class AuthController {
    *                   type: string
    *                   example: "Usuario encontrado!"
    *                 data:
-   *                   type: object
-   *                   properties:
-   *                     user:
-   *                       $ref: '#/components/schemas/User'
+   *                   $ref: '#/components/schemas/FullPatient'
    *       401:
    *         description: No autorizado - requiere autenticación
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/Unauthorized'
    *       500:
    *         description: Error interno del servidor
    *         content:
@@ -297,26 +317,12 @@ export class AuthController {
    *     responses:
    *       204:
    *         description: Sesión cerrada exitosamente
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 success:
-   *                   type: boolean
-   *                   example: true
-   *                 message:
-   *                   type: string
-   *                   example: "Cierre de sesión exitoso"
-   *                 data:
-   *                   type: null
-   *                   example: null
    *       401:
    *         description: No autorizado - requiere autenticación
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/Unauthorized'
    *       500:
    *         description: Error interno del servidor
    *         content:

@@ -704,6 +704,53 @@ const swaggerDefinition: SwaggerDefinition = {
           }
         }
       },
+      Authenticated: {
+        type: "object",
+        properties: {
+          success: {
+            type: "boolean",
+            example: false,
+          },
+          message: {
+            type: "string",
+            example: "Ya existe una sesión activa",
+          }
+        }
+      },
+      BadRequest: {
+        type: "object",
+        properties: {
+          errors: {
+            type: "array",
+            description: "Listado de errores de validación",
+            items: {
+              type: "object",
+              properties: {
+                type: {
+                  type: "string",
+                  example: "field",
+                },
+                value: {
+                  type: "string",
+                  example: "@healthtech.com",
+                },
+                msg: {
+                  type: "string",
+                  example: "email no válido",
+                },
+                path: {
+                  type: "string",
+                  example: "email",
+                },
+                location: {
+                  type: "string",
+                  example: "body",
+                },
+              },
+            },
+          }
+        }
+      },
       Appointment: {
         type: "object",
         properties: {

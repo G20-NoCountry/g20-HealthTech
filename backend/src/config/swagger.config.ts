@@ -678,6 +678,58 @@ const swaggerDefinition: SwaggerDefinition = {
           },
         },
       },
+      MedicalRecordPatient: {
+        type: "object",
+        properties: {
+          critical_records: {
+            type: "object",
+            properties: {
+              allergies: {
+                type: "array",
+                example: ["polen", "penicilina"]
+              }
+            },
+          },
+          personal_records: {
+            type: "object",
+            properties: {
+              surgeries: {
+                type: "string",
+                example: "Colecistectomía (extirpación de vesicula) a los 40 años"
+              },
+              chronicle: {
+                type: "string",
+                example: "Hipertensión desde 2015"
+              },
+              medication: {
+                type: "string",
+                example: "Losartan 50 mg (hipertensión)"
+              },
+              habits: {
+                type: "string",
+                example: "fumar"
+              }
+            },
+          },
+          familiar_records: {
+            type: "object",
+            properties: {
+              mother: {
+                type: "string",
+                example: "Diabetes tipo 2"
+              },
+              father: {
+                type: "string",
+                example: "Infarto agudo de miocardio (65 años)"
+              },
+              sister: {
+                type: "string",
+                example: "Asma (desde la infancia)"
+              }
+            },
+          },
+        },
+      },
       Unauthorized: {
         type: "object",
         properties: {

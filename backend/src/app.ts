@@ -25,8 +25,6 @@ app.use(sessionConfig);
 app.use(passportConfig.initialize());
 app.use(passportConfig.session());
 
-// API Routes - Must be before Swagger middleware
-app.use("/api", router);
 
 // Swagger documentation - Must be after API routes
 app.use(
@@ -44,6 +42,9 @@ app.get("/api.json", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.send(swaggerSpec);
 });
+
+// API Routes - Must be before Swagger middleware
+app.use("/api", router);
 
 // Database connection and synchronization
 const initializeDatabase = async () => {

@@ -468,6 +468,242 @@ const swaggerDefinition: SwaggerDefinition = {
           },
         },
       },
+      UpdateMedicRequest: {
+        type: "object",
+        properties: {
+          first_name: {
+            type: "string",
+            example: "María modificado",
+          },
+          last_name: {
+            type: "string",
+            example: "González",
+          },
+          email: {
+            type: "string",
+            format: "email",
+            example: "medico_mod@ejemplo.com",
+          },
+          phone: {
+            type: "string",
+            example: "+5491122334455",
+          },
+          licence_num: {
+            type: "integer",
+            example: 123456,
+          },
+        },
+      },
+      UpdatePatientRequest: {
+        type: "object",
+        properties: {
+          first_name: {
+            type: "string",
+            example: "Juan",
+          },
+          last_name: {
+            type: "string",
+            example: "Pérez",
+          },
+          email: {
+            type: "string",
+            format: "email",
+            example: "paciente_mod@ejemplo.com",
+          },
+          phone: {
+            type: "string",
+            example: "+5491122334455",
+          },
+          health_insurance: {
+            enum: [
+              "OSECAC",
+              "OSPRERA",
+              "UPCN",
+              "OBSBA",
+              "OSDEPYM",
+              "OSUTHGRA",
+              "OSPE",
+              "OSPECON",
+              "OSIAD",
+              "OSSEG",
+            ],
+            example: "OSECAC",
+          },
+          blood_type: {
+            type: "string",
+            enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+            example: "A+",
+          },
+          alergias: {
+            type: "string",
+            example: "Ninguna",
+          },
+          cronicas_condition: {
+            type: "string",
+            example: "Ninguna",
+          },
+          actual_medication: {
+            type: "string",
+            example: "Ninguna",
+          },
+          location: {
+            type: "string",
+            example: "Buenos Aires, Argentina",
+          }
+        }
+      },
+      FullPatient: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          rol: {
+            type: "string",
+            enum: ["medico", "paciente"],
+            example: "paciente",
+          },
+          first_name: {
+            type: "string",
+            example: "Juan",
+          },
+          last_name: {
+            type: "string",
+            example: "Pérez",
+          },
+          email: {
+            type: "string",
+            format: "email",
+            example: "usuario@ejemplo.com",
+          },
+          phone: {
+            type: "string",
+            example: "+1234567890",
+          },
+          is_active: {
+            type: "boolean",
+            example: true,
+          },
+          health_insurance: {
+            type: "string",
+            enum: [
+              "OSECAC",
+              "OSPRERA",
+              "UPCN",
+              "OBSBA",
+              "OSDEPYM",
+              "OSUTHGRA",
+              "OSPE",
+              "OSPECON",
+              "OSIAD",
+              "OSSEG",
+            ],
+            example: "OSECAC",
+          },
+          blood_type: {
+            type: "string",
+            enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+            example: "A+",
+          },
+          alergias: {
+            type: "string",
+            example: "Ninguna",
+          },
+          cronicas_condition: {
+            type: "string",
+            example: "Ninguna",
+          },
+          actual_medication: {
+            type: "string",
+            example: "Ninguna",
+          },
+          location: {
+            type: "string",
+            example: "Buenos Aires, Argentina",
+          }
+        },
+      },
+      FullMedic: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          rol: {
+            type: "string",
+            enum: ["medico", "paciente"],
+            example: "paciente",
+          },
+          first_name: {
+            type: "string",
+            example: "Juan",
+          },
+          last_name: {
+            type: "string",
+            example: "Pérez",
+          },
+          email: {
+            type: "string",
+            format: "email",
+            example: "usuario@ejemplo.com",
+          },
+          phone: {
+            type: "string",
+            example: "+1234567890",
+          },
+          is_active: {
+            type: "boolean",
+            example: true,
+          },
+          specialty: {
+            type: "string",
+            enum: ["oftamologia", "etc"],
+            example: "oftamologia",
+          },
+          licence_num: {
+            type: "integer",
+            example: 123456,
+          },
+          schedule_from: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T09:00:00Z",
+          },
+          schedule_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-01T17:00:00Z",
+          },
+        },
+      },
+      Unauthorized: {
+        type: "object",
+        properties: {
+          success: {
+            type: "boolean",
+            example: false,
+          },
+          message: {
+            type: "string",
+            example: "La sesión no es válida o ha expirado",
+          }
+        }
+      },
+      Forbidden: {
+        type: "object",
+        properties: {
+          success: {
+            type: "boolean",
+            example: false,
+          },
+          message: {
+            type: "string",
+            example: "No puede realizar esta acción",
+          }
+        }
+      },
       Appointment: {
         type: "object",
         properties: {

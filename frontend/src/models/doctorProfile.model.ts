@@ -1,10 +1,8 @@
-// doctorProfile.model.ts
-
 export interface PersonalData {
   full_name: string;
   license_number: string;
   specialty: string;
-  years_experience: number;
+  years_experience: string;
   phone: string;
   email: string;
 }

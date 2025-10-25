@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { Button } from 'primereact/button';
 import { Chip } from 'primereact/chip';
 import type { DoctorProfile } from '../../models/doctorProfile.model';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { doctorProfileSchema, type DoctorProfileFormData } from './doctorProfile.schema';
 
 export function DoctorProfileForm({
   doctor,
@@ -14,121 +16,101 @@ export function DoctorProfileForm({
   onSave: (updated: DoctorProfile) => void;
   onCancel: () => void;
 }) {
-  const [form, setForm] = useState<DoctorProfile>(doctor);
   const [newArea, setNewArea] = useState('');
   const [newFormation, setNewFormation] = useState({ title: '', institution: '' });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<DoctorProfileFormData>({
+    resolver: zodResolver(doctorProfileSchema),
+    defaultValues: doctor,
+    mode: 'onBlur',
+  });
 
-  const handleChange = (section: keyof DoctorProfile, field: string, value: any) => {
-    setForm((prev) => {
-      const sectionValue = prev[section] as Record<string, any>;
-      return {
-        ...prev,
-        [section]: {
-          ...sectionValue,
-          [field]: value,
-        },
-      };
+  const form = watch();
+  console.log(errors);
+
+  const onSubmit = (data: DoctorProfileFormData) => {
+    console.log('Formulario enviado con los datos:', data);
+    const academic_background = data.academic_background.map((item, index) => ({
+      id: doctor.academic_background[index]?.id ?? crypto.randomUUID(),
+      ...item,
+    }));
+
+    onSave({
+      ...doctor,
+      ...data,
+      academic_background,
     });
-  };
-
-  const handleAcademicChange = (index: number, field: string, value: string) => {
-    const updated = [...form.academic_background];
-    updated[index] = { ...updated[index], [field]: value };
-    setForm((prev) => ({ ...prev, academic_background: updated }));
   };
 
   const addFormation = () => {
     if (!newFormation.title || !newFormation.institution) return;
-    setForm((prev) => ({
-      ...prev,
-      academic_background: [
-        ...prev.academic_background,
-        { id: crypto.randomUUID(), ...newFormation },
-      ],
-    }));
+    const updated = [...form.academic_background, { id: crypto.randomUUID(), ...newFormation }];
+    setValue('academic_background', updated);
     setNewFormation({ title: '', institution: '' });
   };
 
   const removeFormation = (index: number) => {
-    setForm((prev) => ({
-      ...prev,
-      academic_background: prev.academic_background.filter((_, i) => i !== index),
-    }));
+    const updated = form.academic_background.filter((_, i) => i !== index);
+    setValue('academic_background', updated);
   };
 
   const addArea = () => {
     if (!newArea.trim()) return;
-    setForm((prev) => ({
-      ...prev,
-      about_me: {
-        ...prev.about_me,
-        areas_of_expertise: [...prev.about_me.areas_of_expertise, newArea.trim()],
-      },
-    }));
+    const updated = [...form.about_me.areas_of_expertise, newArea.trim()];
+    setValue('about_me.areas_of_expertise', updated);
     setNewArea('');
   };
 
   const removeArea = (index: number) => {
-    setForm((prev) => ({
-      ...prev,
-      about_me: {
-        ...prev.about_me,
-        areas_of_expertise: prev.about_me.areas_of_expertise.filter((_, i) => i !== index),
-      },
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(form);
+    const updated = form.about_me.areas_of_expertise.filter((_, i) => i !== index);
+    setValue('about_me.areas_of_expertise', updated);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-      {/* Datos personales */}
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
       <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
         <h3 className="text-xl font-semibold md:col-span-2">Datos personales</h3>
         <InputField
           label="Nombre completo"
-          name="full_name"
-          value={form.personal_data.full_name}
-          onChange={(e) => handleChange('personal_data', 'full_name', e.target.value)}
+          error={errors.personal_data?.full_name?.message}
+          {...register('personal_data.full_name')}
         />
         <InputField
           label="Matrícula"
-          name="license_number"
-          value={form.personal_data.license_number}
-          onChange={(e) => handleChange('personal_data', 'license_number', e.target.value)}
+          error={errors.personal_data?.license_number?.message}
+          {...register('personal_data.license_number')}
         />
         <InputField
           label="Especialidad"
-          name="specialty"
-          value={form.personal_data.specialty}
-          onChange={(e) => handleChange('personal_data', 'specialty', e.target.value)}
+          error={errors.personal_data?.specialty?.message}
+          {...register('personal_data.specialty')}
         />
+
         <InputField
           label="Años de experiencia"
-          name="years_experience"
-          value={form.personal_data.years_experience.toString()}
-          onChange={(e) =>
-            handleChange('personal_data', 'years_experience', Number(e.target.value))
-          }
+          error={errors.personal_data?.years_experience?.message}
+          {...register('personal_data.years_experience')}
         />
+
         <InputField
           label="Teléfono"
-          name="phone"
-          value={form.personal_data.phone}
-          onChange={(e) => handleChange('personal_data', 'phone', e.target.value)}
+          error={errors.personal_data?.phone?.message}
+          {...register('personal_data.phone')}
         />
+
         <InputField
           label="Email"
-          name="email"
-          value={form.personal_data.email}
-          onChange={(e) => handleChange('personal_data', 'email', e.target.value)}
+          type="email"
+          error={errors.personal_data?.email?.message}
+          {...register('personal_data.email')}
         />
       </section>
 
-      {/* Formación académica */}
       <section className="flex flex-col gap-4">
         <h3 className="text-xl font-semibold">Formación académica</h3>
 
@@ -137,19 +119,19 @@ export function DoctorProfileForm({
             key={item.id}
             className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm md:grid md:grid-cols-2">
             <InputField
-              name={`title-${idx}`}
               label="Título"
-              value={item.title}
-              onChange={(e) => handleAcademicChange(idx, 'title', e.target.value)}
+              error={errors.academic_background?.[idx]?.title?.message}
+              {...register(`academic_background.${idx}.title`)}
             />
+
             <InputField
-              name={`institution-${idx}`}
               label="Institución"
-              value={item.institution}
-              onChange={(e) => handleAcademicChange(idx, 'institution', e.target.value)}
+              error={errors.academic_background?.[idx]?.institution?.message}
+              {...register(`academic_background.${idx}.institution`)}
             />
             <button
               onClick={() => removeFormation(idx)}
+              type="button"
               className="flex cursor-pointer items-center gap-3 self-center text-red-500 md:col-span-2 md:w-fit md:justify-self-end">
               <span className="pi pi-trash"></span>Eliminar
             </button>
@@ -171,13 +153,17 @@ export function DoctorProfileForm({
           />
           <button
             onClick={addFormation}
+            type="button"
             className="bg-accent flex w-full cursor-pointer items-center justify-center gap-3 self-center rounded-md p-3 text-white md:col-span-2 md:w-fit md:justify-self-end">
             <span className="pi pi-plus"></span>Agregar
           </button>
         </div>
+
+        {errors.academic_background && (
+          <p className="text-sm text-red-500">{errors.academic_background.message}</p>
+        )}
       </section>
 
-      {/* Sobre mí */}
       <section className="flex flex-col gap-4">
         <h3 className="text-xl font-semibold">Sobre mí</h3>
         <label htmlFor={`aboutme-description`} className="text-sm font-medium">
@@ -185,12 +171,14 @@ export function DoctorProfileForm({
         </label>
         <InputTextarea
           id={`aboutme-description`}
-          name={`aboutme-description`}
           value={form.about_me.description}
-          onChange={(e) => handleChange('about_me', 'description', e.target.value)}
+          {...register('about_me.description')}
           rows={4}
           className="w-full"
         />
+        {errors.about_me?.description && (
+          <p className="text-sm text-red-500">{errors.about_me.description.message}</p>
+        )}
 
         <label htmlFor={`aboutme-area`} className="text-sm font-medium">
           Áreas de especialización
@@ -212,7 +200,6 @@ export function DoctorProfileForm({
         <div className="flex w-full flex-col gap-2 md:flex-row">
           <InputText
             id={`aboutme-area`}
-            name={`aboutme-area`}
             placeholder="Nueva especialización"
             value={newArea}
             onChange={(e) => setNewArea(e.target.value)}
@@ -220,13 +207,17 @@ export function DoctorProfileForm({
           />
           <button
             onClick={addArea}
+            type="button"
             className="bg-accent flex w-full cursor-pointer items-center justify-center gap-3 self-center rounded-md p-3 text-white md:w-fit">
             <span className="pi pi-plus"></span>Agregar
           </button>
         </div>
+
+        {errors.about_me?.areas_of_expertise && (
+          <p className="text-sm text-red-500">{errors.about_me.areas_of_expertise.message}</p>
+        )}
       </section>
 
-      {/* Botones de acción */}
       <div className="flex justify-center gap-3 md:justify-end">
         <button
           type="submit"
@@ -244,32 +235,21 @@ export function DoctorProfileForm({
   );
 }
 
-function InputField({
-  label,
-  value,
-  onChange,
-  name,
-}: {
+type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  name: string;
-}) {
-  const id = `input-${name.replace(/\s+/g, '-').toLowerCase()}`; // genera id único basado en el name
+  error?: string;
+};
+
+function InputField({ label, name = '', error, value, ...props }: InputFieldProps) {
+  const id = `input-${name}`;
 
   return (
     <span className="flex flex-col gap-1">
       <label htmlFor={id} className="text-sm font-medium">
         {label}
       </label>
-      <InputText
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        autoComplete="false"
-        className="w-full"
-      />
+      <InputText id={id} name={name} {...props} className="w-full" />
+      {error && <p className="text-xs text-red-500">{error}</p>}
     </span>
   );
 }

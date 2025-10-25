@@ -687,6 +687,10 @@ const swaggerDefinition: SwaggerDefinition = {
               allergies: {
                 type: "array",
                 example: ["polen", "penicilina"]
+              },
+              intolerances: {
+                type: "array",
+                example: ["lactosa"]
               }
             },
           },
@@ -694,20 +698,20 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "object",
             properties: {
               surgeries: {
-                type: "string",
-                example: "Colecistectomía (extirpación de vesicula) a los 40 años"
+                type: "array",
+                example: ["Colecistectomía (extirpación de vesicula) a los 40 años"]
               },
               chronicle: {
-                type: "string",
-                example: "Hipertensión desde 2015"
+                type: "array",
+                example: ["Hipertensión desde 2015"]
               },
               medication: {
-                type: "string",
-                example: "Losartan 50 mg (hipertensión)"
+                type: "array",
+                example: ["Losartan 50 mg (hipertensión)"]
               },
               habits: {
-                type: "string",
-                example: "fumar"
+                type: "array",
+                example: ["fumar"]
               }
             },
           },
@@ -715,16 +719,33 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "object",
             properties: {
               mother: {
-                type: "string",
-                example: "Diabetes tipo 2"
+                type: "array",
+                example: ["Diabetes tipo 2"]
               },
               father: {
-                type: "string",
-                example: "Infarto agudo de miocardio (65 años)"
+                type: "array",
+                example: ["Infarto agudo de miocardio (65 años)"]
               },
               sister: {
-                type: "string",
-                example: "Asma (desde la infancia)"
+                type: "array",
+                example: ["Asma (desde la infancia)"]
+              }
+            },
+          },
+          lifestyle_records: {
+            type: "object",
+            properties: {
+              exercise: {
+                type: "array",
+                example: ["Caminatas ocasionales, menos de 2 veces por semana"]
+              },
+              sleep: {
+                type: "array",
+                example: ["6 horas promedio por noche"]
+              },
+              stress_level: {
+                type: "array",
+                example: ["Moderado, relacionado con trabajo"]
               }
             },
           },

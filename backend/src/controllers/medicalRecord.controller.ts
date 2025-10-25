@@ -98,18 +98,24 @@ export class MedicalRecordController {
     return {
       critical_records: {
         allergies: ["polen", "frutos secos"],
+        intolerances: ["lactosa"],
       },
       personal_records: {
-        surgeries: "Colecistectomía (extirpación de vesicula) a los 40 años",
-        chronicle: "Hipertensión desde 2015",
-        medication: "Losartan 50 mg (hipertensión)",
-        habits: "fumar"
+        surgeries: ["Colecistectomía (extirpación de vesicula) a los 40 años", "Apendicectomía en la adolescencia"],
+        chronicle: ["Hipertensión desde 2015"],
+        medication: ["Losartan 50 mg (hipertensión)", "Atorvastatina 20 mg/día (colesterol)"],
+        habits: ["fumar", "Consumo ocasional de alcohol"]
       },
       familiar_records: {
-        mother: "Diabetes tipo 2",
-        father: "Infarto agudo de miocardio (65 años)",
-        sister: "Asma (desde la infancia)"
-      }
+        mother: ["Diabetes tipo 2 diagnosticada a los 55 años"],
+        father: ["Infarto agudo de miocardio a los 65 años e hipertenso"],
+        sister: ["Asma persistente leve desde la infancia"]
+      },
+      lifestyle_records: {
+        exercise: ["Caminatas ocasionales, menos de 2 veces por semana"],
+        sleep: ["6 horas promedio por noche"],
+        stress_level: ["Moderado, relacionado con trabajo"]
+      },
     };
   }
 

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import { RegisterPatientDto } from "../dto/user/registerPatient.dto";
 import { RegisterMedicDto } from "../dto/user/registerMedic.dto";
+import { User } from "../models";
 
 /**
  * @swagger
@@ -44,14 +45,25 @@ export class AuthController {
    *                   type: string
    *                   example: "Inicio de sesión exitoso!"
    *                 data:
-   *                   type: null
-   *                   example: null
+   *                   $ref: '#/components/schemas/FullPatient'
+   *       400:
+   *         description: Datos de entrada inválidos
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/BadRequest'
    *       401:
    *         description: Credenciales inválidas
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/Unauthorized'
+   *       409:
+   *         description: Existe una sesión iniciada
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Authenticated'
    *       500:
    *         description: Error interno del servidor
    *         content:
@@ -61,10 +73,15 @@ export class AuthController {
    */
   public login = async (request: Request, response: Response) => {
     try {
+      const user = request.user as User;
+      const userByRole = user.rol == "paciente"
+        ? await this.userService.getPatient(user.id)
+        : await this.userService.getMedic(user.id);
+
       return response.status(200).json({
         success: true,
         message: "Inicio de sesión exitoso!",
-        data: null,
+        data: userByRole,
       });
     } catch (error: any) {
       return response.status(500).json({
@@ -103,13 +120,19 @@ export class AuthController {
    *                   type: string
    *                   example: "Registro exitoso!"
    *                 data:
-   *                   $ref: '#/components/schemas/UserWithDetails'
+   *                   $ref: '#/components/schemas/FullPatient'
    *       400:
    *         description: Datos de entrada inválidos
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/BadRequest'
+   *       409:
+   *         description: Existe una sesión iniciada
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Authenticated'
    *       500:
    *         description: Error interno del servidor
    *         content:
@@ -120,16 +143,17 @@ export class AuthController {
   public registerPatient = async (request: Request, response: Response) => {
     try {
       const body = request.body as RegisterPatientDto;
-      const user = await this.userService.registerUser(body);
+      body.rol = "paciente";
+      const patient = await this.userService.registerUser(body);
 
-      if (!user) {
+      if (!patient) {
         throw new Error("No se registro el usuario");
       }
 
       return response.status(201).json({
         success: true,
         message: "Registro exitoso!",
-        data: user,
+        data: patient,
       });
     } catch (error: any) {
       return response.status(500).json({
@@ -170,19 +194,25 @@ export class AuthController {
    *                   type: string
    *                   example: "Registro exitoso!"
    *                 data:
-   *                   $ref: '#/components/schemas/UserWithDetails'
+   *                   $ref: '#/components/schemas/FullMedic'
    *       400:
    *         description: Datos de entrada inválidos
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/BadRequest'
    *       401:
    *         description: No autorizado - requiere autenticación de administrador
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/Unauthorized'
+   *       403:
+   *         description: No permitido - requiere permiso de administrador
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Forbidden'
    *       500:
    *         description: Error interno del servidor
    *         content:
@@ -193,16 +223,17 @@ export class AuthController {
   public registerMedic = async (request: Request, response: Response) => {
     try {
       const body = request.body as RegisterMedicDto;
-      const user = await this.userService.registerUser(body);
+      body.rol = "medico";
+      const medic = await this.userService.registerUser(body);
 
-      if (!user) {
+      if (!medic) {
         throw new Error("No se registro el usuario");
       }
 
       return response.status(201).json({
         success: true,
         message: "Registro exitoso!",
-        data: user,
+        data: medic,
       });
     } catch (error: any) {
       return response.status(500).json({
@@ -237,16 +268,13 @@ export class AuthController {
    *                   type: string
    *                   example: "Usuario encontrado!"
    *                 data:
-   *                   type: object
-   *                   properties:
-   *                     user:
-   *                       $ref: '#/components/schemas/User'
+   *                   $ref: '#/components/schemas/FullPatient'
    *       401:
    *         description: No autorizado - requiere autenticación
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/Unauthorized'
    *       500:
    *         description: Error interno del servidor
    *         content:
@@ -256,20 +284,19 @@ export class AuthController {
    */
   public user = async (request: Request, response: Response) => {
     try {
-      const user = request.user;
-      if (!user) {
-        throw new Error();
-      }
+      const user = request.user as User;
+      const userByRole = user.rol == "paciente"
+        ? await this.userService.getPatient(user.id)
+        : await this.userService.getMedic(user.id);
 
       return response.status(200).json({
         success: true,
-        message: "Usuario encontrado!",
+        message: "Usuario obtenido!",
         data: {
-          user: user,
+          user: userByRole,
         },
       });
     } catch (error: any) {
-      console.log(error);
       return response.status(500).json({
         success: false,
         message: "Error al iniciar sesión!",
@@ -290,26 +317,12 @@ export class AuthController {
    *     responses:
    *       204:
    *         description: Sesión cerrada exitosamente
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 success:
-   *                   type: boolean
-   *                   example: true
-   *                 message:
-   *                   type: string
-   *                   example: "Cierre de sesión exitoso"
-   *                 data:
-   *                   type: null
-   *                   example: null
    *       401:
    *         description: No autorizado - requiere autenticación
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Error'
+   *               $ref: '#/components/schemas/Unauthorized'
    *       500:
    *         description: Error interno del servidor
    *         content:

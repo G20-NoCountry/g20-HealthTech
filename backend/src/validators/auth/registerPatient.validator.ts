@@ -16,14 +16,14 @@ export const registerPatientValidator = [
       "OSIAD",
       "OSSEG",
     ])
-    .withMessage("Obra social no válida"),
+    .withMessage("health_insurance no válida"),
   body("location")
     .notEmpty()
-    .withMessage("Ubicación es obligatoria")
+    .withMessage("location es obligatoria")
     .bail()
     .isString()
     .isLength({ min: 3 })
-    .withMessage("Ubicación no válida"),
+    .withMessage("location no válida"),
 
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

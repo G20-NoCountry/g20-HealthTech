@@ -9,20 +9,32 @@ const validateEmail = async (email: string) => {
   }
 };
 
+const validatePhoneExist = async (phone: string) => {
+  const existingPhone = await User.findOne({ where: { phone: phone } });
+  if (existingPhone) {
+    throw new Error('phone ya está registrado');
+  }
+};
+
 export const registerValidator = [
+  body()
+    .exists()
+    .withMessage("object es obligatorio"),
   body("first_name")
     .notEmpty()
-    .withMessage("first_name es obligatorio")
-    .isAlpha()
-    .withMessage("first_name de contener caracteres alfabeticos")
+    .withMessage('first_name es obligatorio')
+    .bail()
+    .matches(/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/)
+    .withMessage('first_name de contener caracteres alfabeticos')
     .bail()
     .isLength({ min: 3 })
     .withMessage("first_name debe tener mínimo 3 caracteres"),
   body("last_name")
     .notEmpty()
-    .withMessage("last_name es obligatorio")
-    .isAlpha()
-    .withMessage("last_name debe contener caracteres alfabeticos")
+    .withMessage('last_name es obligatorio')
+    .bail()
+    .matches(/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/)
+    .withMessage('last_name debe contener caracteres alfabeticos')
     .bail()
     .isLength({ min: 3 })
     .withMessage("last_name debe tener mínimo 3 caracteres"),
@@ -49,7 +61,9 @@ export const registerValidator = [
     .bail()
     .customSanitizer((value) => value.replace(/\D/g, ""))
     .isMobilePhone("es-AR")
-    .withMessage("phone no válido"),
+    .withMessage("phone no válido")
+    .bail()
+    .custom(validatePhoneExist),
 
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

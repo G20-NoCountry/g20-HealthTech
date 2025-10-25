@@ -13,14 +13,16 @@ export class UserService {
   public async registerUser(dto: RegisterPatientDto | RegisterMedicDto) {
     try {
       const newUser = await this.createUser(dto);
-      if (newUser) {
-        const newUserByRole = this.createUserByRole(newUser.id, dto);
-        if (!newUserByRole) {
-          throw new Error("Error en registro");
-        }
-        return newUserByRole;
+      if (!newUser) {
+        throw new Error("Error en registro");
       }
-      return newUser;
+      const newUserByRole = this.createUserByRole(newUser.id, dto);
+      if (!newUserByRole) {
+        throw new Error("Error en registro");
+      }
+      return newUser.rol == "paciente"
+        ? PatientResource.toResponse(newUser, newUserByRole as Patient)
+        : MedicResource.toResponse(newUser, newUserByRole as Medic);
     } catch (error: any) {
       return null;
     }

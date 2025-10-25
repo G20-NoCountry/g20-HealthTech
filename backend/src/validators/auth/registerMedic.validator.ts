@@ -4,16 +4,7 @@ import Medic from "../../models/Medic";
 
 const validateSpeciality = async (specialty: string) => {
     const specialties = [
-        "oftalmologia",
-        "cardiologia",
-        "neurologia",
-        "dermatologia",
-        "pediatria",
-        "ginecologia",
-        "traumatologia",
-        "psiquiatria",
-        "medicina_general",
-        "otra",
+        "oftamologia",
         "etc"
     ];
     if (!specialties.includes(specialty)) {
@@ -37,6 +28,9 @@ export const registerMedicValidator = [
         .notEmpty()
         .withMessage("licence_num es obligatorio")
         .bail()
+        .isNumeric()
+        .withMessage("licence_num debe ser numerico")
+        .bail()
         .custom(validateLicenseNum),
     body('schedule_from')
         .notEmpty()
@@ -51,13 +45,13 @@ export const registerMedicValidator = [
         .isISO8601()
         .withMessage("schedule_at debe ser una fecha"),
 
-  (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-      });
-    }
-    next();
-  },
+    (req: Request, res: Response, next: NextFunction) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array(),
+            });
+        }
+        next();
+    },
 ];

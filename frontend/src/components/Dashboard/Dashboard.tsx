@@ -70,7 +70,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="grid h-full w-full max-w-7xl grid-cols-1 gap-4 lg:max-h-105 lg:grid-cols-[minmax(0,410px)_auto]">
+    <div className="grid w-full max-w-7xl grid-cols-1 gap-4 lg:grid-cols-[minmax(0,410px)_auto]">
       {/* Calendario */}
       <Calendar
         value={date}

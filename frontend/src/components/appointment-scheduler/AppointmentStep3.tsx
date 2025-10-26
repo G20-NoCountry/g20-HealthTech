@@ -1,7 +1,7 @@
 import { AppointmentHeader } from './AppointmentHeader';
 import { AppointmentStepper } from './AppointmentStepper';
 import type { AppointmentData } from './AppointmentScheduler';
-import { specialties, doctors } from '../appointment-scheduler/mockData';
+import { specialties, doctors } from './mockData';
 
 interface Step3Props {
   onPrev: () => void;

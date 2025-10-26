@@ -15,7 +15,7 @@ export default function AppointmentCard({ appointment, isNext }: AppointmentCard
   const isEditable = isAppointmentEditable(status);
 
   return (
-    <div className="bg-button-primary/40 shadow-button-primary/80 relative flex flex-col gap-2 rounded-lg p-5 shadow-lg">
+    <div className="bg-button-primary/40 shadow-button-primary/80 relative flex flex-col gap-2 rounded-lg p-3 shadow-lg lg:p-5">
       {isNext && (
         <p className="flex items-center gap-3 font-medium">
           <span
@@ -32,7 +32,7 @@ export default function AppointmentCard({ appointment, isNext }: AppointmentCard
 
       {/* Acciones de editar / eliminar si es editable */}
       {isEditable && (
-        <div className="absolute top-5 right-5 flex flex-wrap gap-3">
+        <div className="absolute right-3 bottom-3 flex flex-wrap gap-3 lg:top-5 lg:right-5">
           <a
             href="https://react.dev"
             target="_blank"
@@ -47,19 +47,19 @@ export default function AppointmentCard({ appointment, isNext }: AppointmentCard
       )}
 
       <div className="flex flex-col gap-2">
-        <p className="flex items-center gap-3">
+        <p className="flex items-center gap-3 text-sm md:text-base">
           <i className="pi pi-user text-gray-400"></i>
           {doctor.name}
         </p>
-        <p className="flex items-center gap-3">
+        <p className="flex items-center gap-3 text-sm md:text-base">
           <i className="pi pi-calendar text-gray-400"></i>
           {date}
         </p>
-        <p className="flex items-center gap-3">
+        <p className="flex items-center gap-3 text-sm md:text-base">
           <i className="pi pi-clock text-gray-400"></i>
           {time}
         </p>
-        <p className="flex items-center gap-3">
+        <p className="flex items-center gap-3 text-sm md:text-base">
           <i className="pi pi-tag text-gray-400"></i>
           {type === 'virtual' ? 'Virtual' : 'Presencial'}
         </p>

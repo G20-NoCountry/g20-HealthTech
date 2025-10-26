@@ -221,7 +221,7 @@ export function DoctorProfileForm({
       <div className="flex justify-center gap-3 md:justify-end">
         <button
           type="submit"
-          className="bg-button-secondary cursor-pointer rounded-3xl px-6 py-3 text-black shadow-md/30">
+          className="bg-button-secondary hover:bg-muted cursor-pointer rounded-3xl px-6 py-3 text-black shadow-md/30 transition duration-300 ease-in-out">
           Guardar
         </button>
         <button

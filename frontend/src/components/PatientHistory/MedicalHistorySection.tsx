@@ -41,11 +41,17 @@ export const MedicalHistorySection = () => {
   const data = historyData as HistoryData; 
 
   return (
-    <div>
-      <h2 className="text-xl p-2 font-semibold mb-4 bg-[#E8DEF8] ">HISTORIAL MÉDICO</h2>
+      <div>
+      <h2 className="font-semibold mb-4">
+        <span className="bg-[#E8DEF8] px-3 py-1 rounded"> 
+             HISTORIAL MÉDICO
+        </span>
+      </h2>
+      <div className='border border-[#AFAAAA] p-4 rounded-lg'>
       <SimpleSection title={data.criticalAntecedents.title} items={data.criticalAntecedents.items} />
       <PersonalSection title={data.personalAntecedents.title} sections={data.personalAntecedents.sections} />
       <SimpleSection title={data.familyAntecedents.title} items={data.familyAntecedents.items} />
+      </div>
     </div>
   );
 };

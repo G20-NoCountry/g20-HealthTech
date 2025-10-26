@@ -6,7 +6,7 @@ interface PatientHeaderProps {
 
 export const PatientHeader = ({ patient }: PatientHeaderProps) => {
   return (
-    <div className=" bg-white  p-6 rounded-lg shadow-md mb-6 border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-md mb-6 border border-[#AFAAAA]">
       <div className="flex flex-col md:flex-row justify-between md:items-center mb-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">{patient.name}</h2>
@@ -23,9 +23,11 @@ export const PatientHeader = ({ patient }: PatientHeaderProps) => {
         <p className="flex items-center gap-2"><i className="pi pi-map-marker text-[#734F96]"></i> {patient.address}</p>
       </div>
       {patient.allergiesSummary && (
-        <div className=" border border-[#E51F1F]  px-4 py-2 rounded-md flex items-center gap-2 text-sm ">
-          <i className="pi pi-exclamation-triangle "></i>
-          <span>Alergias: {patient.allergiesSummary}</span>
+          <div className="flex justify-center"> 
+          <span className="border border-red-600  p-2 rounded-md flex items-center gap-2 ">
+            <i className="pi pi-exclamation-circle text-red-600"></i> 
+            <span>Alergias: {patient.allergiesSummary}</span>
+          </span>
         </div>
       )}
     </div>

@@ -67,8 +67,8 @@ export const NextAppointmentCard = ({ appointment }: NextAppointmentCardProps) =
     <Dialog
       header="Registro de Consulta"
       visible={isModalVisible}
-      style={{ width: '50vw' }} 
       onHide={() => setIsModalVisible(false)}
+      className="w-11/12 md:w-3/4 lg:w-1/2 xl:max-w-3xl" 
     >
         <DiagnosisModal
           appointmentData={appointment}

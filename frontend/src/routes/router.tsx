@@ -10,6 +10,7 @@ import { RouterLayoutMedico } from './common/RoutherLayoutMedico.tsx';
 import DashboardPage from '../pages/DashboardPage.tsx';
 import AppointmentStepperPage from '../pages/AppointmentStepperPage.tsx';
 import DoctorProfilePage from '../pages/DoctorProfilePage.tsx';
+import { PatientHistoryPage } from '../pages/PatientHistoryPage.tsx';
 
 export const AppRouter = () => {
   return (
@@ -26,6 +27,7 @@ export const AppRouter = () => {
       <Route path="/" element={<RouterLayoutMedico />}>
         <Route path='dashboardMedico' element={<DoctorDashboardPage />} />
         <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
+        <Route path='patient-history' element={<PatientHistoryPage />} />
       </Route>
 
       {/* Rutas sin sidebar */}

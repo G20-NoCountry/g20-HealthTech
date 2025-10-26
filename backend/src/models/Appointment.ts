@@ -4,7 +4,7 @@ import { sequelize } from "../config/database.config";
 interface AppointmentAttributes {
   id: number;
   patient_id: number;
-  doctor_id: number;
+  medic_id: number;
   start_at: Date;
   end_at: Date;
   symptoms?: string;
@@ -27,7 +27,7 @@ class Appointment
 {
   public id!: number;
   public patient_id!: number;
-  public doctor_id!: number;
+  public medic_id!: number;
   public start_at!: Date;
   public end_at!: Date;
   public symptoms?: string;
@@ -57,7 +57,7 @@ Appointment.init(
         key: "id",
       },
     },
-    doctor_id: {
+    medic_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

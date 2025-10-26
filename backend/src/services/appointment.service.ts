@@ -2,6 +2,7 @@ import Appointment from "../models/Appointment";
 import { CreateAppointmentDto } from "../dto/appointment/createAppointment.dto";
 import { UpdateAppointmentDto } from "../dto/appointment/updateAppointment.dto";
 import { Op } from "sequelize";
+import { start } from "repl";
 
 export class AppointmentService {
   public async createAppointment(
@@ -16,7 +17,8 @@ export class AppointmentService {
       // Check for overlapping appointments
       const overlappingAppointment = await this.checkForOverlappingAppointments(
         appointmentData.medic_id,
-        appointmentData.start_at
+        appointmentData.start_at,
+        appointmentData.end_at
       );
 
       if (overlappingAppointment) {
@@ -41,7 +43,7 @@ export class AppointmentService {
 
       if (startDate) {
         whereClause.start_at = {
-          [Op.between]: [new Date(startDate)],
+          [Op.gte]: new Date(startDate),
         };
       }
 
@@ -58,18 +60,26 @@ export class AppointmentService {
 
   public async getAppointmentsByPatient(
     patientId: number,
-    startDate?: string
+    startDate?: string,
+    endDate?: string
   ): Promise<Appointment[]> {
     try {
       const whereClause: any = {
         patient_id: patientId,
       };
 
-      if (startDate) {
+      //$ [FIX] - En un if cuando hay una sola línea, se puede usar sin llaves.
+      //$ [FIX] - Tenías un problema al usar el operador between, estás obligando a pasar ambos valores, se aplico una solución eficiente.
+      if (startDate)
         whereClause.start_at = {
-          [Op.between]: [new Date(startDate)],
+          [Op.gte]: new Date(startDate),
         };
-      }
+
+      if (endDate)
+        whereClause.end_at = {
+          [Op.lte]: new Date(endDate),
+        };
+
 
       const appointments = await Appointment.findAll({
         where: whereClause,
@@ -95,59 +105,33 @@ export class AppointmentService {
 
   public async updateAppointment(
     appointmentId: number,
-    updateData: UpdateAppointmentDto,
-    userRole: "medic" | "patient"
+    updateData: UpdateAppointmentDto
   ): Promise<Appointment> {
-    try {
-      const appointment = await Appointment.findByPk(appointmentId);
+    const appointment = await Appointment.findByPk(appointmentId);
 
-      if (!appointment) {
-        throw new Error("Cita no encontrada");
-      }
-
-      // If updating time, check for overlapping appointments
-      if (updateData.start_at) {
-        const startTime =
-          updateData.start_at || appointment.start_at.toISOString();
-
-        const overlappingAppointment =
-          await this.checkForOverlappingAppointments(
-            appointment.doctor_id,
-            startTime,
-            appointmentId
-          );
-
-        if (overlappingAppointment) {
-          throw new Error("Ya existe una cita en ese horario para este médico");
-        }
-      }
-
-      // Restrict certain fields based on user role
-      if (userRole === "patient") {
-        // Patients can only update time, type, and symptoms
-        const allowedFields = ["start_at", "type", "symptoms"];
-        const filteredData: any = {};
-        Object.keys(updateData).forEach((key) => {
-          if (allowedFields.includes(key)) {
-            filteredData[key] = updateData[key as keyof UpdateAppointmentDto];
-          }
-        });
-
-        await appointment.update(filteredData);
-      } else {
-        // Medics can update all fields
-        await appointment.update(updateData as any);
-      }
-
-      return appointment;
-    } catch (error) {
-      throw error;
+    if (!appointment) {
+      throw new Error("Cita no encontrada");
     }
+    // Check for overlapping appointments if start_at or end_at are being updated
+    if (updateData.start_at || updateData.end_at) {
+      const overlappingAppointment = await this.checkForOverlappingAppointments(
+        updateData.medic_id ?? appointment.medic_id,
+        updateData.start_at || appointment.start_at.toISOString(),
+        updateData.end_at || appointment.end_at.toISOString()
+      );
+
+      if (overlappingAppointment) {
+        throw new Error("Ya existe una cita en ese horario para este médico");
+      }
+    }
+    await appointment.update(updateData as any);
+    return appointment;
   }
 
-  public async deleteAppointment(appointmentId: number): Promise<boolean> {
+  //$ [FIX] - Se puede dar como sobre entendido que el "id" como parámetro pertenece a una cita, implicitamente el nombre del método te afirma que es un id de cita (o algún otro recurso en particular).
+  public async deleteAppointment(id: number): Promise<boolean> {
     try {
-      const appointment = await Appointment.findByPk(appointmentId);
+      const appointment = await Appointment.findByPk(id);
 
       if (!appointment) {
         throw new Error("Cita no encontrada");
@@ -162,35 +146,39 @@ export class AppointmentService {
 
   private async checkForOverlappingAppointments(
     medicId: number,
-    startAt: string | Date,
-    excludeId?: number
-  ): Promise<Appointment | null> {
-    try {
-      const whereClause: any = {
-        medic_id: medicId,
-        [Op.or]: [
-          {
-            start_at: {
-              [Op.between]: [new Date(startAt)],
-            },
+    startDate: string,
+    endDate: string
+  ): Promise<boolean> {
+    //$ [FIX] - Quizás sea mejor devolver un boolean en vez de la cita completa.
+    //$ [FIX] - No es necesario usar try-catch si se devuevle un throw, ya que el error se propagará automáticamente.
+    const whereClause: any = {
+      medic_id: medicId,
+      [Op.or]: [
+        {
+          start_at: {
+            [Op.between]: [new Date(startDate), new Date(endDate)],
           },
-          {
-            [Op.and]: [{ start_at: { [Op.lte]: new Date(startAt) } }],
+        },
+        {
+          end_at: {
+            [Op.between]: [new Date(startDate), new Date(endDate)],
           },
-        ],
-      };
+        },
+        {
+          start_at: {
+            [Op.lte]: new Date(startDate),
+          },
+          end_at: {
+            [Op.gte]: new Date(endDate),
+          },
+        },
+      ],
+    };
 
-      if (excludeId) {
-        whereClause.id = { [Op.ne]: excludeId };
-      }
+    const overlappingAppointment = await Appointment.findOne({
+      where: whereClause,
+    });
 
-      const overlappingAppointment = await Appointment.findOne({
-        where: whereClause,
-      });
-
-      return overlappingAppointment;
-    } catch (error) {
-      throw error;
-    }
+    return !!overlappingAppointment;
   }
 }

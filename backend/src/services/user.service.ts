@@ -108,34 +108,25 @@ export class UserService {
     }
   }
 
-  public async editUser(dto: UpdatePatientDto | UpdateMedicDto) {
-    try {
-      if (!await this.updateUser(dto)) {
-        throw new Error("Error en actualizacion");
-      }
-      const userByRole = await this.updateUserByRole(dto);
-      if (!userByRole) {
-        throw new Error("Error en actualizacion");
-      }
-      return userByRole;
-    } catch (error: any) {
-      return null;
-    }
-  }
+  //$ [FIX] Refactorización de método editUser para actualizar tanto pacientes como médicos
+  public async editUser(dto: UpdatePatientDto | UpdateMedicDto, rol: "paciente" | "medico") {
 
-  private async updateUserByRole(dto: UpdateUserDto) {
-    if ("licence_num" in dto) {
-      if (!await this.updateMedic(dto as UpdateMedicDto)) {
+    const userUpdated = await this.updateUser(dto);
+    if (!userUpdated) {
+      throw new Error("No se pudo actualizar el usuario");
+    }
+    if (rol === "paciente") {
+      const patientUpdated = await this.updatePatient(dto as UpdatePatientDto);
+      if (!patientUpdated) {
+        throw new Error("No se pudo actualizar el paciente");
+      }
+    } else {
+      const medicUpdated = await this.updateMedic(dto as UpdateMedicDto);
+      if (!medicUpdated) {
         throw new Error("No se pudo actualizar el medico");
       }
-      const medicUpdated = this.getMedic(dto.id);
-      return medicUpdated;
     }
-    if (! await this.updatePatient(dto as UpdatePatientDto)) {
-      throw new Error("No se pudo actualizar el paciente");
-    }
-    const patientUpdated = this.getPatient(dto.id);
-    return patientUpdated;
+    return dto;
   }
 
   private async updateUser(dto: UpdateUserDto) {

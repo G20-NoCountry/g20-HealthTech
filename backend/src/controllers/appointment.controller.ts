@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
+import { request, Request, RequestHandler, Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
 import { CreateAppointmentDto } from "../dto/appointment/createAppointment.dto";
 import { UpdateAppointmentDto } from "../dto/appointment/updateAppointment.dto";
+import { User } from "../models";
 
 /**
  * @swagger
@@ -19,20 +20,13 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/medic/appointments/{medic_id}:
+   * /api/medic/appointments:
    *   post:
    *     summary: Crear cita (médico)
-   *     description: Permite a un médico crear una nueva cita
+   *     description: Permite a un médico crear una nueva cita. IDs se envían en el cuerpo.
    *     tags: [Appointments]
    *     security:
    *       - sessionAuth: []
-   *     parameters:
-   *       - in: path
-   *         name: medic_id
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID del médico
    *     requestBody:
    *       required: true
    *       content:
@@ -68,16 +62,15 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { medic_id } = request.params;
       const body = request.body as CreateAppointmentDto;
+      const user = request.user as User;
 
-      // Set medic_id from URL parameter
-      body.medic_id = parseInt(medic_id);
+      // Validar rol y propiedad de la cita
+      if (!user || user.rol !== "medico")
+        throw new Error("Solo los médicos pueden crear citas como médicos.");
 
-      // If user is a patient, infer patient_id from JWT
-      if (request.user && (request.user as any).role === "patient") {
-        body.patient_id = (request.user as any).id;
-      }
+      if (user.id !== body.medic_id)
+        throw new Error("No puedes crear citas para otro médico.");
 
       const appointment = await this.appointmentService.createAppointment(body);
 
@@ -97,20 +90,13 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/patient/appointments/{patient_id}:
+   * /api/patient/appointments:
    *   post:
    *     summary: Crear cita (paciente)
-   *     description: Permite a un paciente crear una nueva cita
+   *     description: Permite a un paciente crear una nueva cita. IDs se envían en el cuerpo.
    *     tags: [Appointments]
    *     security:
    *       - sessionAuth: []
-   *     parameters:
-   *       - in: path
-   *         name: patient_id
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID del paciente
    *     requestBody:
    *       required: true
    *       content:
@@ -141,21 +127,23 @@ export class AppointmentController {
    *               $ref: '#/components/schemas/Error'
    */
   // Create appointment (for patient)
-  public createAppointmentAsPatient = async (
-    request: Request,
+  public createAppointmentAsPatient: RequestHandler = async (
+    request: Request<any, any, CreateAppointmentDto>,
     response: Response
   ) => {
     try {
-      const { paciente_id } = request.params;
-      const body = request.body as CreateAppointmentDto;
+      const user = request.user as User;
+      const body = request.body;
 
       // Set patient_id from URL parameter
-      body.patient_id = parseInt(paciente_id);
-
+      //$ [FIX] - La propiedad y el tipo de rol están en español.
       // If user is a medic, infer medic_id from JWT
-      if (request.user && (request.user as any).role === "medic") {
-        body.medic_id = (request.user as any).id;
-      }
+      if (request.user && user?.rol === "medico")
+        throw new Error("Los médicos no pueden crear citas como pacientes.");
+
+      //$ [FIX] - Validar que el paciente solo pueda solicitar citas para sí mismo.
+      if (user.id !== body.patient_id)
+        throw new Error("No puedes solicitar citas para otros pacientes.");
 
       const appointment = await this.appointmentService.createAppointment(body);
 
@@ -171,7 +159,7 @@ export class AppointmentController {
         data: null,
       });
     }
-  };
+  }
 
   /**
    * @swagger
@@ -301,13 +289,14 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { start_date } = request.query;
+      const { start_date, end_date } = request.query as { start_date?: string; end_date?: string };
       const patientId = (request.user as any).id;
 
       const appointments =
         await this.appointmentService.getAppointmentsByPatient(
           patientId,
-          start_date as string
+          start_date,
+          end_date
         );
 
       return response.status(200).json({
@@ -395,7 +384,7 @@ export class AppointmentController {
       }
 
       // Check if the appointment belongs to the logged-in medic
-      if (appointment.doctor_id !== (request.user as any).id) {
+      if (parseInt(id) !== (request.user as any).id) {
         return response.status(403).json({
           success: false,
           message: "No tienes permisos para ver esta cita",
@@ -478,7 +467,7 @@ export class AppointmentController {
       const appointment = await this.appointmentService.getAppointmentById(
         parseInt(id)
       );
-
+ 
       if (!appointment) {
         return response.status(404).json({
           success: false,
@@ -488,7 +477,7 @@ export class AppointmentController {
       }
 
       // Check if the appointment belongs to the logged-in patient
-      if (appointment.patient_id !== (request.user as any).id) {
+      if (parseInt(id) !== (request.user as any).id) {
         return response.status(403).json({
           success: false,
           message: "No tienes permisos para ver esta cita",
@@ -512,26 +501,13 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/medic/appointments/{paciente_id}/{id_cita}:
-   *   put:
+   * /api/medic/appointments:
+   *   patch:
    *     summary: Actualizar cita (médico)
-   *     description: Permite a un médico actualizar una cita existente
+   *     description: Permite a un médico actualizar una cita existente. IDs se envían en el cuerpo.
    *     tags: [Appointments]
    *     security:
    *       - sessionAuth: []
-   *     parameters:
-   *       - in: path
-   *         name: paciente_id
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID del paciente
-   *       - in: path
-   *         name: id_cita
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID de la cita
    *     requestBody:
    *       required: true
    *       content:
@@ -567,13 +543,18 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { id_cita } = request.params;
       const body = request.body as UpdateAppointmentDto;
+      const user = request.user as User;
+
+      if (!user || user.rol !== "medico")
+        throw new Error("Solo los médicos pueden actualizar citas como médicos.");
+
+      if (user.id !== body.medic_id)
+        throw new Error("No puedes actualizar citas de otro médico.");
 
       const appointment = await this.appointmentService.updateAppointment(
-        parseInt(id_cita),
-        body,
-        "medic"
+        body.id,
+        body
       );
 
       return response.status(200).json({
@@ -647,13 +628,17 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { id_cita } = request.params;
+
       const body = request.body as UpdateAppointmentDto;
+      const user = request.user as User;
+
+      if (user.id !== body.patient_id)
+        throw new Error("No puedes editar citas de otros pacientes.");
 
       const appointment = await this.appointmentService.updateAppointment(
-        parseInt(id_cita),
+        body.id,
         body,
-        "patient"
+
       );
 
       return response.status(200).json({
@@ -672,7 +657,7 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/medic/appointments/{paciente_id}/{id_cita}:
+   * /api/medic/appointments/{id}:
    *   delete:
    *     summary: Cancelar cita (médico)
    *     description: Permite a un médico cancelar una cita existente
@@ -681,13 +666,7 @@ export class AppointmentController {
    *       - sessionAuth: []
    *     parameters:
    *       - in: path
-   *         name: paciente_id
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID del paciente
-   *       - in: path
-   *         name: id_cita
+   *         name: id
    *         required: true
    *         schema:
    *           type: integer
@@ -722,9 +701,9 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { id_cita } = request.params;
+      const { id } = request.params;
 
-      await this.appointmentService.deleteAppointment(parseInt(id_cita));
+      await this.appointmentService.deleteAppointment(parseInt(id));
 
       return response.status(204).json({
         success: true,
@@ -792,9 +771,9 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { id_cita } = request.params;
+      const { id } = request.params;
 
-      await this.appointmentService.deleteAppointment(parseInt(id_cita));
+      await this.appointmentService.deleteAppointment(parseInt(id));
 
       return response.status(204).json({
         success: true,

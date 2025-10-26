@@ -22,9 +22,9 @@ router.use(isAuthenticated);
  */
 
 router.get("/patients/:id", userIdValidator, canAccessPatient, userController.getPatient);
-router.patch("/patients/:id", userIdValidator, isEqualUserLogin, updateUserValidator, updatePatientValidator, userController.updatePatient);
+router.patch("/patients", updateUserValidator, updatePatientValidator, userController.updatePatient);
 
 router.get("/medics/:id", userIdValidator, canAccessMedic, userController.getMedic);
-router.patch("/medics/:id", userIdValidator, isEqualUserLogin, canUpdateMedic, updateUserValidator, updateMedicValidator, userController.updateMedic);
+router.patch("/medics", updateUserValidator, updateMedicValidator, userController.updateMedic);
 
 export default router;

@@ -6,7 +6,7 @@ export const mockDoctorProfiles: DoctorProfile[] = [
     personal_data: {
       full_name: 'Dra. Ana González',
       license_number: 'MP-25478',
-      specialty: 'Cardiología',
+      specialty: { id: 'cardio', name: 'Cardiología' },
       years_experience: '12',
       phone: '+54 9 11 5555-1234',
       email: 'ana.gonzalez@clinicavida.com',
@@ -48,7 +48,7 @@ export const mockDoctorProfiles: DoctorProfile[] = [
     personal_data: {
       full_name: 'Dra. Paula Torres',
       license_number: 'MP-30122',
-      specialty: 'Dermatología',
+      specialty: { id: 'derma', name: 'Dermatología' },
       years_experience: '8',
       phone: '+54 9 11 6000-9876',
       email: 'paula.torres@clinicavida.com',

@@ -6,11 +6,11 @@ import type { Appointment } from '../../models/appointment.model';
 interface AppointmentCardProps {
   appointment: Appointment;
   isNext: boolean;
+  onEdit: () => void;
 }
 
-export default function AppointmentCard({ appointment, isNext }: AppointmentCardProps) {
+export default function AppointmentCard({ appointment, isNext, onEdit }: AppointmentCardProps) {
   const { doctor, start_at, type, status, end_at } = appointment;
-
   const { date, time } = formatDateTime(start_at);
   const isEditable = isAppointmentEditable(status);
 
@@ -33,13 +33,11 @@ export default function AppointmentCard({ appointment, isNext }: AppointmentCard
       {/* Acciones de editar / eliminar si es editable */}
       {isEditable && (
         <div className="absolute right-3 bottom-3 flex flex-wrap gap-3 lg:top-5 lg:right-5">
-          <a
-            href="https://react.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border-accent flex h-7 w-7 items-center justify-center rounded border bg-transparent">
+          <button
+            className="border-accent flex h-7 w-7 cursor-pointer items-center justify-center rounded border bg-transparent"
+            onClick={onEdit}>
             <span className="pi pi-pen-to-square text-accent"></span>
-          </a>
+          </button>
           <button className="border-accent flex h-7 w-7 cursor-pointer items-center justify-center rounded border bg-transparent">
             <span className="pi pi-trash text-accent"></span>
           </button>

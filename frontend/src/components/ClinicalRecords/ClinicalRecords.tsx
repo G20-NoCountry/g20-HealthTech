@@ -10,31 +10,24 @@ import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
 import { ClinicalRecordsService } from '../../services/ClinicalRecordsService';
 import type { ClinicalRecord } from '../../models/clinicalRecords';
+import { specialties } from '../../models/specialty.model';
+import { doctors } from '../../models/doctorProfile.model';
 
 export default function ClinicalRecords() {
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState(null);
-  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
+  const [selectedMonth, setSelectedMonth] = useState<any>(null);
+  const [selectedSpecialty, setSelectedSpecialty] = useState<any>(null);
   const [clinicalRecords, setClinicalRecords] = useState<ClinicalRecord[]>([]);
   const [expandedRows, setExpandedRows] = useState<
     DataTableExpandedRows | DataTableValueArray | undefined
   >(undefined);
 
   const [filters, setFilters] = useState<DataTableFilterMeta>({
-    medico: { value: null, matchMode: FilterMatchMode.EQUALS },
+    'medico.id': { value: null, matchMode: FilterMatchMode.EQUALS },
+    'especialidad.id': { value: null, matchMode: FilterMatchMode.EQUALS },
     fecha: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    especialidad: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
 
-  const doctor = [
-    { id: 'ana-gonzalez', name: 'Dra. Ana González' },
-    { id: 'carlos-ruiz', name: 'Dr. Carlos Ruiz' },
-    { id: 'luis-mendoza', name: 'Dr. Luis Mendoza' },
-    { id: 'paula-torres', name: 'Dra. Paula Torres' },
-    { id: 'julius-hibbert', name: 'Dr. Julius Hibbert' },
-    { id: 'nick-rivera', name: 'Dr. Nick Riviera' },
-    { id: 'mariana-salinas', name: 'Dra. Mariana Salinas' },
-  ];
   const months = [
     { name: 'Enero', code: '01' },
     { name: 'Febrero', code: '02' },
@@ -49,13 +42,6 @@ export default function ClinicalRecords() {
     { name: 'Noviembre', code: '11' },
     { name: 'Diciembre', code: '12' },
   ];
-  const specialties = [
-    { id: 'medicina-general', name: 'Medicina General' },
-    { id: 'oftalmologia', name: 'Oftalmología' },
-    { id: 'dermatologia', name: 'Dermatología' },
-    { id: 'pediatria', name: 'Pediatría' },
-    { id: 'cardiologia', name: 'Cardiología' },
-  ];
 
   useEffect(() => {
     ClinicalRecordsService.getClinicalRecords().then((data) => setClinicalRecords(data));
@@ -66,7 +52,10 @@ export default function ClinicalRecords() {
     setSelectedDoctor(e.value);
     setFilters((prev) => ({
       ...prev,
-      'medico.id': { value: e.value?.id || null, matchMode: FilterMatchMode.EQUALS },
+      'medico.id': {
+        value: e.value?.id ?? null,
+        matchMode: FilterMatchMode.EQUALS,
+      },
     }));
   };
 
@@ -76,8 +65,8 @@ export default function ClinicalRecords() {
     setFilters((prev) => ({
       ...prev,
       fecha: {
-        value: e.value?.code || null,
-        matchMode: FilterMatchMode.CONTAINS, // porque la fecha es "2025-10-01"
+        value: e.value?.code ?? null,
+        matchMode: FilterMatchMode.CONTAINS,
       },
     }));
   };
@@ -87,20 +76,24 @@ export default function ClinicalRecords() {
     setSelectedSpecialty(e.value);
     setFilters((prev) => ({
       ...prev,
-      'especialidad.id': { value: e.value?.id || null, matchMode: FilterMatchMode.EQUALS },
+      'especialidad.id': {
+        value: e.value?.id ?? null,
+        matchMode: FilterMatchMode.EQUALS,
+      },
     }));
   };
 
-  const allowExpansion = () => {
-    return clinicalRecords!.length > 0;
-  };
+  const allowExpansion = () => clinicalRecords.length > 0;
 
   const rowExpansionTemplate = (data: ClinicalRecord) => {
     return (
       <div className="flex flex-col gap-2">
-        <p className="text-accent">{data.diagnostico.descripcion}</p>
-        <div className="border-success rounded-4xl border bg-white px-5 py-3 text-xs">
-          <p>{data.diagnostico.tratamiento}</p>
+        <p className="text-accent font-semibold">{data.diagnostico.titulo}</p>
+        <div className="border-success rounded-4xl border bg-white px-5 py-3 text-sm">
+          <p>{data.diagnostico.descripcion}</p>
+          <p className="mt-2 text-gray-600">
+            <strong>Tratamiento:</strong> {data.diagnostico.tratamiento}
+          </p>
         </div>
       </div>
     );
@@ -116,7 +109,7 @@ export default function ClinicalRecords() {
             inputId="doctorFilter"
             value={selectedDoctor}
             onChange={onDoctorChange}
-            options={doctor}
+            options={doctors}
             optionLabel="name"
             placeholder="Todos los médicos"
             className="w-full md:w-md"
@@ -164,24 +157,14 @@ export default function ClinicalRecords() {
           onRowToggle={(e) => setExpandedRows(e.data)}
           rowExpansionTemplate={rowExpansionTemplate}
           dataKey="id"
-          tableStyle={{ minWidth: '50rem' }}
+          tableStyle={{ minWidth: '60rem' }}
           emptyMessage="No se encontraron registros médicos"
           className="max-w-7xl">
-          <Column
-            field="fecha"
-            header="Fecha"
-            style={{ width: '20%' }}
-            filterPlaceholder="Buscar por fecha"
-          />
-          <Column
-            field="medico.name"
-            header="Médico"
-            style={{ width: '20%' }}
-            filterPlaceholder="Buscar por médico"
-          />
-          <Column field="especialidad.name" header="Especialidad" style={{ width: '23%' }}></Column>
-          <Column field="diagnostico.titulo" header="Diagnóstico" style={{ width: '23%' }}></Column>
-          <Column expander={allowExpansion} style={{ width: '8' }}></Column>
+          <Column field="fecha" header="Fecha" style={{ width: '20%' }} />
+          <Column field="medico.name" header="Médico" style={{ width: '20%' }} />
+          <Column field="especialidad.name" header="Especialidad" style={{ width: '23%' }} />
+          <Column field="diagnostico.titulo" header="Diagnóstico" style={{ width: '23%' }} />
+          <Column expander={allowExpansion} style={{ width: '5%' }} />
         </DataTable>
       </div>
     </>

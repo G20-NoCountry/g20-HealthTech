@@ -1,8 +1,8 @@
 import { canJoinVirtualAppointment } from '../../utils/date';
 
 interface Props {
-  startAt: string;
-  endAt: string;
+  startAt: Date;
+  endAt: Date;
 }
 
 export default function VirtualAppointmentActions({ startAt, endAt }: Props) {

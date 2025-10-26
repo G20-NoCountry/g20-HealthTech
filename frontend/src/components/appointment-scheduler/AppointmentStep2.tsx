@@ -2,8 +2,8 @@ import { AppointmentHeader } from './AppointmentHeader';
 import { AppointmentStepper } from './AppointmentStepper';
 import { Calendar } from 'primereact/calendar';
 import type { AppointmentData } from './AppointmentScheduler';
-import { availableTimes } from './mockData';
 import { Controller } from 'react-hook-form';
+import { availableTimes } from '../../models/appointment.model';
 
 interface Step2Props {
   onNext: () => void;

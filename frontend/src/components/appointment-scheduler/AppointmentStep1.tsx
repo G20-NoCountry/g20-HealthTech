@@ -1,9 +1,10 @@
 import { AppointmentHeader } from './AppointmentHeader';
 import { AppointmentStepper } from './AppointmentStepper';
-import { specialties, doctors } from './mockData';
 import type { AppointmentData } from './AppointmentScheduler';
 import { Controller } from 'react-hook-form';
 import { useEffect } from 'react';
+import { doctors } from '../../models/doctorProfile.model';
+import { specialties } from '../../models/specialty.model';
 
 interface Step1Props {
   onNext: () => void;

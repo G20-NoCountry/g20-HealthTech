@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Chip } from 'primereact/chip';
-import type { DoctorProfile } from '../../models/doctorProfile.model';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { doctorProfileSchema, type DoctorProfileFormData } from './doctorProfile.schema';
+import type { DoctorProfile } from '../../models/doctorProfile.model';
+import { doctorToFormData, formDataToDoctor } from './doctorProfile.mapper';
+import { specialties } from '../../models/specialty.model';
 
 export function DoctorProfileForm({
   doctor,
@@ -16,6 +18,7 @@ export function DoctorProfileForm({
   onSave: (updated: DoctorProfile) => void;
   onCancel: () => void;
 }) {
+  const defaultValues = doctorToFormData(doctor);
   const [newArea, setNewArea] = useState('');
   const [newFormation, setNewFormation] = useState({ title: '', institution: '' });
   const {
@@ -26,25 +29,16 @@ export function DoctorProfileForm({
     formState: { errors },
   } = useForm<DoctorProfileFormData>({
     resolver: zodResolver(doctorProfileSchema),
-    defaultValues: doctor,
+    defaultValues,
     mode: 'onBlur',
   });
 
   const form = watch();
-  console.log(errors);
 
   const onSubmit = (data: DoctorProfileFormData) => {
     console.log('Formulario enviado con los datos:', data);
-    const academic_background = data.academic_background.map((item, index) => ({
-      id: doctor.academic_background[index]?.id ?? crypto.randomUUID(),
-      ...item,
-    }));
-
-    onSave({
-      ...doctor,
-      ...data,
-      academic_background,
-    });
+    const updatedDoctor = formDataToDoctor(data, doctor, specialties);
+    onSave(updatedDoctor);
   };
 
   const addFormation = () => {

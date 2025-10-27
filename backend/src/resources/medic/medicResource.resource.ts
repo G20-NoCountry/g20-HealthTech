@@ -10,9 +10,8 @@ export class MedicResource {
             rol: user.rol,
             phone: user.phone,
             is_active: user.is_active,
-            specialty: medic.specialty,
-            licence_num: medic.licence_num,
-            schedule_from: medic.schedule_from,
+            speciality: medic.speciality,
+            license_num: medic.license_num,
             schedule_at: medic.schedule_at
         };
     }

@@ -123,12 +123,12 @@ export class AppointmentService {
     if (!appointment) {
       throw new Error("Cita no encontrada");
     }
-    // Check for overlapping appointments if start_at or end_at are being updated
-    if (updateData.start_at || updateData.end_at) {
+    // Check for overlapping appointments if start_at is being updated
+    if (updateData.start_at) {
       const overlappingAppointment = await this.checkForOverlappingAppointments(
         updateData.medic_id ?? appointment.medic_id,
         updateData.start_at || appointment.start_at.toISOString(),
-        updateData.end_at || appointment.end_at.toISOString()
+        updateData.start_at || appointment.start_at.toISOString()
       );
 
       if (overlappingAppointment) {

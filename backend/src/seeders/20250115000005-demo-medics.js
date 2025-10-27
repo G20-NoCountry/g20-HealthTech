@@ -14,8 +14,7 @@ module.exports = {
           id: users[0].id, // Dr. María García
           speciality: "cardiologia",
           license_num: 12345,
-          schedule_from: new Date(),
-          schedule_to: new Date(),
+          schedule_at: new Date(),
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -23,8 +22,7 @@ module.exports = {
           id: users[1].id, // Dr. Juan Rodríguez
           speciality: "neurologia",
           license_num: 12346,
-          schedule_from: new Date(),
-          schedule_to: new Date(),
+          schedule_at: new Date(),
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -32,8 +30,7 @@ module.exports = {
           id: users[2].id, // Dra. Ana López
           speciality: "pediatria",
           license_num: 12347,
-          schedule_from: new Date(),
-          schedule_to: new Date(),
+          schedule_at: new Date(),
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -41,8 +38,7 @@ module.exports = {
           id: users[3].id, // Dr. Carlos Martínez
           speciality: "oftalmologia",
           license_num: 12348,
-          schedule_from: new Date(),
-          schedule_to: new Date(),
+          schedule_at: new Date(),
           created_at: new Date(),
           updated_at: new Date(),
         },

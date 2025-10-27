@@ -1839,7 +1839,7 @@ const swaggerDefinition: SwaggerDefinition = {
 
 const options = {
   definition: swaggerDefinition,
-  apis: ["./src/routes/*.ts", "./src/controllers/*.ts"],
+  apis: [], // Solo usar documentación manual, no generar desde archivos
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

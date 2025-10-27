@@ -12,7 +12,7 @@ module.exports = {
       [
         {
           id: users[0].id, // Laura Fernández
-          health_insurance: "OSDE", // OSDE
+          health_insurance: "OSECAC", // OSECAC
           location: "Buenos Aires, CABA",
           blood_type: "A+",
           alergias: "Ninguna",
@@ -56,7 +56,7 @@ module.exports = {
         },
         {
           id: users[4].id, // Sofía Hernández
-          health_insurance: "OSDE", // OSDE
+          health_insurance: "OSECAC", // OSECAC
           location: "La Plata, Buenos Aires",
           blood_type: "A-",
           alergias: "Ninguna",

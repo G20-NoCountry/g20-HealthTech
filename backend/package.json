@@ -12,6 +12,7 @@
     "db:migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
     "db:seed": "npx sequelize-cli db:seed:all",
     "db:seed:undo": "npx sequelize-cli db:seed:undo:all",
+    "db:seed:sequential": "node seed-all.js",
     "seed": "npm run db:seed",
     "seed:demo": "node scripts/seed-demo-data.js",
     "db:create": "npx sequelize-cli db:create",

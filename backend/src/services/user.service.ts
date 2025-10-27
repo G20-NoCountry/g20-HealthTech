@@ -140,7 +140,7 @@ export class UserService {
     }
   }
 
-  //$ [FIX] Refactorización de método editUser para actualizar tanto pacientes como médicos
+  // Refactorización de método editUser para actualizar tanto pacientes como médicos
   public async editUser(dto: UpdatePatientDto | UpdateMedicDto, rol: "paciente" | "medico") {
 
     const userUpdated = await this.updateUser(dto);

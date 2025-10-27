@@ -414,8 +414,8 @@ const swaggerDefinition: SwaggerDefinition = {
           "first_name",
           "last_name",
           "phone",
-          "specialty",
-          "licence_num",
+          "speciality",
+          "license_num",
           "schedule_at",
         ],
         properties: {
@@ -441,7 +441,7 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "string",
             example: "+1234567890",
           },
-          specialty: {
+          speciality: {
             type: "string",
             enum: ["oftalmologia", "cardiologia", "neurologia", "dermatologia", "pediatria", "ginecologia", "traumatologia", "psiquiatria", "medicina_general"],
             example: "cardiologia",
@@ -828,6 +828,11 @@ const swaggerDefinition: SwaggerDefinition = {
             format: "date-time",
             example: "2024-01-15T10:00:00Z",
           },
+          end_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:30:00Z",
+          },
           symptoms: {
             type: "string",
             example: "Dolor de cabeza y fiebre",
@@ -845,6 +850,23 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "string",
             example: "Consultorio 1",
           },
+          status: {
+            type: "string",
+            enum: ["scheduled", "completed", "cancelled", "no_show"],
+            example: "scheduled",
+            description: "Estado actual de la cita",
+          },
+          deleted_at: {
+            type: "string",
+            format: "date-time",
+            example: null,
+            description: "Fecha de cancelación (borrado lógico)",
+          },
+          cancellation_reason: {
+            type: "string",
+            example: null,
+            description: "Motivo de cancelación",
+          },
           created_at: {
             type: "string",
             format: "date-time",
@@ -859,7 +881,7 @@ const swaggerDefinition: SwaggerDefinition = {
       },
       CreateAppointmentRequest: {
         type: "object",
-        required: ["start_at", "type", "symptoms", "diagnostic"],
+        required: ["start_at", "end_at", "type", "symptoms", "diagnostic"],
         properties: {
           patient_id: {
             type: "integer",
@@ -876,6 +898,12 @@ const swaggerDefinition: SwaggerDefinition = {
             format: "date-time",
             example: "2024-01-15T10:00:00Z",
             description: "Fecha y hora de inicio de la cita",
+          },
+          end_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:30:00Z",
+            description: "Fecha y hora de finalización de la cita",
           },
           type: {
             type: "string",
@@ -908,6 +936,12 @@ const swaggerDefinition: SwaggerDefinition = {
             format: "date-time",
             example: "2024-01-15T10:00:00Z",
             description: "Fecha y hora de inicio de la cita",
+          },
+          end_at: {
+            type: "string",
+            format: "date-time",
+            example: "2024-01-15T10:30:00Z",
+            description: "Fecha y hora de finalización de la cita",
           },
           type: {
             type: "string",
@@ -1010,6 +1044,16 @@ const swaggerDefinition: SwaggerDefinition = {
           },
           medic: {
             $ref: "#/components/schemas/Medic",
+          },
+        },
+      },
+      CancelAppointmentRequest: {
+        type: "object",
+        properties: {
+          reason: {
+            type: "string",
+            example: "Paciente no puede asistir",
+            description: "Motivo de cancelación (opcional)",
           },
         },
       },
@@ -1587,8 +1631,8 @@ const swaggerDefinition: SwaggerDefinition = {
       },
       delete: {
         tags: ["Appointments"],
-        summary: "Eliminar cita como médico",
-        description: "Elimina una cita médica",
+        summary: "Cancelar cita como médico",
+        description: "Cancela una cita médica (borrado lógico) con razón opcional",
         security: [{ sessionAuth: [] }],
         parameters: [
           {
@@ -1599,9 +1643,19 @@ const swaggerDefinition: SwaggerDefinition = {
             description: "ID de la cita",
           },
         ],
+        requestBody: {
+          required: false,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/CancelAppointmentRequest",
+              },
+            },
+          },
+        },
         responses: {
           200: {
-            description: "Cita eliminada exitosamente",
+            description: "Cita cancelada exitosamente",
             content: {
               "application/json": {
                 schema: {
@@ -1612,6 +1666,143 @@ const swaggerDefinition: SwaggerDefinition = {
           },
           404: {
             description: "Cita no encontrada",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+      patch: {
+        tags: ["Appointments"],
+        summary: "Restaurar cita cancelada (médico)",
+        description: "Restaura una cita que fue cancelada previamente",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID de la cita a restaurar",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Cita restaurada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "La cita no está cancelada o no puede restaurarse",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Cita no encontrada",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/api/medic/appointments/cancelled": {
+      get: {
+        tags: ["Appointments"],
+        summary: "Obtener citas canceladas (médico)",
+        description: "Obtiene todas las citas canceladas del médico autenticado",
+        security: [{ sessionAuth: [] }],
+        responses: {
+          200: {
+            description: "Lista de citas canceladas",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/api/appointments/availability": {
+      get: {
+        tags: ["Appointments"],
+        summary: "Verificar disponibilidad de citas",
+        description: "Verifica la disponibilidad de un médico en una fecha y hora específica",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "medic_id",
+            in: "query",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID del médico",
+          },
+          {
+            name: "date",
+            in: "query",
+            required: true,
+            schema: { type: "string", format: "date" },
+            description: "Fecha a verificar (YYYY-MM-DD)",
+          },
+          {
+            name: "start_time",
+            in: "query",
+            required: true,
+            schema: { type: "string", format: "time" },
+            description: "Hora de inicio (HH:MM)",
+          },
+          {
+            name: "end_time",
+            in: "query",
+            required: true,
+            schema: { type: "string", format: "time" },
+            description: "Hora de fin (HH:MM)",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Disponibilidad verificada",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: { type: "boolean", example: true },
+                    message: { type: "string", example: "El médico está disponible" },
+                    data: {
+                      type: "object",
+                      properties: {
+                        available: { type: "boolean", example: true },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description: "Parámetros inválidos",
             content: {
               "application/json": {
                 schema: {
@@ -1759,8 +1950,8 @@ const swaggerDefinition: SwaggerDefinition = {
       },
       delete: {
         tags: ["Appointments"],
-        summary: "Eliminar cita como paciente",
-        description: "Elimina una cita médica",
+        summary: "Cancelar cita como paciente",
+        description: "Cancela una cita médica (borrado lógico) con razón opcional",
         security: [{ sessionAuth: [] }],
         parameters: [
           {
@@ -1771,9 +1962,19 @@ const swaggerDefinition: SwaggerDefinition = {
             description: "ID de la cita",
           },
         ],
+        requestBody: {
+          required: false,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/CancelAppointmentRequest",
+              },
+            },
+          },
+        },
         responses: {
           200: {
-            description: "Cita eliminada exitosamente",
+            description: "Cita cancelada exitosamente",
             content: {
               "application/json": {
                 schema: {
@@ -1788,6 +1989,73 @@ const swaggerDefinition: SwaggerDefinition = {
               "application/json": {
                 schema: {
                   $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+      patch: {
+        tags: ["Appointments"],
+        summary: "Restaurar cita cancelada (paciente)",
+        description: "Restaura una cita que fue cancelada previamente",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID de la cita a restaurar",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Cita restaurada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "La cita no está cancelada o no puede restaurarse",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Cita no encontrada",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/api/paciente/appointments/cancelled": {
+      get: {
+        tags: ["Appointments"],
+        summary: "Obtener citas canceladas (paciente)",
+        description: "Obtiene todas las citas canceladas del paciente autenticado",
+        security: [{ sessionAuth: [] }],
+        responses: {
+          200: {
+            description: "Lista de citas canceladas",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
                 },
               },
             },

@@ -4,18 +4,24 @@ import { createAppointmentValidator } from "../validators/appointment/createAppo
 import { updateAppointmentValidator } from "../validators/appointment/updateAppointment.validator";
 import { validationResult } from "express-validator";
 import { isAuthenticated } from "../middlewares/auth/authenticated.middleware";
+import { 
+  canDeleteMedicAppointment, 
+  canDeletePatientAppointment,
+  canUpdateMedicAppointment,
+  canUpdatePatientAppointment 
+} from "../middlewares/appointment/appointmentAuthorization.middleware";
 
 const router = Router();
 const appointmentController = new AppointmentController();
 
-//$ [FIX] - Asegurarse de que el usuario esté autenticado para todas las rutas de citas.
+// Asegurar que el usuario esté autenticado para todas las rutas de citas
 router.use(isAuthenticated);
 
-//$ [ADD] - Ruta para verificar disponibilidad de citas
-// router.get(
-//   "/appointments/availability",
-//   // appointmentController.getAvailability
-// );
+// Ruta para verificar disponibilidad de citas
+router.get(
+  "/appointments/availability",
+  appointmentController.getAvailability
+);
 
 // Middleware to handle validation errors
 const handleValidationErrors = (req: any, res: any, next: any) => {
@@ -50,18 +56,33 @@ router.patch(
   "/medic/appointments",
   updateAppointmentValidator,
   handleValidationErrors,
+  canUpdateMedicAppointment,
   appointmentController.updateMedicAppointment
 );
 
-//$ [TASK] - Validar que el medico sea el dueño de la cita antes de eliminar.
+// Validar que el medico sea el dueño de la cita antes de cancelar
 router.delete(
   "/medic/appointments/:id",
-  appointmentController.deleteMedicAppointment
+  canDeleteMedicAppointment,
+  appointmentController.cancelMedicAppointment
+);
+
+// Restaurar cita cancelada (médico)
+router.patch(
+  "/medic/appointments/:id/restore",
+  canDeleteMedicAppointment,
+  appointmentController.restoreMedicAppointment
+);
+
+// Obtener citas canceladas (médico)
+router.get(
+  "/medic/appointments/cancelled",
+  appointmentController.getCancelledMedicAppointments
 );
 
 // Patient routes
 
-//$ [FIX] - Solicitar desde el body las id en métodos post.
+// Solicitar desde el body las id en métodos post
 router.post(
   "/paciente/appointments",
   createAppointmentValidator,
@@ -79,18 +100,33 @@ router.get(
   appointmentController.getPatientAppointmentById
 );
 
-//$ [FIX] - Refactorización de ruta para hacer todos los cambios del body, cuidado con usar put para actualización de valores, mejor patch.
+// Refactorización de ruta para hacer todos los cambios del body, cuidado con usar put para actualización de valores, mejor patch
 router.patch(
   "/paciente/appointments",
   updateAppointmentValidator,
   handleValidationErrors,
+  canUpdatePatientAppointment,
   appointmentController.updatePatientAppointment
 );
 
-//$ [TASK] - Validar que el paciente sea el dueño de la cita antes de eliminar.
+// Validar que el paciente sea el dueño de la cita antes de cancelar
 router.delete(
   "/paciente/appointments/:id",
-  appointmentController.deletePatientAppointment
+  canDeletePatientAppointment,
+  appointmentController.cancelPatientAppointment
+);
+
+// Restaurar cita cancelada (paciente)
+router.patch(
+  "/paciente/appointments/:id/restore",
+  canDeletePatientAppointment,
+  appointmentController.restorePatientAppointment
+);
+
+// Obtener citas canceladas (paciente)
+router.get(
+  "/paciente/appointments/cancelled",
+  appointmentController.getCancelledPatientAppointments
 );
 
 export default router;

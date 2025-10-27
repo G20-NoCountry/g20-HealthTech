@@ -2,12 +2,12 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Obtener los IDs de usuarios y appointments
+    // Obtener los IDs de usuarios y appointments activas
     const [users] = await queryInterface.sequelize.query(
       "SELECT id, email FROM users ORDER BY id"
     );
     const [appointments] = await queryInterface.sequelize.query(
-      "SELECT id FROM appointments ORDER BY id"
+      "SELECT id FROM appointments WHERE deleted_at IS NULL ORDER BY id"
     );
 
     await queryInterface.bulkInsert(

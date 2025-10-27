@@ -21,6 +21,8 @@ router.use(isAuthenticated);
  *   description: Endpoints para gestionar usuarios
  */
 
+router.get("/medics/summary", userController.getMedicsSummary);
+
 router.get("/patients/:id", userIdValidator, canAccessPatient, userController.getPatient);
 router.patch("/patients", updateUserValidator, updatePatientValidator, userController.updatePatient);
 

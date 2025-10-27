@@ -28,6 +28,39 @@ export class UserService {
     }
   }
 
+  public async obtainMedicsSummary() {
+    try {
+      const medics = await Medic.findAll({ attributes: ["id", "specialty"] });
+      const ids = medics.map((m) => Number(m.get("id")));
+
+      const users = await User.findAll({
+      where: { id: ids },
+      attributes: ["id", "first_name", "last_name"],
+      });
+
+      const usersById = new Map<number, { first_name: string; last_name: string }>();
+      users.forEach((u) =>
+      usersById.set(Number(u.get("id")), {
+        first_name: String(u.get("first_name")),
+        last_name: String(u.get("last_name")),
+      })
+      );
+
+      return medics.map((m) => {
+      const id = Number(m.get("id"));
+      const user = usersById.get(id);
+      return {
+        medic_id: String(id),
+        specialty: String(m.get("specialty")),
+        first_name: user?.first_name ?? "",
+        last_name: user?.last_name ?? "",
+      };
+      });
+    } catch (error) {
+      return [] as { medic_id: string; specialty: string; first_name: string; last_name: string }[];
+    }
+  }
+
   private createUserByRole(
     userId: number,
     dto: RegisterMedicDto | RegisterPatientDto

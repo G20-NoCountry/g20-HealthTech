@@ -11,6 +11,12 @@ const appointmentController = new AppointmentController();
 //$ [FIX] - Asegurarse de que el usuario esté autenticado para todas las rutas de citas.
 router.use(isAuthenticated);
 
+//$ [ADD] - Ruta para verificar disponibilidad de citas
+// router.get(
+//   "/appointments/availability",
+//   // appointmentController.getAvailability
+// );
+
 // Middleware to handle validation errors
 const handleValidationErrors = (req: any, res: any, next: any) => {
   const errors = validationResult(req);

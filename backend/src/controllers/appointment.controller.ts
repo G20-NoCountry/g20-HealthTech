@@ -88,6 +88,7 @@ export class AppointmentController {
     }
   };
 
+
   /**
    * @swagger
    * /api/patient/appointments:
@@ -467,7 +468,7 @@ export class AppointmentController {
       const appointment = await this.appointmentService.getAppointmentById(
         parseInt(id)
       );
- 
+
       if (!appointment) {
         return response.status(404).json({
           success: false,

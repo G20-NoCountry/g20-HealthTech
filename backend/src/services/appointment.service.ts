@@ -32,6 +32,17 @@ export class AppointmentService {
     }
   }
 
+  private roundUpToSlot(date: Date, slotMinutes: number): Date {
+    const d = new Date(date);
+    d.setSeconds(0, 0);
+    const minutes = d.getMinutes();
+    const remainder = minutes % slotMinutes;
+    if (remainder !== 0) {
+      d.setMinutes(minutes + (slotMinutes - remainder));
+    }
+    return d;
+  }
+
   public async getAppointmentsByMedic(
     medicId: number,
     startDate?: string

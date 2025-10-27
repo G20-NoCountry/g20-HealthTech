@@ -14,6 +14,69 @@ export class UserController {
 
     /**
     * @swagger
+    * /api/medics:
+    *   get:
+    *     summary: Listar todos los médicos (resumen)
+    *     tags: [Users]
+    *     security:
+    *       - sessionAuth: []
+    *     responses:
+    *       200:
+    *         description: Lista de médicos obtenida correctamente
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 success:
+    *                   type: boolean
+    *                   example: true
+    *                 message:
+    *                   type: string
+    *                   example: "Obtenidos con exito!"
+    *                 data:
+    *                   type: array
+    *                   items:
+    *                     type: object
+    *                     properties:
+    *                       medic_id:
+    *                         type: string
+    *                         example: "12"
+    *                       specialty:
+    *                         type: string
+    *                         example: "oftamologia"
+    *       401:
+    *         description: No autenticado
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Unauthorized'
+    *       500:
+    *         description: Error interno del servidor
+    *         content:
+    *           application/json:
+    *             schema:
+    *               $ref: '#/components/schemas/Error'
+    */
+    public getMedicsSummary = async (request: Request, response: Response) => {
+        try {
+            const medics = await this.userService.obtainMedicsSummary();
+            return response.status(200).json({
+                success: true,
+                message: 'Obtenidos con exito!',
+                data: medics,
+            });
+        } catch (error: any) {
+            return response.status(500).json({
+                success: false,
+                message: 'Hubo un error al obtener los medicos',
+                data: null,
+            });
+        }
+    }
+
+    /**
+    * @swagger
     * /api/patients/{id}:
     *   get:
     *     summary: Obtener un paciente

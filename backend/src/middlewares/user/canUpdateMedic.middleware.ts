@@ -6,7 +6,7 @@ export async function canUpdateMedic(req: Request, res: Response, next: NextFunc
   const user = await User.findOne({ where: { id: userId } });
 
   if (user) {
-    const appointments = await Appointment.findAll({ where: { doctor_id: user.id } });
+    const appointments = await Appointment.findAll({ where: { medic_id: user.id } });
     if (appointments.length > 0) {
       return res.status(400).json({
         success: false,

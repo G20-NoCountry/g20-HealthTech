@@ -28,6 +28,39 @@ export class UserService {
     }
   }
 
+  public async obtainMedicsSummary() {
+    try {
+      const medics = await Medic.findAll({ attributes: ["id", "specialty"] });
+      const ids = medics.map((m) => Number(m.get("id")));
+
+      const users = await User.findAll({
+      where: { id: ids },
+      attributes: ["id", "first_name", "last_name"],
+      });
+
+      const usersById = new Map<number, { first_name: string; last_name: string }>();
+      users.forEach((u) =>
+      usersById.set(Number(u.get("id")), {
+        first_name: String(u.get("first_name")),
+        last_name: String(u.get("last_name")),
+      })
+      );
+
+      return medics.map((m) => {
+      const id = Number(m.get("id"));
+      const user = usersById.get(id);
+      return {
+        medic_id: String(id),
+        specialty: String(m.get("specialty")),
+        first_name: user?.first_name ?? "",
+        last_name: user?.last_name ?? "",
+      };
+      });
+    } catch (error) {
+      return [] as { medic_id: string; specialty: string; first_name: string; last_name: string }[];
+    }
+  }
+
   private createUserByRole(
     userId: number,
     dto: RegisterMedicDto | RegisterPatientDto
@@ -108,34 +141,25 @@ export class UserService {
     }
   }
 
-  public async editUser(dto: UpdatePatientDto | UpdateMedicDto) {
-    try {
-      if (!await this.updateUser(dto)) {
-        throw new Error("Error en actualizacion");
-      }
-      const userByRole = await this.updateUserByRole(dto);
-      if (!userByRole) {
-        throw new Error("Error en actualizacion");
-      }
-      return userByRole;
-    } catch (error: any) {
-      return null;
-    }
-  }
+  //$ [FIX] Refactorización de método editUser para actualizar tanto pacientes como médicos
+  public async editUser(dto: UpdatePatientDto | UpdateMedicDto, rol: "paciente" | "medico") {
 
-  private async updateUserByRole(dto: UpdateUserDto) {
-    if ("licence_num" in dto) {
-      if (!await this.updateMedic(dto as UpdateMedicDto)) {
+    const userUpdated = await this.updateUser(dto);
+    if (!userUpdated) {
+      throw new Error("No se pudo actualizar el usuario");
+    }
+    if (rol === "paciente") {
+      const patientUpdated = await this.updatePatient(dto as UpdatePatientDto);
+      if (!patientUpdated) {
+        throw new Error("No se pudo actualizar el paciente");
+      }
+    } else {
+      const medicUpdated = await this.updateMedic(dto as UpdateMedicDto);
+      if (!medicUpdated) {
         throw new Error("No se pudo actualizar el medico");
       }
-      const medicUpdated = this.getMedic(dto.id);
-      return medicUpdated;
     }
-    if (! await this.updatePatient(dto as UpdatePatientDto)) {
-      throw new Error("No se pudo actualizar el paciente");
-    }
-    const patientUpdated = this.getPatient(dto.id);
-    return patientUpdated;
+    return dto;
   }
 
   private async updateUser(dto: UpdateUserDto) {

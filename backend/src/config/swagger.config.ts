@@ -176,19 +176,14 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "integer",
             example: 1,
           },
-          specialty: {
+          speciality: {
             type: "string",
-            enum: ["oftamologia", "etc"],
-            example: "oftamologia",
+            enum: ["oftalmologia", "cardiologia", "neurologia", "dermatologia", "pediatria", "ginecologia", "traumatologia", "psiquiatria", "medicina_general"],
+            example: "cardiologia",
           },
-          licence_num: {
+          license_num: {
             type: "integer",
             example: 123456,
-          },
-          schedule_from: {
-            type: "string",
-            format: "date-time",
-            example: "2024-01-01T09:00:00Z",
           },
           schedule_at: {
             type: "string",
@@ -421,7 +416,6 @@ const swaggerDefinition: SwaggerDefinition = {
           "phone",
           "specialty",
           "licence_num",
-          "schedule_from",
           "schedule_at",
         ],
         properties: {
@@ -449,17 +443,12 @@ const swaggerDefinition: SwaggerDefinition = {
           },
           specialty: {
             type: "string",
-            enum: ["oftamologia", "etc"],
-            example: "oftamologia",
+            enum: ["oftalmologia", "cardiologia", "neurologia", "dermatologia", "pediatria", "ginecologia", "traumatologia", "psiquiatria", "medicina_general"],
+            example: "cardiologia",
           },
-          licence_num: {
+          license_num: {
             type: "integer",
             example: 123456,
-          },
-          schedule_from: {
-            type: "string",
-            format: "date-time",
-            example: "2024-01-01T09:00:00Z",
           },
           schedule_at: {
             type: "string",
@@ -488,7 +477,7 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "string",
             example: "+5491122334455",
           },
-          licence_num: {
+          license_num: {
             type: "integer",
             example: 123456,
           },
@@ -657,19 +646,14 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "boolean",
             example: true,
           },
-          specialty: {
+          speciality: {
             type: "string",
-            enum: ["oftamologia", "etc"],
-            example: "oftamologia",
+            enum: ["oftalmologia", "cardiologia", "neurologia", "dermatologia", "pediatria", "ginecologia", "traumatologia", "psiquiatria", "medicina_general"],
+            example: "cardiologia",
           },
-          licence_num: {
+          license_num: {
             type: "integer",
             example: 123456,
-          },
-          schedule_from: {
-            type: "string",
-            format: "date-time",
-            example: "2024-01-01T09:00:00Z",
           },
           schedule_at: {
             type: "string",
@@ -844,11 +828,6 @@ const swaggerDefinition: SwaggerDefinition = {
             format: "date-time",
             example: "2024-01-15T10:00:00Z",
           },
-          end_at: {
-            type: "string",
-            format: "date-time",
-            example: "2024-01-15T11:00:00Z",
-          },
           symptoms: {
             type: "string",
             example: "Dolor de cabeza y fiebre",
@@ -880,7 +859,7 @@ const swaggerDefinition: SwaggerDefinition = {
       },
       CreateAppointmentRequest: {
         type: "object",
-        required: ["start_at", "type"],
+        required: ["start_at", "type", "symptoms", "diagnostic"],
         properties: {
           patient_id: {
             type: "integer",
@@ -912,7 +891,12 @@ const swaggerDefinition: SwaggerDefinition = {
           symptoms: {
             type: "string",
             example: "Dolor de cabeza",
-            description: "Síntomas del paciente (opcional)",
+            description: "Síntomas del paciente",
+          },
+          diagnostic: {
+            type: "string",
+            example: "Gripe común",
+            description: "Diagnóstico inicial",
           },
         },
       },
@@ -1049,11 +1033,6 @@ const swaggerDefinition: SwaggerDefinition = {
             format: "date-time",
             example: "2024-01-15T10:00:00Z",
           },
-          end_at: {
-            type: "string",
-            format: "date-time",
-            example: "2024-01-15T11:00:00Z",
-          },
           symptoms: {
             type: "string",
             example: "Dolor de cabeza y fiebre",
@@ -1099,6 +1078,763 @@ const swaggerDefinition: SwaggerDefinition = {
       sessionAuth: [],
     },
   ],
+  paths: {
+    "/auth/login": {
+      post: {
+        tags: ["Authentication"],
+        summary: "Iniciar sesión",
+        description: "Autentica a un usuario y crea una sesión",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/LoginRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Login exitoso",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Credenciales inválidas",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/auth/register/patient": {
+      post: {
+        tags: ["Authentication"],
+        summary: "Registrar paciente",
+        description: "Crea una nueva cuenta de paciente",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/RegisterPatientRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: "Paciente registrado exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Datos de validación incorrectos",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BadRequest",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/auth/register/medic": {
+      post: {
+        tags: ["Authentication"],
+        summary: "Registrar médico",
+        description: "Crea una nueva cuenta de médico (solo administradores)",
+        security: [{ sessionAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/RegisterMedicRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: "Médico registrado exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Datos de validación incorrectos",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BadRequest",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Acceso denegado - Solo administradores",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Forbidden",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/auth/user": {
+      get: {
+        tags: ["Authentication"],
+        summary: "Obtener usuario actual",
+        description: "Obtiene la información del usuario autenticado",
+        security: [{ sessionAuth: [] }],
+        responses: {
+          200: {
+            description: "Información del usuario",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          401: {
+            description: "No autenticado",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Unauthorized",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/auth/logout": {
+      post: {
+        tags: ["Authentication"],
+        summary: "Cerrar sesión",
+        description: "Cierra la sesión del usuario actual",
+        security: [{ sessionAuth: [] }],
+        responses: {
+          200: {
+            description: "Sesión cerrada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/medics/summary": {
+      get: {
+        tags: ["Users"],
+        summary: "Obtener resumen de médicos",
+        description: "Obtiene una lista resumida de todos los médicos disponibles",
+        security: [{ sessionAuth: [] }],
+        responses: {
+          200: {
+            description: "Lista de médicos",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: { type: "boolean", example: true },
+                    message: { type: "string", example: "Médicos obtenidos exitosamente" },
+                    data: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          medic_id: { type: "string", example: "1" },
+                          speciality: { type: "string", example: "cardiologia" },
+                          first_name: { type: "string", example: "María" },
+                          last_name: { type: "string", example: "García" },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/patients/{id}": {
+      get: {
+        tags: ["Users"],
+        summary: "Obtener paciente por ID",
+        description: "Obtiene la información completa de un paciente específico",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID del paciente",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Información del paciente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Sin permisos para acceder a este paciente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Forbidden",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/patients": {
+      patch: {
+        tags: ["Users"],
+        summary: "Actualizar información de paciente",
+        description: "Actualiza la información del paciente autenticado",
+        security: [{ sessionAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdatePatientRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Paciente actualizado exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Datos de validación incorrectos",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BadRequest",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/medics/{id}": {
+      get: {
+        tags: ["Users"],
+        summary: "Obtener médico por ID",
+        description: "Obtiene la información completa de un médico específico",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID del médico",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Información del médico",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Sin permisos para acceder a este médico",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Forbidden",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/medics": {
+      patch: {
+        tags: ["Users"],
+        summary: "Actualizar información de médico",
+        description: "Actualiza la información del médico autenticado",
+        security: [{ sessionAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateMedicRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Médico actualizado exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Datos de validación incorrectos",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BadRequest",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/medic/appointments": {
+      post: {
+        tags: ["Appointments"],
+        summary: "Crear cita como médico",
+        description: "Crea una nueva cita médica",
+        security: [{ sessionAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/CreateAppointmentRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: "Cita creada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Datos de validación incorrectos",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BadRequest",
+                },
+              },
+            },
+          },
+        },
+      },
+      get: {
+        tags: ["Appointments"],
+        summary: "Obtener citas del médico",
+        description: "Obtiene todas las citas del médico autenticado",
+        security: [{ sessionAuth: [] }],
+        responses: {
+          200: {
+            description: "Lista de citas del médico",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+        },
+      },
+      patch: {
+        tags: ["Appointments"],
+        summary: "Actualizar cita como médico",
+        description: "Actualiza una cita médica existente",
+        security: [{ sessionAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateAppointmentRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Cita actualizada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Datos de validación incorrectos",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BadRequest",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/medic/appointments/{id}": {
+      get: {
+        tags: ["Appointments"],
+        summary: "Obtener cita específica del médico",
+        description: "Obtiene una cita específica del médico autenticado",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID de la cita",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Información de la cita",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Cita no encontrada",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        tags: ["Appointments"],
+        summary: "Eliminar cita como médico",
+        description: "Elimina una cita médica",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID de la cita",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Cita eliminada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Cita no encontrada",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/paciente/appointments": {
+      post: {
+        tags: ["Appointments"],
+        summary: "Crear cita como paciente",
+        description: "Crea una nueva cita médica",
+        security: [{ sessionAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/CreateAppointmentRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: "Cita creada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Datos de validación incorrectos",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BadRequest",
+                },
+              },
+            },
+          },
+        },
+      },
+      get: {
+        tags: ["Appointments"],
+        summary: "Obtener citas del paciente",
+        description: "Obtiene todas las citas del paciente autenticado",
+        security: [{ sessionAuth: [] }],
+        responses: {
+          200: {
+            description: "Lista de citas del paciente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+        },
+      },
+      patch: {
+        tags: ["Appointments"],
+        summary: "Actualizar cita como paciente",
+        description: "Actualiza una cita médica existente",
+        security: [{ sessionAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateAppointmentRequest",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Cita actualizada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Datos de validación incorrectos",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BadRequest",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/paciente/appointments/{id}": {
+      get: {
+        tags: ["Appointments"],
+        summary: "Obtener cita específica del paciente",
+        description: "Obtiene una cita específica del paciente autenticado",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID de la cita",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Información de la cita",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Cita no encontrada",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        tags: ["Appointments"],
+        summary: "Eliminar cita como paciente",
+        description: "Elimina una cita médica",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID de la cita",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Cita eliminada exitosamente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          404: {
+            description: "Cita no encontrada",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/medical_records/{patient_id}": {
+      get: {
+        tags: ["Medical Records"],
+        summary: "Obtener historial médico",
+        description: "Obtiene el historial médico completo de un paciente",
+        security: [{ sessionAuth: [] }],
+        parameters: [
+          {
+            name: "patient_id",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "ID del paciente",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Historial médico del paciente",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Success",
+                },
+              },
+            },
+          },
+          403: {
+            description: "Sin permisos para acceder al historial",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Forbidden",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 const options = {

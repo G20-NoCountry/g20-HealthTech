@@ -70,8 +70,9 @@ export const updateUserValidator = [
         .withMessage('phone no puede estar vacío')
         .bail()
         .customSanitizer(value => value.replace(/\D/g, ''))
-        .isMobilePhone("es-AR")
-        .withMessage('phone no válido')
+        .isLength({ min: 10, max: 13 })
+        .isNumeric()
+        .withMessage("phone no válido")
         .bail()
         .custom(validatePhoneExist),
 

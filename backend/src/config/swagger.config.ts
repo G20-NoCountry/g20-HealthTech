@@ -678,6 +678,79 @@ const swaggerDefinition: SwaggerDefinition = {
           },
         },
       },
+      MedicalRecordPatient: {
+        type: "object",
+        properties: {
+          critical_records: {
+            type: "object",
+            properties: {
+              allergies: {
+                type: "array",
+                example: ["polen", "penicilina"]
+              },
+              intolerances: {
+                type: "array",
+                example: ["lactosa"]
+              }
+            },
+          },
+          personal_records: {
+            type: "object",
+            properties: {
+              surgeries: {
+                type: "array",
+                example: ["Colecistectomía (extirpación de vesicula) a los 40 años"]
+              },
+              chronicle: {
+                type: "array",
+                example: ["Hipertensión desde 2015"]
+              },
+              medication: {
+                type: "array",
+                example: ["Losartan 50 mg (hipertensión)"]
+              },
+              habits: {
+                type: "array",
+                example: ["fumar"]
+              }
+            },
+          },
+          familiar_records: {
+            type: "object",
+            properties: {
+              mother: {
+                type: "array",
+                example: ["Diabetes tipo 2"]
+              },
+              father: {
+                type: "array",
+                example: ["Infarto agudo de miocardio (65 años)"]
+              },
+              sister: {
+                type: "array",
+                example: ["Asma (desde la infancia)"]
+              }
+            },
+          },
+          lifestyle_records: {
+            type: "object",
+            properties: {
+              exercise: {
+                type: "array",
+                example: ["Caminatas ocasionales, menos de 2 veces por semana"]
+              },
+              sleep: {
+                type: "array",
+                example: ["6 horas promedio por noche"]
+              },
+              stress_level: {
+                type: "array",
+                example: ["Moderado, relacionado con trabajo"]
+              }
+            },
+          },
+        },
+      },
       Unauthorized: {
         type: "object",
         properties: {

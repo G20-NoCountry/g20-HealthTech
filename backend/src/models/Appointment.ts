@@ -21,7 +21,7 @@ interface AppointmentAttributes {
 interface AppointmentCreationAttributes
   extends Optional<
     AppointmentAttributes,
-    "id" | "location" | "status" | "deleted_at" | "cancellation_reason" | "created_at" | "updated_at"
+    "id" | "location" | "diagnostic" | "status" | "deleted_at" | "cancellation_reason" | "created_at" | "updated_at"
   > {}
 
 class Appointment
@@ -85,7 +85,7 @@ Appointment.init(
     },
     diagnostic: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true, // El diagnóstico se agrega después por el médico
     },
     type: {
       type: DataTypes.ENUM("in_person", "virtual"),

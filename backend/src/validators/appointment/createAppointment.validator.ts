@@ -18,18 +18,19 @@ export const createAppointmentValidator: ValidationChain[] = [
     }),
 
   body("end_at")
-    .notEmpty()
-    .withMessage("La fecha y hora de fin es requerida")
+    .optional()
     .isISO8601()
     .withMessage("La fecha debe tener formato ISO8601")
     .custom((value, { req }) => {
-      const startDate = new Date(req.body.start_at);
-      const endDate = new Date(value);
+      if (value) {
+        const startDate = new Date(req.body.start_at);
+        const endDate = new Date(value);
 
-      if (endDate <= startDate) {
-        throw new Error(
-          "La hora de fin debe ser posterior a la hora de inicio"
-        );
+        if (endDate <= startDate) {
+          throw new Error(
+            "La hora de fin debe ser posterior a la hora de inicio"
+          );
+        }
       }
 
       return true;
@@ -49,11 +50,19 @@ export const createAppointmentValidator: ValidationChain[] = [
     .withMessage("La ubicación no puede exceder 255 caracteres"),
 
   body("symptoms")
-    .optional()
+    .notEmpty()
+    .withMessage("Los síntomas son requeridos")
     .isString()
     .withMessage("Los síntomas deben ser texto")
     .isLength({ max: 100 })
     .withMessage("Los síntomas no pueden exceder 100 caracteres"),
+
+  body("diagnostic")
+    .optional()
+    .isString()
+    .withMessage("El diagnóstico debe ser texto")
+    .isLength({ max: 100 })
+    .withMessage("El diagnóstico no puede exceder 100 caracteres"),
 
   body("patient_id")
     .optional()

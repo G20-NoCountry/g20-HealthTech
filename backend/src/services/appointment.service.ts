@@ -14,18 +14,30 @@ export class AppointmentService {
         throw new Error("medic_id y patient_id son requeridos");
       }
 
+      // Si end_at no se proporciona, calcularlo automáticamente (start_at + 30 minutos)
+      let endAt = appointmentData.end_at;
+      if (!endAt && appointmentData.start_at) {
+        const startAtDate = new Date(appointmentData.start_at);
+        const endAtDate = new Date(startAtDate);
+        endAtDate.setMinutes(endAtDate.getMinutes() + 30);
+        endAt = endAtDate.toISOString();
+      }
+
       // Check for overlapping appointments
       const overlappingAppointment = await this.checkForOverlappingAppointments(
         appointmentData.medic_id,
         appointmentData.start_at,
-        appointmentData.end_at
+        endAt || appointmentData.end_at
       );
 
       if (overlappingAppointment) {
         throw new Error("Ya existe una cita en ese horario para este médico");
       }
 
-      const appointment = await Appointment.create(appointmentData as any);
+      const appointment = await Appointment.create({
+        ...appointmentData,
+        end_at: endAt || appointmentData.end_at
+      } as any);
       return appointment;
     } catch (error) {
       throw error;

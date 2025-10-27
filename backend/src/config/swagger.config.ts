@@ -881,7 +881,7 @@ const swaggerDefinition: SwaggerDefinition = {
       },
       CreateAppointmentRequest: {
         type: "object",
-        required: ["start_at", "end_at", "type", "symptoms", "diagnostic"],
+        required: ["start_at", "type", "symptoms"],
         properties: {
           patient_id: {
             type: "integer",
@@ -903,7 +903,7 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "string",
             format: "date-time",
             example: "2024-01-15T10:30:00Z",
-            description: "Fecha y hora de finalización de la cita",
+            description: "Fecha y hora de finalización (opcional, se calcula automáticamente como start_at + 30 minutos si no se proporciona)",
           },
           type: {
             type: "string",
@@ -919,12 +919,12 @@ const swaggerDefinition: SwaggerDefinition = {
           symptoms: {
             type: "string",
             example: "Dolor de cabeza",
-            description: "Síntomas del paciente",
+            description: "Síntomas del paciente (requerido)",
           },
           diagnostic: {
             type: "string",
-            example: "Gripe común",
-            description: "Diagnóstico inicial",
+            example: null,
+            description: "Diagnóstico (opcional, lo completa el médico durante o después de la consulta)",
           },
         },
       },

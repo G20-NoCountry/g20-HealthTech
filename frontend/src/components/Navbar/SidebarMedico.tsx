@@ -51,7 +51,7 @@ export const SidebarMedico = () => {
             </NavLink>
 
             <NavLink
-              to="/" 
+              to="/settings-medico" 
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-cog mr-3"></i>
               <span className="font-medium">Ajustes</span>

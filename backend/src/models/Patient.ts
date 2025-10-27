@@ -4,32 +4,31 @@ import { sequelize } from "../config/database.config";
 interface PatientAttributes {
   id: number;
   health_insurance:
-    | "OSECAC"
-    | "OSPRERA"
-    | "UPCN"
-    | "OBSBA"
-    | "OSDEPYM"
-    | "OSUTHGRA"
-    | "OSPE"
-    | "OSPECON"
-    | "OSIAD"
-    | "OSSEG";
-  blood_type: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
-  alergias: string;
-  cronicas_condition: string;
-  actual_medication: string;
+  | "OSECAC"
+  | "OSPRERA"
+  | "UPCN"
+  | "OBSBA"
+  | "OSDEPYM"
+  | "OSUTHGRA"
+  | "OSPE"
+  | "OSPECON"
+  | "OSIAD"
+  | "OSSEG";
   location: string;
-  created_at: Date;
-  updated_at: Date;
+  blood_type?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+  alergias?: string;
+  cronicas_condition?: string;
+  actual_medication?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 interface PatientCreationAttributes
-  extends Optional<PatientAttributes, "id" | "created_at" | "updated_at"> {}
+  extends Optional<PatientAttributes, "id" | "created_at" | "updated_at"> { }
 
 class Patient
   extends Model<PatientAttributes, PatientCreationAttributes>
-  implements PatientAttributes
-{
+  implements PatientAttributes {
   public id!: number;
   public health_insurance!:
     | "OSECAC"

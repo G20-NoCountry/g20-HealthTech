@@ -1,7 +1,7 @@
-export interface UpdateAppointmentDto {
-  start_at?: string;
-  type?: "in_person" | "virtual";
-  location?: string;
-  symptoms?: string;
-  diagnostic?: string;
+import { CreateAppointmentDto } from "./createAppointment.dto";
+
+export interface UpdateAppointmentDto extends Partial<CreateAppointmentDto> {
+  id: number;
+  patient_id: number;
+  medic_id: number;
 }

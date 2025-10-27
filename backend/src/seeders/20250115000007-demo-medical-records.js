@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           patient_id: 5, // Laura Fernández
-          doctor_id: 1, // Dr. María García (Cardióloga)
+          medic_id: 1, // Dr. María García (Cardióloga)
           record_type: "consulta_cardiológica",
           content: JSON.stringify({
             motivo_consulta: "Dolor en el pecho intermitente",
@@ -44,7 +44,7 @@ module.exports = {
         },
         {
           patient_id: 6, // Roberto Silva
-          doctor_id: 2, // Dr. Juan Rodríguez (Neurólogo)
+          medic_id: 2, // Dr. Juan Rodríguez (Neurólogo)
           record_type: "consulta_neurológica",
           content: JSON.stringify({
             motivo_consulta: "Dolores de cabeza frecuentes",
@@ -79,7 +79,7 @@ module.exports = {
         },
         {
           patient_id: 7, // Carmen González
-          doctor_id: 3, // Dra. Ana López (Pediatra)
+          medic_id: 3, // Dra. Ana López (Pediatra)
           record_type: "control_pediatrico",
           content: JSON.stringify({
             motivo_consulta: "Control de crecimiento y desarrollo",
@@ -113,7 +113,7 @@ module.exports = {
         },
         {
           patient_id: 8, // Diego Pérez
-          doctor_id: 4, // Dr. Carlos Martínez (Oftalmólogo)
+          medic_id: 4, // Dr. Carlos Martínez (Oftalmólogo)
           record_type: "consulta_oftalmologica",
           content: JSON.stringify({
             motivo_consulta: "Dificultad para ver de lejos",
@@ -149,7 +149,7 @@ module.exports = {
         },
         {
           patient_id: 9, // Sofía Hernández
-          doctor_id: 1, // Dr. María García (Cardióloga)
+          medic_id: 1, // Dr. María García (Cardióloga)
           record_type: "consulta_seguimiento",
           content: JSON.stringify({
             motivo_consulta: "Seguimiento de hipertensión",

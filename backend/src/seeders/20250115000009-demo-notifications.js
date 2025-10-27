@@ -102,7 +102,7 @@ module.exports = {
         // Notificaciones de cancelación
         {
           user_id: users[0].id, // Laura Fernández
-          appointment_id: appointments[6].id, // Su cita cancelada
+          appointment_id: appointments[7].id, // Su cita cancelada
           type: "email",
           status: "sent",
           payload: JSON.stringify({

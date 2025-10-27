@@ -1,11 +1,8 @@
 import { Avatar } from 'primereact/avatar';
 import SidebarNav from './Sidebar';
-import Logo from '../../assets/logoMedicalApp.png';
+import Logo from '../../assets/logo.png';
 import { NotificationBell } from '../Notifications/NotificationBell';
 import { patientNotifications } from '../../services/mockNotifications';
-
-
-
 
 export default function Navbar() {
   return (

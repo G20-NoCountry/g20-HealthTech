@@ -56,21 +56,14 @@ module.exports = {
           record_type: "consulta_neurológica",
           content: JSON.stringify({
             motivo_consulta: "Dolores de cabeza frecuentes",
-            sintomas: [
-              "Cefalea pulsátil",
-              "Sensibilidad a la luz",
-              "Náuseas ocasionales",
-            ],
+            sintomas: ["Cefalea pulsátil", "Sensibilidad a la luz", "Náuseas ocasionales"],
             examen_fisico: {
               estado_mental: "Consciente y orientado",
               reflejos: "Normales",
               coordinacion: "Normal",
               fuerza_muscular: "5/5 en todas las extremidades",
             },
-            estudios_solicitados: [
-              "Resonancia magnética cerebral",
-              "Tomografía computada",
-            ],
+            estudios_solicitados: ["Resonancia magnética cerebral", "Tomografía computada"],
             diagnostico: "Migraña sin aura",
             tratamiento: {
               medicamentos: ["Ibuprofeno 400mg cuando aparezca"],
@@ -136,11 +129,7 @@ module.exports = {
               presion_intraocular: "14 mmHg ambos ojos",
               fondo_de_ojo: "Normal",
             },
-            estudios_realizados: [
-              "Refracción",
-              "Tonometría",
-              "Examen de fondo de ojo",
-            ],
+            estudios_realizados: ["Refracción", "Tonometría", "Examen de fondo de ojo"],
             diagnostico: "Miopía leve",
             tratamiento: {
               correccion: "Lentes con graduación -1.50 dioptrías",
@@ -174,10 +163,7 @@ module.exports = {
             evaluacion: "Buena respuesta al tratamiento",
             ajustes_tratamiento: {
               medicamentos: ["Enalapril 5mg diario (reducido)"],
-              recomendaciones: [
-                "Continuar dieta baja en sodio",
-                "Mantener actividad física",
-              ],
+              recomendaciones: ["Continuar dieta baja en sodio", "Mantener actividad física"],
             },
             proximo_control: "3 meses",
           }),

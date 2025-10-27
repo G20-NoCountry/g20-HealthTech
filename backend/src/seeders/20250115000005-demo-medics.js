@@ -12,7 +12,7 @@ module.exports = {
       [
         {
           id: users[0].id, // Dr. María García
-          speciality: "cardiologia",
+          speciality: "oftalmologia",
           license_num: 12345,
           schedule_at: new Date(),
           created_at: new Date(),
@@ -20,7 +20,7 @@ module.exports = {
         },
         {
           id: users[1].id, // Dr. Juan Rodríguez
-          speciality: "neurologia",
+          speciality: "cardiologia",
           license_num: 12346,
           schedule_at: new Date(),
           created_at: new Date(),

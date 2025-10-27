@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Ripple } from 'primereact/ripple';
 import { NavLink } from 'react-router';
-import Logo from '../../assets/logoMedicalApp.png';
+import Logo from '../../assets/logo.png';
 
 export const SidebarMedico = () => {
   const [visible, setVisible] = useState<boolean>(false);
@@ -25,9 +25,8 @@ export const SidebarMedico = () => {
         className="bg-info">
         <div className="overflow-y-auto">
           <nav className="flex flex-col gap-1">
-            
             <NavLink
-              to="/" 
+              to="/"
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-home mr-3"></i>
               <span className="font-medium">Inicio</span>
@@ -43,7 +42,7 @@ export const SidebarMedico = () => {
             </NavLink>
 
             <NavLink
-              to="/" 
+              to="/"
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-credit-card mr-3"></i>
               <span className="font-medium">Historial de Pagos</span>
@@ -51,7 +50,7 @@ export const SidebarMedico = () => {
             </NavLink>
 
             <NavLink
-              to="/" 
+              to="/settings-medico" 
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-cog mr-3"></i>
               <span className="font-medium">Ajustes</span>
@@ -59,13 +58,12 @@ export const SidebarMedico = () => {
             </NavLink>
 
             <NavLink
-              to="/" 
+              to="/"
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-sign-out mr-3"></i>
               <span className="font-medium">Cerrar sesión</span>
               <Ripple />
             </NavLink>
-
           </nav>
         </div>
       </Sidebar>

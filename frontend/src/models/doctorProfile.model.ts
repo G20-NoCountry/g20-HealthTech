@@ -1,16 +1,14 @@
-// doctorProfile.model.ts
-
 export interface PersonalData {
   full_name: string;
   license_number: string;
   specialty: string;
-  years_experience: number;
+  years_experience: string;
   phone: string;
   email: string;
 }
 
 export interface AcademicFormation {
-  id: number;
+  id: string;
   title: string; // Ej: "Especialización en Cardiología"
   institution: string; // Ej: "Universidad de Buenos Aires"
   year_completed?: number;

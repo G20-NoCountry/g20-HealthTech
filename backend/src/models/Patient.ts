@@ -78,7 +78,7 @@ Patient.init(
         "OSIAD",
         "OSSEG"
       ),
-      allowNull: false,
+      allowNull: true,
     },
     blood_type: {
       type: DataTypes.ENUM("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"),

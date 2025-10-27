@@ -19,7 +19,7 @@ export const AppointmentListItem = ({ appointment }: AppointmentListItemProps) =
   return (
 <div className="bg-white p-4 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
-        <div className="text-center w-20"> {/* Ancho fijo para alinear */}
+        <div className="text-center w-20"> 
           <p className="font-bold text-[#734F96]">{appointment.time}</p>
           <p className={`text-xs font-semibold ${isPending ? 'text-yellow-500' : 'text-green-500'}`}>
             {appointment.status.toUpperCase()}

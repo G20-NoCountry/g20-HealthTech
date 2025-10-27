@@ -25,8 +25,8 @@ module.exports = {
           start_at: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
           end_at: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000), // +30 min
           type: "in_person",
-          symptoms: "Dolor en el pecho intermitente",
-          diagnostic: "Hipertensión arterial leve",
+          symptoms: "Dolor en el pecho y falta de aire",
+          diagnostic: "Hipertensión arterial controlada",
           location: "Consultorio 1, Clínica Central",
           status: "completed",
           deleted_at: null,
@@ -40,8 +40,8 @@ module.exports = {
           start_at: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
           end_at: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000 + 45 * 60 * 1000), // +45 min
           type: "virtual",
-          symptoms: "Dolores de cabeza frecuentes",
-          diagnostic: "Migraña sin aura",
+          symptoms: "Dolores de cabeza recurrentes",
+          diagnostic: "Migraña crónica",
           location: null,
           status: "completed",
           deleted_at: null,
@@ -57,8 +57,8 @@ module.exports = {
           start_at: new Date(tomorrow.getTime() + 9 * 60 * 60 * 1000), // 9:00 AM
           end_at: new Date(tomorrow.getTime() + 9 * 60 * 60 * 1000 + 30 * 60 * 1000), // +30 min
           type: "in_person",
-          symptoms: "Control de crecimiento",
-          diagnostic: "Desarrollo normal",
+          symptoms: "Fiebre y dolor de garganta",
+          diagnostic: "Consulta pediátrica programada",
           location: "Consultorio 2, Clínica Central",
           status: "scheduled",
           deleted_at: null,
@@ -72,8 +72,8 @@ module.exports = {
           start_at: new Date(tomorrow.getTime() + 14 * 60 * 60 * 1000), // 2:00 PM
           end_at: new Date(tomorrow.getTime() + 14 * 60 * 60 * 1000 + 60 * 60 * 1000), // +60 min
           type: "in_person",
-          symptoms: "Dificultad para ver de lejos",
-          diagnostic: "Miopía leve",
+          symptoms: "Problemas de visión",
+          diagnostic: "Control oftalmológico",
           location: "Consultorio 3, Clínica Central",
           status: "scheduled",
           deleted_at: null,
@@ -89,8 +89,8 @@ module.exports = {
           start_at: new Date(nextWeek.getTime() + 10 * 60 * 60 * 1000), // 10:00 AM
           end_at: new Date(nextWeek.getTime() + 10 * 60 * 60 * 1000 + 30 * 60 * 1000), // +30 min
           type: "virtual",
-          symptoms: "Seguimiento de hipertensión",
-          diagnostic: "Hipertensión controlada",
+          symptoms: "Control de presión arterial",
+          diagnostic: "Seguimiento cardiológico",
           location: null,
           status: "scheduled",
           deleted_at: null,
@@ -104,8 +104,8 @@ module.exports = {
           start_at: new Date(nextWeek.getTime() + 15 * 60 * 60 * 1000), // 3:00 PM
           end_at: new Date(nextWeek.getTime() + 15 * 60 * 60 * 1000 + 45 * 60 * 1000), // +45 min
           type: "in_person",
-          symptoms: "Consulta general",
-          diagnostic: "Sin patología",
+          symptoms: "Dolores de cabeza y mareos",
+          diagnostic: "Consulta neurológica",
           location: "Consultorio 1, Clínica Central",
           status: "scheduled",
           deleted_at: null,
@@ -122,7 +122,7 @@ module.exports = {
           end_at: new Date(nextMonth.getTime() + 11 * 60 * 60 * 1000 + 30 * 60 * 1000), // +30 min
           type: "virtual",
           symptoms: "Control pediátrico",
-          diagnostic: "Desarrollo normal",
+          diagnostic: "Revisión de crecimiento",
           location: null,
           status: "scheduled",
           deleted_at: null,
@@ -138,8 +138,8 @@ module.exports = {
           start_at: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
           end_at: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000), // +60 min
           type: "in_person",
-          symptoms: "Consulta oftalmológica",
-          diagnostic: "Sin patología",
+          symptoms: "Problemas de visión",
+          diagnostic: "Consulta oftalmológica cancelada",
           location: "Consultorio 3, Clínica Central",
           status: "cancelled",
           deleted_at: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // Cancelada hace 2 días
@@ -155,8 +155,8 @@ module.exports = {
           start_at: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
           end_at: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000), // +30 min
           type: "in_person",
-          symptoms: "Consulta cardiológica",
-          diagnostic: "Sin patología",
+          symptoms: "Control cardiológico",
+          diagnostic: "Paciente no se presentó",
           location: "Consultorio 1, Clínica Central",
           status: "no_show",
           deleted_at: null,

@@ -1,3 +1,4 @@
+import { api } from './api';
 import type { Appointment } from '../models/appointment.model';
 import { mockDoctorProfiles } from './DoctorProfileService';
 
@@ -99,5 +100,44 @@ export const AppointmentsService = {
         resolve(mockAppointments);
       }, 500);
     });
+  },
+
+  // Obtener citas del médico logueado
+  async getAppointmentsForMedic(): Promise<Appointment[]> {
+    const res = await api.get('/medic/appointments');
+    return res.data;
+  },
+
+  // Obtener citas del paciente logueado
+  async getAppointmentsForPatient(): Promise<Appointment[]> {
+    const res = await api.get('/paciente/appointments');
+    return res.data;
+  },
+
+  // Crear nueva cita
+  async createAppointment(data: {
+    medic_id: number;
+    start_at: string; // formato ISO
+    end_at: string;
+    type: 'in_person' | 'virtual';
+    location?: string;
+  }): Promise<Appointment> {
+    const res = await api.post('/paciente/appointments', data);
+    return res.data;
+  },
+
+  // Actualizar cita
+  async updateAppointment(
+    medic_id: number,
+    id_cita: number,
+    data: Partial<Appointment>,
+  ): Promise<Appointment> {
+    const res = await api.put(`/paciente/appointments/${medic_id}/${id_cita}`, data);
+    return res.data;
+  },
+
+  // Cancelar cita
+  async cancelAppointment(medic_id: number, id_cita: number): Promise<void> {
+    await api.delete(`/paciente/appointments/${medic_id}/${id_cita}`);
   },
 };

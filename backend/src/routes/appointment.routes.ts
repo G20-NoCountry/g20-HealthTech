@@ -53,6 +53,7 @@ router.patch(
   appointmentController.updateMedicAppointment
 );
 
+//$ [TASK] - Validar que el medico sea el dueño de la cita antes de eliminar.
 router.delete(
   "/medic/appointments/:id",
   appointmentController.deleteMedicAppointment
@@ -86,6 +87,7 @@ router.patch(
   appointmentController.updatePatientAppointment
 );
 
+//$ [TASK] - Validar que el paciente sea el dueño de la cita antes de eliminar.
 router.delete(
   "/paciente/appointments/:id",
   appointmentController.deletePatientAppointment

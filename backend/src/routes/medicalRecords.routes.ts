@@ -9,7 +9,6 @@ const router = Router();
 const medicalRecordController = new MedicalRecordController;
 router.use(isAuthenticated);
 
-//$ [FIX] - Solo médicos pueden acceder a los historiales médicos??.
-router.get('/medical_records/:patient_id', canAccessMedic, patientIdValidator, medicalRecordController.getMedicalRecord);
+router.get('/medical_records/:patient_id', patientIdValidator, medicalRecordController.getMedicalRecord);
 
 export default router;

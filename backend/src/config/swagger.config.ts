@@ -1079,7 +1079,7 @@ const swaggerDefinition: SwaggerDefinition = {
     },
   ],
   paths: {
-    "/auth/login": {
+    "/api/auth/login": {
       post: {
         tags: ["Authentication"],
         summary: "Iniciar sesión",
@@ -1118,7 +1118,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/auth/register/patient": {
+    "/api/auth/register/patient": {
       post: {
         tags: ["Authentication"],
         summary: "Registrar paciente",
@@ -1157,7 +1157,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/auth/register/medic": {
+    "/api/auth/register/medic": {
       post: {
         tags: ["Authentication"],
         summary: "Registrar médico",
@@ -1207,7 +1207,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/auth/user": {
+    "/api/auth/user": {
       get: {
         tags: ["Authentication"],
         summary: "Obtener usuario actual",
@@ -1237,7 +1237,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/auth/logout": {
+    "/api/auth/logout": {
       post: {
         tags: ["Authentication"],
         summary: "Cerrar sesión",
@@ -1257,7 +1257,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/medics/summary": {
+    "/api/medics/summary": {
       get: {
         tags: ["Users"],
         summary: "Obtener resumen de médicos",
@@ -1293,7 +1293,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/patients/{id}": {
+    "/api/patients/{id}": {
       get: {
         tags: ["Users"],
         summary: "Obtener paciente por ID",
@@ -1372,7 +1372,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/medics/{id}": {
+    "/api/medics/{id}": {
       get: {
         tags: ["Users"],
         summary: "Obtener médico por ID",
@@ -1451,7 +1451,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/medic/appointments": {
+    "/api/medic/appointments": {
       post: {
         tags: ["Appointments"],
         summary: "Crear cita como médico",
@@ -1547,7 +1547,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/medic/appointments/{id}": {
+    "/api/medic/appointments/{id}": {
       get: {
         tags: ["Appointments"],
         summary: "Obtener cita específica del médico",
@@ -1623,7 +1623,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/paciente/appointments": {
+    "/api/paciente/appointments": {
       post: {
         tags: ["Appointments"],
         summary: "Crear cita como paciente",
@@ -1719,7 +1719,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/paciente/appointments/{id}": {
+    "/api/paciente/appointments/{id}": {
       get: {
         tags: ["Appointments"],
         summary: "Obtener cita específica del paciente",
@@ -1795,7 +1795,7 @@ const swaggerDefinition: SwaggerDefinition = {
         },
       },
     },
-    "/medical_records/{patient_id}": {
+    "/api/medical_records/{patient_id}": {
       get: {
         tags: ["Medical Records"],
         summary: "Obtener historial médico",

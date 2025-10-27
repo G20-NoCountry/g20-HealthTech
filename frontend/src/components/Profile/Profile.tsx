@@ -101,14 +101,14 @@ interface FormFieldProps {
   disabled?: boolean;
 }
 const FormField = ({
-                     label,
-                     name,
-                     icon,
-                     type = 'text',
-                     register,
-                     error,
-                     disabled,
-                   }: FormFieldProps) => (
+  label,
+  name,
+  icon,
+  type = 'text',
+  register,
+  error,
+  disabled,
+}: FormFieldProps) => (
   <div className="flex flex-col space-y-3">
     <label className="text-2xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
       {label}
@@ -258,9 +258,9 @@ export const Profile = () => {
                         value={
                           field.value
                             ? (() => {
-                              const [d, m, y] = field.value.split('/');
-                              return new Date(+y, +m - 1, +d);
-                            })()
+                                const [d, m, y] = field.value.split('/');
+                                return new Date(+y, +m - 1, +d);
+                              })()
                             : null
                         }
                         onChange={(e) => {
@@ -277,9 +277,7 @@ export const Profile = () => {
                         pt={{
                           input: {
                             className: `text-2xl bg-transparent border-0 shadow-none focus:outline-none w-full ${
-                              !isEditing
-                                ? 'text-gray-500'
-                                : 'text-gray-900 placeholder-gray-400'
+                              !isEditing ? 'text-gray-500' : 'text-gray-900 placeholder-gray-400'
                             }`,
                           },
                           dropdownButton: { className: 'hidden' },

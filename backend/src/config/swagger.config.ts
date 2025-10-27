@@ -218,7 +218,7 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "integer",
             example: 1,
           },
-          doctor_id: {
+          medic_id: {
             type: "integer",
             example: 2,
           },
@@ -1040,7 +1040,7 @@ const swaggerDefinition: SwaggerDefinition = {
             type: "integer",
             example: 1,
           },
-          doctor_id: {
+          medic_id: {
             type: "integer",
             example: 2,
           },

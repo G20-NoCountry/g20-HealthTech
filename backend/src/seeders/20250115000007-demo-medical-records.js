@@ -14,8 +14,8 @@ module.exports = {
       "medical_records",
       [
         {
-          patient_id: 5, // Laura Fernández
-          medic_id: 1, // Dr. María García (Cardióloga)
+          patient_id: patients[0].id, // Laura Fernández
+          medic_id: doctors[0].id, // Dr. María García (Cardióloga)
           record_type: "consulta_cardiológica",
           content: JSON.stringify({
             motivo_consulta: "Dolor en el pecho intermitente",
@@ -51,8 +51,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          patient_id: 6, // Roberto Silva
-          medic_id: 2, // Dr. Juan Rodríguez (Neurólogo)
+          patient_id: patients[1].id, // Roberto Silva
+          medic_id: doctors[1].id, // Dr. Juan Rodríguez (Neurólogo)
           record_type: "consulta_neurológica",
           content: JSON.stringify({
             motivo_consulta: "Dolores de cabeza frecuentes",
@@ -79,8 +79,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          patient_id: 7, // Carmen González
-          medic_id: 3, // Dra. Ana López (Pediatra)
+          patient_id: patients[2].id, // Carmen González
+          medic_id: doctors[2].id, // Dra. Ana López (Pediatra)
           record_type: "control_pediatrico",
           content: JSON.stringify({
             motivo_consulta: "Control de crecimiento y desarrollo",
@@ -113,8 +113,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          patient_id: 8, // Diego Pérez
-          medic_id: 4, // Dr. Carlos Martínez (Oftalmólogo)
+          patient_id: patients[3].id, // Diego Pérez
+          medic_id: doctors[3].id, // Dr. Carlos Martínez (Oftalmólogo)
           record_type: "consulta_oftalmologica",
           content: JSON.stringify({
             motivo_consulta: "Dificultad para ver de lejos",
@@ -145,8 +145,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          patient_id: 9, // Sofía Hernández
-          medic_id: 1, // Dr. María García (Cardióloga)
+          patient_id: patients[4].id, // Sofía Hernández
+          medic_id: doctors[0].id, // Dr. María García (Cardióloga)
           record_type: "consulta_seguimiento",
           content: JSON.stringify({
             motivo_consulta: "Seguimiento de hipertensión",

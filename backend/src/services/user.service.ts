@@ -30,7 +30,7 @@ export class UserService {
 
   public async obtainMedicsSummary() {
     try {
-      const medics = await Medic.findAll({ attributes: ["id", "specialty"] });
+      const medics = await Medic.findAll({ attributes: ["id", "speciality"] });
       const ids = medics.map((m) => Number(m.get("id")));
 
       const users = await User.findAll({
@@ -51,13 +51,13 @@ export class UserService {
       const user = usersById.get(id);
       return {
         medic_id: String(id),
-        specialty: String(m.get("specialty")),
+        speciality: String(m.get("speciality")),
         first_name: user?.first_name ?? "",
         last_name: user?.last_name ?? "",
       };
       });
     } catch (error) {
-      return [] as { medic_id: string; specialty: string; first_name: string; last_name: string }[];
+      return [] as { medic_id: string; speciality: string; first_name: string; last_name: string }[];
     }
   }
 
@@ -104,9 +104,8 @@ export class UserService {
   private createMedic(userId: number, dto: RegisterMedicDto) {
     const medic = Medic.build({
       id: userId,
-      specialty: dto.specialty,
-      licence_num: dto.licence_num,
-      schedule_from: dto.schedule_from,
+      speciality: dto.specialty,
+      license_num: dto.licence_num,
       schedule_at: dto.schedule_at,
     });
     medic.save();
@@ -141,7 +140,7 @@ export class UserService {
     }
   }
 
-  //$ [FIX] Refactorización de método editUser para actualizar tanto pacientes como médicos
+  // Refactorización de método editUser para actualizar tanto pacientes como médicos
   public async editUser(dto: UpdatePatientDto | UpdateMedicDto, rol: "paciente" | "medico") {
 
     const userUpdated = await this.updateUser(dto);
@@ -186,7 +185,7 @@ export class UserService {
 
   private async updateMedic(dto: UpdateMedicDto) {
     const rows = await Medic.update({
-      licence_num: dto.licence_num,
+      license_num: dto.licence_num,
     }, { where: { id: dto.id } });
     return rows.length > 0;
   }

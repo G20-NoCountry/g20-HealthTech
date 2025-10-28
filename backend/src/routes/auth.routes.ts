@@ -35,7 +35,7 @@ router.post(
   authController.registerPatient
 );
 
-//$ [FIX] - No se debe estar logeado ahora.
+// No se debe estar logeado para registrar médicos
 router.post(
   "/register/medic",
   isNotAuthenticated,

@@ -3,9 +3,8 @@ import { sequelize } from "../config/database.config";
 
 interface MedicAttributes {
   id: number;
-  specialty: "oftamologia" | "etc";
-  licence_num: number;
-  schedule_from: Date;
+  speciality: "oftalmologia" | "cardiologia" | "neurologia" | "dermatologia" | "pediatria" | "ginecologia" | "traumatologia" | "psiquiatria" | "medicina_general";
+  license_num: number;
   schedule_at: Date;
   created_at: Date;
   updated_at: Date;
@@ -14,7 +13,7 @@ interface MedicAttributes {
 interface MedicCreationAttributes
   extends Optional<
     MedicAttributes,
-    "id" | "schedule_from" | "schedule_at" | "created_at" | "updated_at"
+    "id" | "schedule_at" | "created_at" | "updated_at"
   > {}
 
 class Medic
@@ -22,9 +21,8 @@ class Medic
   implements MedicAttributes
 {
   public id!: number;
-  public specialty!: "oftamologia" | "etc";
-  public licence_num!: number;
-  public schedule_from!: Date;
+  public speciality!: "oftalmologia" | "cardiologia" | "neurologia" | "dermatologia" | "pediatria" | "ginecologia" | "traumatologia" | "psiquiatria" | "medicina_general";
+  public license_num!: number;
   public schedule_at!: Date;
   public created_at!: Date;
   public updated_at!: Date;
@@ -45,17 +43,14 @@ Medic.init(
         key: "id",
       },
     },
-    specialty: {
-      type: DataTypes.ENUM("oftamologia", "etc"),
+    speciality: {
+      type: DataTypes.ENUM("oftalmologia", "cardiologia", "neurologia", "dermatologia", "pediatria", "ginecologia", "traumatologia", "psiquiatria", "medicina_general"),
       allowNull: false,
     },
-    licence_num: {
+    license_num: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    schedule_from: {
-      type: DataTypes.DATE,
-      allowNull: false,
+      unique: true,
     },
     schedule_at: {
       type: DataTypes.DATE,

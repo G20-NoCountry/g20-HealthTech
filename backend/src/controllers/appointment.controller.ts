@@ -383,14 +383,6 @@ export class AppointmentController {
         });
       }
 
-      // Check if the appointment belongs to the logged-in medic
-      if (parseInt(id) !== (request.user as any).id) {
-        return response.status(403).json({
-          success: false,
-          message: "No tienes permisos para ver esta cita",
-          data: null,
-        });
-      }
 
       return response.status(200).json({
         success: true,
@@ -476,14 +468,6 @@ export class AppointmentController {
         });
       }
 
-      // Check if the appointment belongs to the logged-in patient
-      if (parseInt(id) !== (request.user as any).id) {
-        return response.status(403).json({
-          success: false,
-          message: "No tienes permisos para ver esta cita",
-          data: null,
-        });
-      }
 
       return response.status(200).json({
         success: true,

@@ -6,8 +6,7 @@ export function isSameDay(a: Date, b: Date): boolean {
   );
 }
 
-export function formatDateTime(iso: string) {
-  const date = new Date(iso);
+export function formatDateTime(date: Date) {
   return {
     date: date.toLocaleDateString('es-ES'),
     time: date.toLocaleTimeString('es-ES', {
@@ -17,14 +16,10 @@ export function formatDateTime(iso: string) {
   };
 }
 
-export function canJoinVirtualAppointment(startAt: string, endAt: string): boolean {
+export function canJoinVirtualAppointment(startAt: Date, endAt: Date): boolean {
   const now = new Date();
-  const start = new Date(startAt);
-  const end = new Date(endAt);
+  const isToday = isSameDay(startAt, now);
+  const fiveMinutesBefore = new Date(startAt.getTime() - 5 * 60 * 1000);
 
-  const isToday = isSameDay(start, now);
-
-  const fiveMinutesBefore = new Date(start.getTime() - 5 * 60 * 1000);
-
-  return isToday && now >= fiveMinutesBefore && now <= end;
+  return isToday && now >= fiveMinutesBefore && now <= endAt;
 }

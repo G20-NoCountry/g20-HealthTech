@@ -1,31 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../../models";
 
 /**
  * Middleware para validar permisos de administrador
- * Verifica que el usuario autenticado tenga rol de médico
- * y que proporcione la contraseña de administrador correcta
+ * Solo verifica que se proporcione la contraseña de administrador correcta
+ * No requiere autenticación de usuario
  */
 export async function isAdmin(req: Request, res: Response, next: NextFunction) {
   try {
-    const user = req.user as User;
-    
-    // Verificar que el usuario esté autenticado
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Usuario no autenticado",
-      });
-    }
-
-    // Verificar que sea médico
-    if (user.rol !== "medico") {
-      return res.status(403).json({
-        success: false,
-        message: "Solo los médicos pueden registrar otros médicos",
-      });
-    }
-
     // Verificar contraseña de administrador
     const adminPassword = req.body.admin_password as string;
     

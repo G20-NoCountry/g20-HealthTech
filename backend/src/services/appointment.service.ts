@@ -27,7 +27,7 @@ export class AppointmentService {
       const overlappingAppointment = await this.checkForOverlappingAppointments(
         appointmentData.medic_id,
         appointmentData.start_at,
-        endAt || appointmentData.end_at
+        endAt!
       );
 
       if (overlappingAppointment) {
@@ -36,7 +36,7 @@ export class AppointmentService {
 
       const appointment = await Appointment.create({
         ...appointmentData,
-        end_at: endAt || appointmentData.end_at
+        end_at: endAt!
       } as any);
       return appointment;
     } catch (error) {

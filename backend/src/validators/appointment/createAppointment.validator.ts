@@ -50,8 +50,7 @@ export const createAppointmentValidator: ValidationChain[] = [
     .withMessage("La ubicación no puede exceder 255 caracteres"),
 
   body("symptoms")
-    .notEmpty()
-    .withMessage("Los síntomas son requeridos")
+    .optional()
     .isString()
     .withMessage("Los síntomas deben ser texto")
     .isLength({ max: 100 })

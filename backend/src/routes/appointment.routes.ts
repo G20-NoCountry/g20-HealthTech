@@ -109,6 +109,15 @@ router.patch(
   appointmentController.updatePatientAppointment
 );
 
+// Nueva ruta: Médicos pueden actualizar citas de pacientes (para agregar síntomas, diagnósticos, etc.)
+router.patch(
+  "/medic/patient-appointments",
+  updateAppointmentValidator,
+  handleValidationErrors,
+  canUpdatePatientAppointment,
+  appointmentController.updatePatientAppointmentAsMedic
+);
+
 // Validar que el paciente sea el dueño de la cita antes de cancelar
 router.delete(
   "/paciente/appointments/:id",

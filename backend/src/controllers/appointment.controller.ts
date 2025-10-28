@@ -91,7 +91,7 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/patient/appointments:
+   * /api/paciente/appointments:
    *   post:
    *     summary: Crear cita (paciente)
    *     description: Permite a un paciente crear una nueva cita. IDs se envían en el cuerpo.
@@ -163,7 +163,7 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/medic/appointments/:
+   * /api/medic/appointments:
    *   get:
    *     summary: Listar citas del médico logueado
    *     description: Obtiene todas las citas del médico autenticado, opcionalmente filtradas por fecha
@@ -238,7 +238,7 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/patient/appointments/:
+   * /api/paciente/appointments:
    *   get:
    *     summary: Listar citas del paciente logueado
    *     description: Obtiene todas las citas del paciente autenticado, opcionalmente filtradas por fecha
@@ -408,7 +408,7 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/patient/appointments/{id}:
+   * /api/paciente/appointments/{id}:
    *   get:
    *     summary: Obtener cita por ID (paciente)
    *     description: Obtiene una cita específica por su ID para el paciente autenticado
@@ -573,26 +573,13 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/patient/appointments/{medic_id}/{id_cita}:
-   *   put:
+   * /api/paciente/appointments:
+   *   patch:
    *     summary: Actualizar cita (paciente)
    *     description: Permite a un paciente actualizar una cita existente
    *     tags: [Appointments]
    *     security:
    *       - sessionAuth: []
-   *     parameters:
-   *       - in: path
-   *         name: medic_id
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID del médico
-   *       - in: path
-   *         name: id_cita
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID de la cita
    *     requestBody:
    *       required: true
    *       content:
@@ -628,17 +615,17 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-
       const body = request.body as UpdateAppointmentDto;
       const user = request.user as User;
 
-      if (user.id !== body.patient_id)
+      // Solo validar si es paciente (los médicos ya están autorizados por el middleware)
+      if (user.rol === "paciente" && user.id !== body.patient_id) {
         throw new Error("No puedes editar citas de otros pacientes.");
+      }
 
       const appointment = await this.appointmentService.updateAppointment(
         body.id,
-        body,
-
+        body
       );
 
       return response.status(200).json({
@@ -657,6 +644,53 @@ export class AppointmentController {
 
   /**
    * @swagger
+   * /api/medic/patient-appointments:
+   *   patch:
+   *     summary: Actualizar cita de paciente (médico)
+   *     description: Permite a un médico actualizar citas de pacientes para agregar síntomas, diagnósticos, etc.
+   *     tags: [Appointments]
+   *     security:
+   *       - sessionAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/UpdateAppointmentRequest'
+   *     responses:
+   *       200:
+   *         description: Cita actualizada exitosamente
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: "Cita actualizada exitosamente"
+   *                 data:
+   *                   $ref: '#/components/schemas/Appointment'
+   *       400:
+   *         description: Error en la solicitud
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   */
+  // Update patient appointment (for medic) - reutiliza el mismo método
+  public updatePatientAppointmentAsMedic = async (
+    request: Request,
+    response: Response
+  ) => {
+    // Reutiliza la misma lógica que updatePatientAppointment
+    return this.updatePatientAppointment(request, response);
+  };
+
+  /**
+   * @swagger
    * /api/medic/appointments/{id}:
    *   delete:
    *     summary: Cancelar cita (médico)
@@ -671,6 +705,12 @@ export class AppointmentController {
    *         schema:
    *           type: integer
    *         description: ID de la cita
+   *       - in: query
+   *         name: reason
+   *         required: false
+   *         schema:
+   *           type: string
+   *         description: Razón de la cancelación
    *     responses:
    *       204:
    *         description: Cita cancelada exitosamente
@@ -703,9 +743,9 @@ export class AppointmentController {
   ) => {
     try {
       const { id } = request.params;
-      const { reason } = request.body;
+      const { reason } = request.query;
 
-      await this.appointmentService.cancelAppointment(parseInt(id), reason);
+      await this.appointmentService.cancelAppointment(parseInt(id), reason as string);
 
       return response.status(200).json({
         success: true,
@@ -723,7 +763,7 @@ export class AppointmentController {
 
   /**
    * @swagger
-   * /api/patient/appointments/{medic_id}/{id_cita}:
+   * /api/paciente/appointments/{id}:
    *   delete:
    *     summary: Cancelar cita (paciente)
    *     description: Permite a un paciente cancelar una cita existente
@@ -732,17 +772,17 @@ export class AppointmentController {
    *       - sessionAuth: []
    *     parameters:
    *       - in: path
-   *         name: medic_id
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID del médico
-   *       - in: path
-   *         name: id_cita
+   *         name: id
    *         required: true
    *         schema:
    *           type: integer
    *         description: ID de la cita
+   *       - in: query
+   *         name: reason
+   *         required: false
+   *         schema:
+   *           type: string
+   *         description: Razón de la cancelación
    *     responses:
    *       204:
    *         description: Cita cancelada exitosamente
@@ -774,9 +814,9 @@ export class AppointmentController {
   ) => {
     try {
       const { id } = request.params;
-      const { reason } = request.body;
+      const { reason } = request.query;
 
-      await this.appointmentService.cancelAppointment(parseInt(id), reason);
+      await this.appointmentService.cancelAppointment(parseInt(id), reason as string);
 
       return response.status(200).json({
         success: true,

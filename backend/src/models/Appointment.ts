@@ -7,8 +7,8 @@ interface AppointmentAttributes {
   medic_id: number;
   start_at: Date;
   end_at: Date;
-  symptoms: string;
-  diagnostic: string;
+  symptoms?: string;
+  diagnostic?: string;
   type: "in_person" | "virtual";
   location?: string;
   status: "scheduled" | "completed" | "cancelled" | "no_show";
@@ -21,7 +21,7 @@ interface AppointmentAttributes {
 interface AppointmentCreationAttributes
   extends Optional<
     AppointmentAttributes,
-    "id" | "location" | "diagnostic" | "status" | "deleted_at" | "cancellation_reason" | "created_at" | "updated_at"
+    "id" | "location" | "symptoms" | "diagnostic" | "status" | "deleted_at" | "cancellation_reason" | "created_at" | "updated_at"
   > {}
 
 class Appointment
@@ -33,8 +33,8 @@ class Appointment
   public medic_id!: number;
   public start_at!: Date;
   public end_at!: Date;
-  public symptoms!: string;
-  public diagnostic!: string;
+  public symptoms?: string;
+  public diagnostic?: string;
   public type!: "in_person" | "virtual";
   public location?: string;
   public status!: "scheduled" | "completed" | "cancelled" | "no_show";
@@ -81,7 +81,7 @@ Appointment.init(
     },
     symptoms: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true, // Los síntomas se agregan durante o después de la consulta
     },
     diagnostic: {
       type: DataTypes.STRING(100),

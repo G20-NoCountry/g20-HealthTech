@@ -160,10 +160,10 @@ export async function canUpdatePatientAppointment(
     const body = req.body;
     const user = req.user as User;
 
-    if (!user || user.rol !== "paciente") {
+    if (!user || (user.rol !== "paciente" && user.rol !== "medico")) {
       return res.status(403).json({
         success: false,
-        message: "Solo los pacientes pueden actualizar sus citas",
+        message: "Solo pacientes y médicos pueden actualizar citas de pacientes",
       });
     }
 
@@ -176,11 +176,19 @@ export async function canUpdatePatientAppointment(
       });
     }
 
-    if (appointment.patient_id !== user.id) {
+    // Si es paciente, solo puede actualizar sus propias citas
+    if (user.rol === "paciente" && appointment.patient_id !== user.id) {
       return res.status(403).json({
         success: false,
         message: "Solo puedes actualizar tus propias citas",
       });
+    }
+
+    // Si es médico, puede actualizar citas de cualquier paciente
+    // (para agregar síntomas, diagnósticos, etc.)
+    if (user.rol === "medico") {
+      // Opcional: verificar que el médico tenga acceso a este paciente
+      // Por ahora permitimos acceso completo
     }
 
     req.appointment = appointment;

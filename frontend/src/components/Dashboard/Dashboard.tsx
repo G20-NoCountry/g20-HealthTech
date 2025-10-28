@@ -10,7 +10,11 @@ import {
 import { isSameDay } from '../../utils/date';
 import type { Appointment } from '../../models/appointment.model';
 
-export default function Dashboard() {
+interface DashboardProps {
+  rol: 'patient' | 'doctor';
+}
+
+export default function Dashboard({ rol }: DashboardProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [date, setDate] = useState<Date | null>(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -86,13 +90,17 @@ export default function Dashboard() {
           dateTemplate={dateTemplate}
         />
 
-        <div className="border-success overflow-hidden rounded-xl border">
+        <div
+          className={`border-success overflow-hidden rounded-xl border ${
+            rol === 'patient' ? 'bg-white' : 'bg-button-secondary shadow-black/20'
+          } `}>
           <div className="scrollable flex flex-col gap-5 overflow-y-auto p-3 md:max-h-105">
             {filtered.length === 0 ? (
               <p className="py-10 text-center text-gray-500">No se encontraron citas</p>
             ) : (
               filtered.map((a) => (
                 <AppointmentCard
+                  rol={rol}
                   key={a.id}
                   appointment={a}
                   isNext={a.id === nextAppointmentId}

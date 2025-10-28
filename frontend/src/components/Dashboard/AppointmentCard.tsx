@@ -7,15 +7,26 @@ interface AppointmentCardProps {
   appointment: Appointment;
   isNext: boolean;
   onEdit: () => void;
+  rol: 'patient' | 'doctor';
 }
 
-export default function AppointmentCard({ appointment, isNext, onEdit }: AppointmentCardProps) {
-  const { doctor, start_at, type, status, end_at } = appointment;
+export default function AppointmentCard({
+  appointment,
+  isNext,
+  onEdit,
+  rol,
+}: AppointmentCardProps) {
+  const { doctor, patient, start_at, type, status, end_at } = appointment;
   const { date, time } = formatDateTime(start_at);
   const isEditable = isAppointmentEditable(status);
 
   return (
-    <div className="bg-button-primary/40 shadow-button-primary/80 relative flex flex-col gap-2 rounded-lg p-3 shadow-lg lg:p-5">
+    <div
+      className={`relative flex flex-col gap-2 rounded-lg p-3 shadow-lg lg:p-5 ${
+        rol === 'patient'
+          ? 'bg-button-primary/40 shadow-button-primary/80'
+          : 'bg-white shadow-black/20'
+      } `}>
       {isNext && (
         <p className="flex items-center gap-3 font-medium">
           <span
@@ -46,19 +57,19 @@ export default function AppointmentCard({ appointment, isNext, onEdit }: Appoint
 
       <div className="flex flex-col gap-2">
         <p className="flex items-center gap-3 text-sm md:text-base">
-          <i className="pi pi-user text-gray-400"></i>
-          {doctor.name}
+          <i className={`pi pi-user ${rol === 'patient' ? 'text-gray-400' : 'text-accent'}`} />
+          {rol === 'patient' ? doctor.name : patient.name}
         </p>
         <p className="flex items-center gap-3 text-sm md:text-base">
-          <i className="pi pi-calendar text-gray-400"></i>
+          <i className={`pi pi-calendar ${rol === 'patient' ? 'text-gray-400' : 'text-accent'}`} />
           {date}
         </p>
         <p className="flex items-center gap-3 text-sm md:text-base">
-          <i className="pi pi-clock text-gray-400"></i>
+          <i className={`pi pi-clock ${rol === 'patient' ? 'text-gray-400' : 'text-accent'}`} />
           {time}
         </p>
         <p className="flex items-center gap-3 text-sm md:text-base">
-          <i className="pi pi-tag text-gray-400"></i>
+          <i className={`pi pi-tag ${rol === 'patient' ? 'text-gray-400' : 'text-accent'}`} />
           {type === 'virtual' ? 'Virtual' : 'Presencial'}
         </p>
       </div>

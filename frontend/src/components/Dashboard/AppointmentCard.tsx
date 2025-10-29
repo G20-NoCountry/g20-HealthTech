@@ -7,7 +7,7 @@ interface AppointmentCardProps {
   appointment: Appointment;
   isNext: boolean;
   onEdit: () => void;
-  rol: 'patient' | 'doctor';
+  rol: 'paciente' | 'medico';
 }
 
 export default function AppointmentCard({
@@ -23,7 +23,7 @@ export default function AppointmentCard({
   return (
     <div
       className={`relative flex flex-col gap-2 rounded-lg p-3 shadow-lg lg:p-5 ${
-        rol === 'patient'
+        rol === 'paciente'
           ? 'bg-button-primary/40 shadow-button-primary/80'
           : 'bg-white shadow-black/20'
       } `}>
@@ -57,19 +57,19 @@ export default function AppointmentCard({
 
       <div className="flex flex-col gap-2">
         <p className="flex items-center gap-3 text-sm md:text-base">
-          <i className={`pi pi-user ${rol === 'patient' ? 'text-gray-400' : 'text-accent'}`} />
-          {rol === 'patient' ? doctor.name : patient.name}
+          <i className={`pi pi-user ${rol === 'paciente' ? 'text-gray-400' : 'text-accent'}`} />
+          {rol === 'paciente' ? doctor.name : patient.name}
         </p>
         <p className="flex items-center gap-3 text-sm md:text-base">
-          <i className={`pi pi-calendar ${rol === 'patient' ? 'text-gray-400' : 'text-accent'}`} />
+          <i className={`pi pi-calendar ${rol === 'paciente' ? 'text-gray-400' : 'text-accent'}`} />
           {date}
         </p>
         <p className="flex items-center gap-3 text-sm md:text-base">
-          <i className={`pi pi-clock ${rol === 'patient' ? 'text-gray-400' : 'text-accent'}`} />
+          <i className={`pi pi-clock ${rol === 'paciente' ? 'text-gray-400' : 'text-accent'}`} />
           {time}
         </p>
         <p className="flex items-center gap-3 text-sm md:text-base">
-          <i className={`pi pi-tag ${rol === 'patient' ? 'text-gray-400' : 'text-accent'}`} />
+          <i className={`pi pi-tag ${rol === 'paciente' ? 'text-gray-400' : 'text-accent'}`} />
           {type === 'virtual' ? 'Virtual' : 'Presencial'}
         </p>
       </div>

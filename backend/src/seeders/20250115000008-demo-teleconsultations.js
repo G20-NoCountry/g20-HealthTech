@@ -2,9 +2,9 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Obtener las citas virtuales
+    // Obtener las citas virtuales activas (no canceladas)
     const [virtualAppointments] = await queryInterface.sequelize.query(
-      "SELECT id FROM appointments WHERE type = 'virtual' ORDER BY id"
+      "SELECT id FROM appointments WHERE type = 'virtual' AND deleted_at IS NULL ORDER BY id"
     );
 
     await queryInterface.bulkInsert(

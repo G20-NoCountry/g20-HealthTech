@@ -1,10 +1,10 @@
 import { Outlet } from 'react-router';
-import NavbarMedico from '../../components/Navbar/NavbarMedico';
+import Navbar from '../components/Navbar/Navbar';
 
-export const RouterLayoutMedico = () => {
+export const RouterLayout = () => {
   return (
     <div className="flex min-h-dvh w-full max-w-7xl flex-1 flex-col items-center">
-      <NavbarMedico />
+      <Navbar />
       <Outlet />
     </div>
   );

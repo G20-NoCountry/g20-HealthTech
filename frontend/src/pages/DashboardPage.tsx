@@ -17,7 +17,7 @@ export default function DashboardPage() {
             Nueva cita
           </Link>
         </header>
-        <Dashboard rol="patient" />
+        <Dashboard />
       </div>
     </section>
   );

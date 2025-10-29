@@ -1,0 +1,38 @@
+{
+  "criticalAntecedents": {
+    "title": "ANTECEDENTES MÉDICOS CRÍTICOS:",
+    "items": [
+      "ALERGIAS:",
+      "- Penicilina (Alergia a Medicamento - ¡Máxima Precaución!)",
+      "- Polen (Alergia Estacional)"
+    ]
+  },
+  "personalAntecedents": {
+    "title": "ANTECEDENTES PERSONALES (AMP):",
+    "sections": [
+      {
+        "subtitle": "ENFERMEDADES CRÓNICAS:",
+        "items": ["- Hipertensión Arterial (Diagnosticada hace 5 años)."]
+      },
+      {
+        "subtitle": "CIRUGÍAS:",
+        "items": ["- Colecistectomía (Extirpación de vesícula) a los 40 años."]
+      },
+      {
+        "subtitle": "MEDICAMENTOS ACTIVOS:",
+        "items": ["- Losartan 50mg (1 tableta diaria - para Hipertensión)"]
+      },
+      {
+        "subtitle": "HÁBITOS:",
+        "items": ["- NO FUMA. Consumo social y ocasional de alcohol."]
+      }
+    ]
+  },
+  "familyAntecedents": {
+    "title": "ANTECEDENTES FAMILIARES (AF):",
+    "items": [
+      "- Madre: Diabetes Tipo 2.",
+      "- Padre: Falleció por Infarto Agudo de Miocardio a los 65 años."
+    ]
+  }
+}

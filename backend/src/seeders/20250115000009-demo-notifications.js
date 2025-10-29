@@ -2,13 +2,21 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // Obtener los IDs de usuarios y appointments activas
+    const [users] = await queryInterface.sequelize.query(
+      "SELECT id, email FROM users ORDER BY id"
+    );
+    const [appointments] = await queryInterface.sequelize.query(
+      "SELECT id FROM appointments WHERE deleted_at IS NULL ORDER BY id"
+    );
+
     await queryInterface.bulkInsert(
       "notifications",
       [
         // Notificaciones de confirmación de citas
         {
-          user_id: 7, // Carmen González
-          appointment_id: 3, // Su cita de mañana
+          user_id: users[2].id, // Carmen González
+          appointment_id: appointments[2].id, // Su cita de mañana
           type: "email",
           status: "sent",
           payload: JSON.stringify({
@@ -24,8 +32,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          user_id: 8, // Diego Pérez
-          appointment_id: 4, // Su cita de mañana
+          user_id: users[3].id, // Diego Pérez
+          appointment_id: appointments[3].id, // Su cita de mañana
           type: "sms",
           status: "sent",
           payload: JSON.stringify({
@@ -41,8 +49,8 @@ module.exports = {
 
         // Notificaciones de recordatorios
         {
-          user_id: 9, // Sofía Hernández
-          appointment_id: 5, // Su cita de la próxima semana
+          user_id: users[4].id, // Sofía Hernández
+          appointment_id: appointments[4].id, // Su cita de la próxima semana
           type: "email",
           status: "queued",
           payload: JSON.stringify({
@@ -58,8 +66,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          user_id: 10, // Miguel Torres
-          appointment_id: 6, // Su cita de la próxima semana
+          user_id: users[5].id, // Miguel Torres
+          appointment_id: appointments[5].id, // Su cita de la próxima semana
           type: "sms",
           status: "queued",
           payload: JSON.stringify({
@@ -75,8 +83,8 @@ module.exports = {
 
         // Notificaciones de resultados
         {
-          user_id: 5, // Laura Fernández
-          appointment_id: 1, // Su cita completada
+          user_id: users[0].id, // Laura Fernández
+          appointment_id: appointments[0].id, // Su cita completada
           type: "email",
           status: "sent",
           payload: JSON.stringify({
@@ -93,8 +101,8 @@ module.exports = {
 
         // Notificaciones de cancelación
         {
-          user_id: 5, // Laura Fernández
-          appointment_id: 8, // Su cita cancelada
+          user_id: users[0].id, // Laura Fernández
+          appointment_id: appointments[7].id, // Su cita cancelada
           type: "email",
           status: "sent",
           payload: JSON.stringify({
@@ -112,7 +120,7 @@ module.exports = {
 
         // Notificaciones generales del sistema
         {
-          user_id: 6, // Roberto Silva
+          user_id: users[1].id, // Roberto Silva
           type: "email",
           status: "sent",
           payload: JSON.stringify({
@@ -125,7 +133,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          user_id: 11, // Elena Vargas
+          user_id: users[6].id, // Elena Vargas
           type: "email",
           status: "queued",
           payload: JSON.stringify({
@@ -140,8 +148,8 @@ module.exports = {
 
         // Notificaciones fallidas
         {
-          user_id: 7, // Carmen González
-          appointment_id: 3,
+          user_id: users[2].id, // Carmen González
+          appointment_id: appointments[2].id,
           type: "sms",
           status: "failed",
           payload: JSON.stringify({

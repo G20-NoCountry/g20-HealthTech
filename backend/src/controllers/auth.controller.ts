@@ -74,7 +74,7 @@ export class AuthController {
   public login = async (request: Request, response: Response) => {
     try {
       const user = request.user as User;
-      const userByRole = user.rol == "paciente"
+      const userByRole = user.rol === "paciente"
         ? await this.userService.getPatient(user.id)
         : await this.userService.getMedic(user.id);
 

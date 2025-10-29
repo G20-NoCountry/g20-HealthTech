@@ -7,9 +7,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { corsConfig } from "./config/cors.config";
 import { sequelize } from "./config/database.config";
-import models from "./models";
+import { setupAssociations } from "./models";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger.config";
+import { env } from "process";
 
 // Load environment variables
 dotenv.config();
@@ -52,6 +53,11 @@ const initializeDatabase = async () => {
     await sequelize.authenticate();
     console.log("✅ Database connection established successfully.");
 
+    // Simplemente para limpiar la base de datos de forma sencilla
+    await sequelize.sync({ force: env.DB_RESET_FORCE === 'true' });
+
+    // Las relaciones no estaban siendo llamadas correctamente
+    setupAssociations();
     // Sync models with database (in development)
     if (appConfig.nodeEnv === "development") {
       await sequelize.sync({ alter: true });

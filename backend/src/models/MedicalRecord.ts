@@ -4,7 +4,7 @@ import { sequelize } from "../config/database.config";
 interface MedicalRecordAttributes {
   id: number;
   patient_id: number;
-  doctor_id: number;
+  medic_id: number;
   record_type: string;
   content: string;
   created_at: Date;
@@ -23,7 +23,7 @@ class MedicalRecord
 {
   public id!: number;
   public patient_id!: number;
-  public doctor_id!: number;
+  public medic_id!: number;
   public record_type!: string;
   public content!: string;
   public created_at!: Date;
@@ -49,7 +49,7 @@ MedicalRecord.init(
         key: "id",
       },
     },
-    doctor_id: {
+    medic_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

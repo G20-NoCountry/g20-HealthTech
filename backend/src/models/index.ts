@@ -8,7 +8,7 @@ import Teleconsultation from "./Teleconsultation";
 import Notification from "./Notification";
 
 // Define associations
-const setupAssociations = () => {
+export const setupAssociations = () => {
   // User associations with Patient and Medic (inheritance-like relationship)
   User.hasOne(Patient, { foreignKey: "id", as: "patient" });
   Patient.belongsTo(User, { foreignKey: "id", as: "user" });
@@ -22,22 +22,22 @@ const setupAssociations = () => {
     as: "patientAppointments",
   });
   User.hasMany(Appointment, {
-    foreignKey: "doctor_id",
-    as: "doctorAppointments",
+    foreignKey: "medic_id",
+    as: "medicAppointments",
   });
 
   Appointment.belongsTo(User, { foreignKey: "patient_id", as: "patient" });
-  Appointment.belongsTo(User, { foreignKey: "doctor_id", as: "doctor" });
+  Appointment.belongsTo(User, { foreignKey: "medic_id", as: "medic" });
 
   // MedicalRecord associations
   User.hasMany(MedicalRecord, {
     foreignKey: "patient_id",
     as: "patientRecords",
   });
-  User.hasMany(MedicalRecord, { foreignKey: "doctor_id", as: "doctorRecords" });
+  User.hasMany(MedicalRecord, { foreignKey: "medic_id", as: "medicRecords" });
 
   MedicalRecord.belongsTo(User, { foreignKey: "patient_id", as: "patient" });
-  MedicalRecord.belongsTo(User, { foreignKey: "doctor_id", as: "doctor" });
+  MedicalRecord.belongsTo(User, { foreignKey: "medic_id", as: "medic" });
 
   // Teleconsultation associations
   Appointment.hasOne(Teleconsultation, {
@@ -64,7 +64,6 @@ const setupAssociations = () => {
 };
 
 // Setup associations
-setupAssociations();
 
 // Export models and sequelize instance
 export {

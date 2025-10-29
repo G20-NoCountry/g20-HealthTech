@@ -2,12 +2,20 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // Obtener los IDs de usuarios
+    const [patients] = await queryInterface.sequelize.query(
+      "SELECT id, email FROM users WHERE rol = 'paciente' ORDER BY id"
+    );
+    const [doctors] = await queryInterface.sequelize.query(
+      "SELECT id, email FROM users WHERE rol = 'medico' ORDER BY id"
+    );
+
     await queryInterface.bulkInsert(
       "medical_records",
       [
         {
-          patient_id: 5, // Laura Fernández
-          doctor_id: 1, // Dr. María García (Cardióloga)
+          patient_id: patients[0].id, // Laura Fernández
+          medic_id: doctors[0].id, // Dr. María García (Cardióloga)
           record_type: "consulta_cardiológica",
           content: JSON.stringify({
             motivo_consulta: "Dolor en el pecho intermitente",
@@ -43,26 +51,19 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          patient_id: 6, // Roberto Silva
-          doctor_id: 2, // Dr. Juan Rodríguez (Neurólogo)
+          patient_id: patients[1].id, // Roberto Silva
+          medic_id: doctors[1].id, // Dr. Juan Rodríguez (Neurólogo)
           record_type: "consulta_neurológica",
           content: JSON.stringify({
             motivo_consulta: "Dolores de cabeza frecuentes",
-            sintomas: [
-              "Cefalea pulsátil",
-              "Sensibilidad a la luz",
-              "Náuseas ocasionales",
-            ],
+            sintomas: ["Cefalea pulsátil", "Sensibilidad a la luz", "Náuseas ocasionales"],
             examen_fisico: {
               estado_mental: "Consciente y orientado",
               reflejos: "Normales",
               coordinacion: "Normal",
               fuerza_muscular: "5/5 en todas las extremidades",
             },
-            estudios_solicitados: [
-              "Resonancia magnética cerebral",
-              "Tomografía computada",
-            ],
+            estudios_solicitados: ["Resonancia magnética cerebral", "Tomografía computada"],
             diagnostico: "Migraña sin aura",
             tratamiento: {
               medicamentos: ["Ibuprofeno 400mg cuando aparezca"],
@@ -78,8 +79,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          patient_id: 7, // Carmen González
-          doctor_id: 3, // Dra. Ana López (Pediatra)
+          patient_id: patients[2].id, // Carmen González
+          medic_id: doctors[2].id, // Dra. Ana López (Pediatra)
           record_type: "control_pediatrico",
           content: JSON.stringify({
             motivo_consulta: "Control de crecimiento y desarrollo",
@@ -112,8 +113,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          patient_id: 8, // Diego Pérez
-          doctor_id: 4, // Dr. Carlos Martínez (Oftalmólogo)
+          patient_id: patients[3].id, // Diego Pérez
+          medic_id: doctors[3].id, // Dr. Carlos Martínez (Oftalmólogo)
           record_type: "consulta_oftalmologica",
           content: JSON.stringify({
             motivo_consulta: "Dificultad para ver de lejos",
@@ -128,11 +129,7 @@ module.exports = {
               presion_intraocular: "14 mmHg ambos ojos",
               fondo_de_ojo: "Normal",
             },
-            estudios_realizados: [
-              "Refracción",
-              "Tonometría",
-              "Examen de fondo de ojo",
-            ],
+            estudios_realizados: ["Refracción", "Tonometría", "Examen de fondo de ojo"],
             diagnostico: "Miopía leve",
             tratamiento: {
               correccion: "Lentes con graduación -1.50 dioptrías",
@@ -148,8 +145,8 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          patient_id: 9, // Sofía Hernández
-          doctor_id: 1, // Dr. María García (Cardióloga)
+          patient_id: patients[4].id, // Sofía Hernández
+          medic_id: doctors[0].id, // Dr. María García (Cardióloga)
           record_type: "consulta_seguimiento",
           content: JSON.stringify({
             motivo_consulta: "Seguimiento de hipertensión",
@@ -166,10 +163,7 @@ module.exports = {
             evaluacion: "Buena respuesta al tratamiento",
             ajustes_tratamiento: {
               medicamentos: ["Enalapril 5mg diario (reducido)"],
-              recomendaciones: [
-                "Continuar dieta baja en sodio",
-                "Mantener actividad física",
-              ],
+              recomendaciones: ["Continuar dieta baja en sodio", "Mantener actividad física"],
             },
             proximo_control: "3 meses",
           }),

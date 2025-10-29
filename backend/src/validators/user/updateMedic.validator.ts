@@ -3,8 +3,8 @@ import { body, validationResult } from "express-validator";
 import Medic from "../../models/Medic";
 
 const validateLicenseNum = async (id: string) => {
-    if (await Medic.findOne({ where: { licence_num: id } })) {
-        throw new Error('licence_num ya está registrado');
+    if (await Medic.findOne({ where: { license_num: id } })) {
+        throw new Error('license_num ya está registrado');
     }
 };
 

@@ -3,38 +3,27 @@ import { Dropdown, type DropdownChangeEvent } from 'primereact/dropdown';
 import {
   DataTable,
   type DataTableExpandedRows,
-  type DataTableFilterMeta,
   type DataTableValueArray,
 } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { FilterMatchMode } from 'primereact/api';
-import { ClinicalRecordsService } from '../../services/ClinicalRecordsService';
-import type { ClinicalRecord } from '../../models/clinicalRecords';
+import type { Appointment } from '../../api/models/appointment.interface';
+import { api } from '../../api';
+import type { MedicListItem } from '../../api/models/medic-list-item.interface';
+import { specialties } from '../../api/models/medic.interface';
 
 export default function ClinicalRecords() {
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState(null);
-  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
-  const [clinicalRecords, setClinicalRecords] = useState<ClinicalRecord[]>([]);
+  const [selectedDoctor, setSelectedDoctor] = useState<MedicListItem | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<{ name: string; code: string } | null>(null);
+  const [selectedSpecialty, setSelectedSpecialty] = useState<{ id: string; name: string } | null>(
+    null,
+  );
+  const [records, setRecords] = useState<Appointment[]>([]);
+  const [medics, setMedics] = useState<MedicListItem[]>([]);
   const [expandedRows, setExpandedRows] = useState<
     DataTableExpandedRows | DataTableValueArray | undefined
   >(undefined);
+  const [loading, setLoading] = useState(true);
 
-  const [filters, setFilters] = useState<DataTableFilterMeta>({
-    medico: { value: null, matchMode: FilterMatchMode.EQUALS },
-    fecha: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    especialidad: { value: null, matchMode: FilterMatchMode.EQUALS },
-  });
-
-  const doctor = [
-    { id: 'ana-gonzalez', name: 'Dra. Ana González' },
-    { id: 'carlos-ruiz', name: 'Dr. Carlos Ruiz' },
-    { id: 'luis-mendoza', name: 'Dr. Luis Mendoza' },
-    { id: 'paula-torres', name: 'Dra. Paula Torres' },
-    { id: 'julius-hibbert', name: 'Dr. Julius Hibbert' },
-    { id: 'nick-rivera', name: 'Dr. Nick Riviera' },
-    { id: 'mariana-salinas', name: 'Dra. Mariana Salinas' },
-  ];
   const months = [
     { name: 'Enero', code: '01' },
     { name: 'Febrero', code: '02' },
@@ -49,62 +38,62 @@ export default function ClinicalRecords() {
     { name: 'Noviembre', code: '11' },
     { name: 'Diciembre', code: '12' },
   ];
-  const specialties = [
-    { id: 'medicina-general', name: 'Medicina General' },
-    { id: 'oftalmologia', name: 'Oftalmología' },
-    { id: 'dermatologia', name: 'Dermatología' },
-    { id: 'pediatria', name: 'Pediatría' },
-    { id: 'cardiologia', name: 'Cardiología' },
-  ];
 
   useEffect(() => {
-    ClinicalRecordsService.getClinicalRecords().then((data) => setClinicalRecords(data));
+    Promise.all([api.users.getMedicsSummary(), api.appointments.searchPatientAppointments()])
+      .then(([medicsRes, recordsRes]) => {
+        if (medicsRes.success) setMedics(medicsRes.data);
+
+        if (recordsRes.success) {
+          const now = new Date();
+          const oldAppointments = recordsRes.data.filter(
+            (r: Appointment) => new Date(r.end_at) < now,
+          );
+          setRecords(oldAppointments);
+        }
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  // Aplicar filtros al seleccionar médico
-  const onDoctorChange = (e: DropdownChangeEvent) => {
-    setSelectedDoctor(e.value);
-    setFilters((prev) => ({
-      ...prev,
-      'medico.id': { value: e.value?.id || null, matchMode: FilterMatchMode.EQUALS },
-    }));
-  };
+  const filteredRecords = records.filter((r) => {
+    let match = true;
 
-  // Aplicar filtros al seleccionar mes
-  const onMonthChange = (e: DropdownChangeEvent) => {
-    setSelectedMonth(e.value);
-    setFilters((prev) => ({
-      ...prev,
-      fecha: {
-        value: e.value?.code || null,
-        matchMode: FilterMatchMode.CONTAINS, // porque la fecha es "2025-10-01"
-      },
-    }));
-  };
+    if (selectedDoctor?.medic_id && r.medic_id !== Number(selectedDoctor.medic_id)) match = false;
 
-  // Aplicar filtros al seleccionar especialidad
-  const onSpecialtyChange = (e: DropdownChangeEvent) => {
-    setSelectedSpecialty(e.value);
-    setFilters((prev) => ({
-      ...prev,
-      'especialidad.id': { value: e.value?.id || null, matchMode: FilterMatchMode.EQUALS },
-    }));
-  };
+    if (selectedMonth?.code) {
+      const month = new Date(r.start_at).toISOString().slice(5, 7);
+      if (month !== selectedMonth.code) match = false;
+    }
 
-  const allowExpansion = () => {
-    return clinicalRecords!.length > 0;
-  };
+    if (selectedSpecialty?.id) {
+      const medic = medics.find((m) => m.medic_id === String(r.medic_id));
+      if (medic?.speciality !== selectedSpecialty.id) match = false;
+    }
 
-  const rowExpansionTemplate = (data: ClinicalRecord) => {
-    return (
-      <div className="flex flex-col gap-2">
-        <p className="text-accent">{data.diagnostico.descripcion}</p>
-        <div className="border-success rounded-4xl border bg-white px-5 py-3 text-xs">
-          <p>{data.diagnostico.tratamiento}</p>
-        </div>
+    return match;
+  });
+
+  const onDoctorChange = (e: DropdownChangeEvent) => setSelectedDoctor(e.value);
+  const onMonthChange = (e: DropdownChangeEvent) => setSelectedMonth(e.value);
+  const onSpecialtyChange = (e: DropdownChangeEvent) => setSelectedSpecialty(e.value);
+
+  const rowExpansionTemplate = (data: Appointment) => (
+    <div className="flex flex-col gap-2">
+      <p className="text-accent font-semibold">{data.diagnostic || 'Sin diagnóstico registrado'}</p>
+      <div className="border-success rounded-3xl border bg-white px-5 py-3 text-sm">
+        <p>
+          <strong>Síntomas:</strong> {data.symptoms || 'No especificados'}
+        </p>
+        {data.location && (
+          <p className="mt-2 text-gray-600">
+            <strong>Ubicación:</strong> {data.location}
+          </p>
+        )}
       </div>
-    );
-  };
+    </div>
+  );
+
+  if (loading) return <p>Cargando historial clínico...</p>;
 
   return (
     <>
@@ -116,13 +105,14 @@ export default function ClinicalRecords() {
             inputId="doctorFilter"
             value={selectedDoctor}
             onChange={onDoctorChange}
-            options={doctor}
-            optionLabel="name"
+            options={medics}
+            optionLabel="first_name"
             placeholder="Todos los médicos"
             className="w-full md:w-md"
             showClear
           />
         </div>
+
         <div className="flex w-full flex-col gap-2 sm:max-w-md">
           <label htmlFor="monthFilter">Filtrar por mes</label>
           <Dropdown
@@ -136,6 +126,7 @@ export default function ClinicalRecords() {
             showClear
           />
         </div>
+
         <div className="flex w-full flex-col gap-2 sm:max-w-md">
           <label htmlFor="specialtyFilter">Filtrar por especialidad</label>
           <Dropdown
@@ -150,12 +141,11 @@ export default function ClinicalRecords() {
           />
         </div>
       </div>
+
       {/* Tabla */}
       <div className="mt-5">
         <DataTable
-          value={clinicalRecords}
-          filters={filters}
-          filterDisplay="menu"
+          value={filteredRecords}
           paginator
           rows={5}
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
@@ -164,24 +154,36 @@ export default function ClinicalRecords() {
           onRowToggle={(e) => setExpandedRows(e.data)}
           rowExpansionTemplate={rowExpansionTemplate}
           dataKey="id"
-          tableStyle={{ minWidth: '50rem' }}
+          tableStyle={{ minWidth: '60rem' }}
           emptyMessage="No se encontraron registros médicos"
           className="max-w-7xl">
           <Column
-            field="fecha"
+            field="start_at"
             header="Fecha"
+            body={(row) => new Date(row.start_at).toLocaleDateString()}
             style={{ width: '20%' }}
-            filterPlaceholder="Buscar por fecha"
           />
           <Column
-            field="medico.name"
+            field="medic.name"
             header="Médico"
+            body={(row) => {
+              const medic = medics.find((m) => m.medic_id === String(row.medic_id));
+              return medic ? `${medic.first_name} ${medic.last_name}` : 'N/A';
+            }}
             style={{ width: '20%' }}
-            filterPlaceholder="Buscar por médico"
           />
-          <Column field="especialidad.name" header="Especialidad" style={{ width: '23%' }}></Column>
-          <Column field="diagnostico.titulo" header="Diagnóstico" style={{ width: '23%' }}></Column>
-          <Column expander={allowExpansion} style={{ width: '8' }}></Column>
+          <Column
+            field="specialty"
+            header="Especialidad"
+            body={(row) => {
+              const medic = medics.find((m) => Number(m.medic_id) === row.medic_id);
+              const spec = specialties.find((s) => s.id === medic?.speciality);
+              return spec?.name ?? 'N/A';
+            }}
+            style={{ width: '25%' }}
+          />
+          <Column field="diagnostic" header="Diagnóstico" style={{ width: '25%' }} />
+          <Column expander style={{ width: '5%' }} />
         </DataTable>
       </div>
     </>

@@ -19,7 +19,7 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "RESTRICT",
       },
-      doctor_id: {
+      medic_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

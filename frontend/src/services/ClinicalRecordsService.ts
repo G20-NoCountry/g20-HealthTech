@@ -5,7 +5,7 @@ const mockClinicalRecords: ClinicalRecord[] = [
     id: 1,
     fecha: '2025-10-01',
     medico: { id: 'ana-gonzalez', name: 'Dra. Ana González' },
-    especialidad: { id: 'oftalmologia', name: 'Oftalmología' },
+    especialidad: { id: 'oftal', name: 'Oftalmología' },
     diagnostico: {
       titulo: 'Conjuntivitis bacteriana',
       descripcion: 'Infección ocular común causada por bacterias.',
@@ -27,7 +27,7 @@ const mockClinicalRecords: ClinicalRecord[] = [
     id: 3,
     fecha: '2025-08-20',
     medico: { id: 'ana-gonzalez', name: 'Dra. Ana González' },
-    especialidad: { id: 'oftalmologia', name: 'Oftalmología' },
+    especialidad: { id: 'oftal', name: 'Oftalmología' },
     diagnostico: {
       titulo: 'Miopía moderada',
       descripcion: 'Dificultad para ver objetos lejanos.',
@@ -38,7 +38,7 @@ const mockClinicalRecords: ClinicalRecord[] = [
     id: 4,
     fecha: '2025-07-15',
     medico: { id: 'luis-mendoza', name: 'Dr. Luis Mendoza' },
-    especialidad: { id: 'dermatologia', name: 'Dermatología' },
+    especialidad: { id: 'derma', name: 'Dermatología' },
     diagnostico: {
       titulo: 'Dermatitis atópica',
       descripcion: 'Inflamación crónica de la piel con picazón.',
@@ -60,7 +60,7 @@ const mockClinicalRecords: ClinicalRecord[] = [
     id: 6,
     fecha: '2025-05-22',
     medico: { id: 'julius-hibbert', name: 'Dr. Julius Hibbert' },
-    especialidad: { id: 'cardiologia', name: 'Cardiología' },
+    especialidad: { id: 'cardio', name: 'Cardiología' },
     diagnostico: {
       titulo: 'Hipertensión arterial',
       descripcion: 'Presión arterial elevada de forma crónica.',
@@ -71,11 +71,11 @@ const mockClinicalRecords: ClinicalRecord[] = [
     id: 7,
     fecha: '2025-10-15',
     medico: { id: 'mariana-salinas', name: 'Dra. Mariana Salinas' },
-    especialidad: { id: 'oftalmologia', name: 'Oftalmología' },
+    especialidad: { id: 'pediatria', name: 'Pediatría' },
     diagnostico: {
-      titulo: 'Astigmatismo',
-      descripcion: 'Defecto en la curvatura del ojo que causa visión borrosa.',
-      tratamiento: 'Uso de lentes correctivos cilíndricos.',
+      titulo: 'Asma infantil',
+      descripcion: 'Episodios recurrentes de dificultad respiratoria.',
+      tratamiento: 'Inhaladores de mantenimiento y control periódico.',
     },
   },
 ];

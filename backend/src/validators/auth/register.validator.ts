@@ -60,7 +60,8 @@ export const registerValidator = [
     .withMessage("phone no puede estar vacío")
     .bail()
     .customSanitizer((value) => value.replace(/\D/g, ""))
-    .isMobilePhone("es-AR")
+    .isLength({ min: 10, max: 13 })
+    .isNumeric()
     .withMessage("phone no válido")
     .bail()
     .custom(validatePhoneExist),

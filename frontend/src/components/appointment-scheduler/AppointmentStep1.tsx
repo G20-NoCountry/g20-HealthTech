@@ -4,7 +4,7 @@ import type { AppointmentData } from './AppointmentScheduler';
 import { Controller } from 'react-hook-form';
 import { useEffect } from 'react';
 import { doctors } from '../../models/doctorProfile.model';
-import { specialties } from '../../models/speciality.model';
+import { specialties } from '../../api/models/medic.interface';
 
 interface Step1Props {
   onNext: () => void;

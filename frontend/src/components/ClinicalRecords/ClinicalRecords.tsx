@@ -131,8 +131,8 @@ export default function ClinicalRecords() {
           <label htmlFor="specialityFilter">Filtrar por especialidad</label>
           <Dropdown
             inputId="specialityFilter"
-            value={selectedspeciality}
-            onChange={onspecialityChange}
+            value={selectedSpecialty}
+            onChange={onSpecialtyChange}
             options={specialties}
             optionLabel="name"
             placeholder="Todas las especialidades"

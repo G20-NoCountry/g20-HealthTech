@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { doctorProfileSchema, type DoctorProfileFormData } from './doctorProfile.schema';
 import type { DoctorProfile } from '../../models/doctorProfile.model';
 import { doctorToFormData, formDataToDoctor } from './doctorProfile.mapper';
-import { specialties } from '../../models/speciality.model';
+import { specialties } from '../../api/models/medic.interface';
 
 export function DoctorProfileForm({
   doctor,

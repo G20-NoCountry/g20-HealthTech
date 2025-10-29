@@ -26,7 +26,7 @@ export const NextAppointmentCard = ({ appointment }: NextAppointmentCardProps) =
 
   const handleVerPerfil = () => {
     if (appointment.patientId) {
-      navigate(`/pacientes/${appointment.patientId}`);
+      navigate(`/patient-profile/${appointment.patientId}`);
     } else {
       alert('ID del paciente no encontrado.');
     }

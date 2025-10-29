@@ -15,6 +15,7 @@ import SettingsPageMedico from '../pages/SettingsPageMedico';
 import DoctorDiaryPage from '../pages/DoctorDiaryPage';
 import { RouterLayout } from './RouterLayout';
 import { NotFoundPage } from '../pages/NotFoundPage';
+import { PatientHistoryPage } from '../pages/PatientHistoryPage';
 
 export const AppRouter = () => {
   return (
@@ -40,8 +41,10 @@ export const AppRouter = () => {
           <Route element={<RoleRoute allowedRoles={['medico']} />}>
             <Route path="dashboardMedico" element={<DoctorDashboardPage />} />
             <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
+            <Route path="patient-profile/:id" element={<ProfilePage />} />
             <Route path="settings-medico" element={<SettingsPageMedico />} />
             <Route path="doctor-diary" element={<DoctorDiaryPage />} />
+            <Route path='medical-history/:id' element={<PatientHistoryPage />} />
           </Route>
         </Route>
       </Route>

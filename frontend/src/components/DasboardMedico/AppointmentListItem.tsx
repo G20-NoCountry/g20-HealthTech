@@ -43,7 +43,7 @@ export const AppointmentListItem = ({ appointment }: AppointmentListItemProps) =
           </a>
         )}
         <Link
-          to={`/pacientes/${appointment.patientId || ''}`}
+          to={`/patient-profile/${appointment.patientId || ''}`}
           className='bg-[#734F96] text-white rounded-full px-5 py-3 inline-block hover:bg-[#EABAFF] transition-colors'
         >
           VER PERFIL

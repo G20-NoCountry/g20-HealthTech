@@ -9,13 +9,13 @@ const validateLicenseNum = async (id: string) => {
 };
 
 export const updateMedicValidator = [
-    body('licence_num')
+    body('license_num')
         .optional()
         .notEmpty()
-        .withMessage("licence_num no puede estar vacío")
+        .withMessage("license_num no puede estar vacío")
         .bail()
         .isNumeric()
-        .withMessage("licence_num debe ser numerico")
+        .withMessage("license_num debe ser numerico")
         .bail()
         .custom(validateLicenseNum)
     ,

@@ -8,7 +8,16 @@ export class RegisterMedicDto extends RegisterUserDto {
     password: string,
     rol: "medico" | "paciente",
     phone: string,
-    public specialty: "oftalmologia" | "cardiologia" | "neurologia" | "dermatologia" | "pediatria" | "ginecologia" | "traumatologia" | "psiquiatria" | "medicina_general",
+    public speciality:
+      | "oftalmologia"
+      | "cardiologia"
+      | "neurologia"
+      | "dermatologia"
+      | "pediatria"
+      | "ginecologia"
+      | "traumatologia"
+      | "psiquiatria"
+      | "medicina_general",
     public licence_num: number,
     public schedule_at: Date
   ) {

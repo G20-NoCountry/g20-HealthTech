@@ -1,10 +1,10 @@
-import type { Specialty } from './specialty.model';
+import type { speciality } from './speciality.model';
 
 export interface ClinicalRecord {
   id: number;
   fecha: string; // Esto puede mantenerse como string si solo se muestra la fecha
   medico: { id: string; name: string };
-  especialidad: Specialty;
+  especialidad: speciality;
   diagnostico: {
     titulo: string;
     descripcion: string;

@@ -2,7 +2,7 @@ import type { Appointment } from './AppointmentListItem';
 
 export const doctorInfo = {
   name: 'Dra. Ana García',
-  specialty: 'Cardiología',
+  speciality: 'Cardiología',
   notifications: 2,
 };
 

@@ -22,7 +22,7 @@ export const PersonalDataSection = ({
       <div className="grid w-full gap-6 md:grid-cols-2">
         <Field label="Nombre completo" value={data.full_name} icon="pi-user" />
         <Field label="Matrícula" value={data.license_number} icon="pi-id-card" />
-        <Field label="Especialidad" value={data.specialty.name} icon="pi-heart" />
+        <Field label="Especialidad" value={data.speciality.name} icon="pi-heart" />
         <Field
           label="Experiencia Laboral"
           value={`${data.years_experience} años`}

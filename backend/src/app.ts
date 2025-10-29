@@ -53,10 +53,10 @@ const initializeDatabase = async () => {
     await sequelize.authenticate();
     console.log("✅ Database connection established successfully.");
 
-    //$ [FIX] - Simplemente para limpiar la base de datos de forma sencilla.
+    // Simplemente para limpiar la base de datos de forma sencilla
     await sequelize.sync({ force: env.DB_RESET_FORCE === 'true' });
 
-    //$ [FIX] Las relaciones no estaban siendo llamadas correctamente.
+    // Las relaciones no estaban siendo llamadas correctamente
     setupAssociations();
     // Sync models with database (in development)
     if (appConfig.nodeEnv === "development") {

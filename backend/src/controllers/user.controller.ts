@@ -131,8 +131,7 @@ export class UserController {
             const id = parseInt(request.params.id);
             const user = request.user as User;
 
-            //$ [FIX] - Si eres medico, puedes acceder a cualquier paciente, pero si eres paciente, solamente a tu propio recurso.
-
+            // Si eres medico, puedes acceder a cualquier paciente, pero si eres paciente, solamente a tu propio recurso
             if (!user || (user.rol === "paciente" && id !== user.id))
                 throw new Error("No tienes permisos para ver este paciente");
 
@@ -285,7 +284,7 @@ export class UserController {
     *               $ref: '#/components/schemas/Error'
     */
     public updateMedic = async (request: Request, response: Response) => {
-        //$ [FIX] - Arreglo de controlador y aplicado de restricciones de autorización necesarias.
+        // Arreglo de controlador y aplicado de restricciones de autorización necesarias
         try {
             const authUser = request.user as User | undefined;
 
@@ -380,7 +379,7 @@ export class UserController {
     */
     public updatePatient = async (request: Request, response: Response) => {
         try {
-            //$ [FIX] - Arreglo de controlador y aplicado de restricciones de autorización necesarias.
+            // Arreglo de controlador y aplicado de restricciones de autorización necesarias
             const authUser = request.user as User | undefined;
 
             if (!authUser) {

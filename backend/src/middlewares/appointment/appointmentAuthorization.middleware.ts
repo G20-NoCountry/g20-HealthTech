@@ -31,7 +31,7 @@ export async function canDeleteMedicAppointment(
     }
 
     const appointment = await Appointment.findByPk(parseInt(id));
-    
+
     if (!appointment) {
       return res.status(404).json({
         success: false,
@@ -77,7 +77,7 @@ export async function canDeletePatientAppointment(
     }
 
     const appointment = await Appointment.findByPk(parseInt(id));
-    
+
     if (!appointment) {
       return res.status(404).json({
         success: false,
@@ -123,7 +123,7 @@ export async function canUpdateMedicAppointment(
     }
 
     const appointment = await Appointment.findByPk(body.id);
-    
+
     if (!appointment) {
       return res.status(404).json({
         success: false,
@@ -163,12 +163,13 @@ export async function canUpdatePatientAppointment(
     if (!user || (user.rol !== "paciente" && user.rol !== "medico")) {
       return res.status(403).json({
         success: false,
-        message: "Solo pacientes y médicos pueden actualizar citas de pacientes",
+        message:
+          "Solo pacientes y médicos pueden actualizar citas de pacientes",
       });
     }
 
     const appointment = await Appointment.findByPk(body.id);
-    
+
     if (!appointment) {
       return res.status(404).json({
         success: false,

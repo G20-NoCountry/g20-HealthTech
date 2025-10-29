@@ -88,7 +88,6 @@ export class AppointmentController {
     }
   };
 
-
   /**
    * @swagger
    * /api/paciente/appointments:
@@ -159,7 +158,7 @@ export class AppointmentController {
         data: null,
       });
     }
-  }
+  };
 
   /**
    * @swagger
@@ -289,7 +288,10 @@ export class AppointmentController {
     response: Response
   ) => {
     try {
-      const { start_date, end_date } = request.query as { start_date?: string; end_date?: string };
+      const { start_date, end_date } = request.query as {
+        start_date?: string;
+        end_date?: string;
+      };
       const patientId = (request.user as any).id;
 
       const appointments =
@@ -383,7 +385,6 @@ export class AppointmentController {
         });
       }
 
-
       return response.status(200).json({
         success: true,
         message: "Cita obtenida exitosamente",
@@ -468,7 +469,6 @@ export class AppointmentController {
         });
       }
 
-
       return response.status(200).json({
         success: true,
         message: "Cita obtenida exitosamente",
@@ -531,7 +531,9 @@ export class AppointmentController {
       const user = request.user as User;
 
       if (!user || user.rol !== "medico")
-        throw new Error("Solo los médicos pueden actualizar citas como médicos.");
+        throw new Error(
+          "Solo los médicos pueden actualizar citas como médicos."
+        );
 
       if (user.id !== body.medic_id)
         throw new Error("No puedes actualizar citas de otro médico.");
@@ -696,7 +698,7 @@ export class AppointmentController {
    *           type: string
    *         description: Razón de la cancelación
    *     responses:
-   *       204:
+   *       200:
    *         description: Cita cancelada exitosamente
    *         content:
    *           application/json:
@@ -718,31 +720,19 @@ export class AppointmentController {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/Error'
+   *       403:
+   *         description: No tienes permisos para cancelar esta cita
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
    */
-  // Delete appointment (for medic)
   // Cancelar cita (médico)
   public cancelMedicAppointment = async (
     request: Request,
     response: Response
   ) => {
-    try {
-      const { id } = request.params;
-      const { reason } = request.query;
-
-      await this.appointmentService.cancelAppointment(parseInt(id), reason as string);
-
-      return response.status(200).json({
-        success: true,
-        message: "Cita cancelada exitosamente",
-        data: null,
-      });
-    } catch (error: any) {
-      return response.status(400).json({
-        success: false,
-        message: error.message || "Error al cancelar la cita",
-        data: null,
-      });
-    }
+    return this.cancelAppointment(request, response, "medico");
   };
 
   /**
@@ -768,7 +758,7 @@ export class AppointmentController {
    *           type: string
    *         description: Razón de la cancelación
    *     responses:
-   *       204:
+   *       200:
    *         description: Cita cancelada exitosamente
    *         content:
    *           application/json:
@@ -790,17 +780,60 @@ export class AppointmentController {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/Error'
+   *       403:
+   *         description: No tienes permisos para cancelar esta cita
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
    */
   // Cancelar cita (paciente)
   public cancelPatientAppointment = async (
     request: Request,
     response: Response
   ) => {
+    return this.cancelAppointment(request, response, "paciente");
+  };
+
+  /**
+   * Función generalizada para cancelar citas con validación de autorización
+   * @param request - Request object
+   * @param response - Response object
+   * @param userRole - Rol del usuario ('medico' o 'paciente')
+   */
+  private cancelAppointment = async (
+    request: Request,
+    response: Response,
+    userRole: "medico" | "paciente"
+  ) => {
     try {
       const { id } = request.params;
       const { reason } = request.query;
+      const user = request.user as User;
 
-      await this.appointmentService.cancelAppointment(parseInt(id), reason as string);
+      // Validar que el usuario esté autenticado
+      if (!user) {
+        return response.status(401).json({
+          success: false,
+          message: "Usuario no autenticado",
+          data: null,
+        });
+      }
+
+      // Validar que el usuario tenga el rol correcto
+      if (user.rol !== userRole) {
+        return response.status(403).json({
+          success: false,
+          message: `Solo los ${userRole}s pueden cancelar citas como ${userRole}`,
+          data: null,
+        });
+      }
+
+      // Cancelar la cita
+      await this.appointmentService.cancelAppointment(
+        parseInt(id),
+        reason as string
+      );
 
       return response.status(200).json({
         success: true,
@@ -873,13 +906,10 @@ export class AppointmentController {
    *             schema:
    *               $ref: '#/components/schemas/Error'
    */
-  public getAvailability = async (
-    request: Request,
-    response: Response
-  ) => {
+  public getAvailability = async (request: Request, response: Response) => {
     try {
       const { medic_id, date, duration = 30 } = request.query;
-      
+
       if (!medic_id || !date) {
         return response.status(400).json({
           success: false,
@@ -973,7 +1003,8 @@ export class AppointmentController {
     try {
       const medicId = (request.user as any).id;
 
-      const appointments = await this.appointmentService.getCancelledAppointments(medicId);
+      const appointments =
+        await this.appointmentService.getCancelledAppointments(medicId);
 
       return response.status(200).json({
         success: true,
@@ -1052,7 +1083,11 @@ export class AppointmentController {
     try {
       const patientId = (request.user as any).id;
 
-      const appointments = await this.appointmentService.getCancelledAppointments(undefined, patientId);
+      const appointments =
+        await this.appointmentService.getCancelledAppointments(
+          undefined,
+          patientId
+        );
 
       return response.status(200).json({
         success: true,

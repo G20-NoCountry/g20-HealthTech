@@ -9,16 +9,16 @@ import {
 } from './EditAppointmentModal';
 import { isSameDay } from '../../utils/date';
 import type { Appointment } from '../../models/appointment.model';
+import { useAuth } from '../../contexts/AuthContext';
 
-interface DashboardProps {
-  rol: 'patient' | 'doctor';
-}
-
-export default function Dashboard({ rol }: DashboardProps) {
+export default function Dashboard() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [date, setDate] = useState<Date | null>(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editableData, setEditableData] = useState<EditableAppointmentModalData | null>(null);
+  const { user } = useAuth();
+
+  const rol = user?.rol ?? 'paciente';
 
   const today = new Date();
 
@@ -92,7 +92,7 @@ export default function Dashboard({ rol }: DashboardProps) {
 
         <div
           className={`border-success overflow-hidden rounded-xl border ${
-            rol === 'patient' ? 'bg-white' : 'bg-button-secondary shadow-black/20'
+            rol === 'paciente' ? 'bg-white' : 'bg-button-secondary shadow-black/20'
           } `}>
           <div className="scrollable flex flex-col gap-5 overflow-y-auto p-3 md:max-h-105">
             {filtered.length === 0 ? (

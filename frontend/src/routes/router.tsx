@@ -1,10 +1,6 @@
 import { Route, Routes } from 'react-router';
-import { RouterLayout } from './common/RouterLayout';
-import { RouterLayoutMedico } from './common/RoutherLayoutMedico';
 import { ProtectedRoute } from './ProtectedRoute';
 import { RoleRoute } from './RoleRoute';
-
-// Páginas
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import HomePage from '../pages/HomePage';
@@ -13,11 +9,12 @@ import AppointmentStepperPage from '../pages/AppointmentStepperPage';
 import ClinicalRecordsPage from '../pages/ClinicalRecordsPage';
 import { ProfilePage } from '../pages/ProfilePage';
 import SettingsPage from '../pages/SettingsPage';
-
 import { DoctorDashboardPage } from '../pages/DoctorDashboardPage';
 import DoctorProfilePage from '../pages/DoctorProfilePage';
 import SettingsPageMedico from '../pages/SettingsPageMedico';
 import DoctorDiaryPage from '../pages/DoctorDiaryPage';
+import { RouterLayout } from './RouterLayout';
+import { NotFoundPage } from '../pages/NotFoundPage';
 
 export const AppRouter = () => {
   return (
@@ -27,23 +24,20 @@ export const AppRouter = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      {/* Rutas protegidas para PACIENTE */}
+      {/* Rutas protegidas */}
       <Route element={<ProtectedRoute />}>
-        <Route element={<RoleRoute allowedRoles={['paciente']} />}>
-          <Route element={<RouterLayout />}>
+        <Route element={<RouterLayout />}>
+          {/* Rutas PACIENTE */}
+          <Route element={<RoleRoute allowedRoles={['paciente']} />}>
+            <Route path="dashboard" element={<DashboardPage />} />
             <Route path="appointment" element={<AppointmentStepperPage />} />
             <Route path="clinical-records" element={<ClinicalRecordsPage />} />
             <Route path="profile" element={<ProfilePage />} />
-            <Route path="dashboard" element={<DashboardPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
-        </Route>
-      </Route>
 
-      {/* Rutas protegidas para MÉDICO */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<RoleRoute allowedRoles={['medico']} />}>
-          <Route element={<RouterLayoutMedico />}>
+          {/* Rutas MÉDICO */}
+          <Route element={<RoleRoute allowedRoles={['medico']} />}>
             <Route path="dashboardMedico" element={<DoctorDashboardPage />} />
             <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
             <Route path="settings-medico" element={<SettingsPageMedico />} />
@@ -51,6 +45,8 @@ export const AppRouter = () => {
           </Route>
         </Route>
       </Route>
+
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

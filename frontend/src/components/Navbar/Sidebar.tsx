@@ -4,22 +4,22 @@ import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Ripple } from 'primereact/ripple';
 import { NavLink, useNavigate } from 'react-router';
+import { menuItems } from './menuItems';
 import Logo from '../../assets/logo.png';
 import { useAuth } from '../../contexts/AuthContext';
 
-export default function SidebarNav() {
-  const [visible, setVisible] = useState<boolean>(false);
-  const { logout } = useAuth();
+export const SidebarNav = () => {
+  const [visible, setVisible] = useState(false);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (err) {
-      console.error('Error al cerrar sesión:', err);
-    }
+    await logout();
+    navigate('/');
   };
+
+  const role = user?.rol === 'medico' ? 'medico' : 'paciente';
+  const items = menuItems[role];
 
   const customHeader = (
     <div className="flex items-center gap-3">
@@ -37,41 +37,17 @@ export default function SidebarNav() {
         className="bg-info">
         <div className="overflow-y-auto">
           <nav className="flex flex-col gap-1">
-            <NavLink
-              to="/dashboard"
-              className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
-              <i className="pi pi-home mr-3"></i>
-              <span className="font-medium">Inicio</span>
-              <Ripple />
-            </NavLink>
-            <NavLink
-              to="/profile"
-              className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
-              <i className="pi pi-user mr-3"></i>
-              <span className="font-medium">Perfil</span>
-              <Ripple />
-            </NavLink>
-            <NavLink
-              to="/clinical-records"
-              className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
-              <i className="pi pi-folder-open mr-3"></i>
-              <span className="font-medium">Historial Clínico</span>
-              <Ripple />
-            </NavLink>
-            <NavLink
-              to="/payments"
-              className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
-              <i className="pi pi-credit-card mr-3"></i>
-              <span className="font-medium">Pagos</span>
-              <Ripple />
-            </NavLink>
-            <NavLink
-              to="/settings"
-              className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
-              <i className="pi pi-cog mr-3"></i>
-              <span className="font-medium">Ajustes</span>
-              <Ripple />
-            </NavLink>
+            {items.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
+                <i className={`${item.icon} mr-3`}></i>
+                <span className="font-medium">{item.label}</span>
+                <Ripple />
+              </NavLink>
+            ))}
+
             <button
               onClick={handleLogout}
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold text-red-600 transition-colors duration-150 hover:bg-black/10">
@@ -82,7 +58,8 @@ export default function SidebarNav() {
           </nav>
         </div>
       </Sidebar>
+
       <Button icon="pi pi-bars" onClick={() => setVisible(true)} className="sidebar-button" />
     </>
   );
-}
+};

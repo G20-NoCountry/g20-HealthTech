@@ -10,7 +10,7 @@ export default function DoctorDiaryPage() {
             <p className="text-accent text-sm font-medium md:text-base">Administra tus citas</p>
           </div>
         </header>
-        <Dashboard rol="doctor" />
+        <Dashboard />
       </div>
     </section>
   );

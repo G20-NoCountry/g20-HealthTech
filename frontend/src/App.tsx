@@ -2,7 +2,6 @@ import { BrowserRouter } from 'react-router';
 import { AppRouter } from './routes/router';
 import { Toast } from 'primereact/toast';
 import { addLocale } from 'primereact/api';
-import { AuthProvider } from './contexts/AuthContext';
 
 addLocale('es', {
   firstDayOfWeek: 1,
@@ -43,14 +42,12 @@ addLocale('es', {
 
 const App = () => {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <div className="bg-primary font-kanit flex min-h-dvh w-full justify-center uppercase">
-          <AppRouter />
-        </div>
-        <Toast />
-      </BrowserRouter>
-    </AuthProvider>
+    <BrowserRouter>
+      <div className="bg-primary font-kanit flex min-h-dvh w-full justify-center uppercase">
+        <AppRouter />
+      </div>
+      <Toast />
+    </BrowserRouter>
   );
 };
 export default App;

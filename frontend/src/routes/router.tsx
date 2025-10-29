@@ -1,42 +1,52 @@
 import { Route, Routes } from 'react-router';
-import { RouterLayout } from './common/RouterLayout.tsx';
-import { LoginPage } from '../pages/LoginPage.tsx';
-import { RegisterPage } from '../pages/RegisterPage.tsx';
-import ClinicalRecordsPage from '../pages/ClinicalRecordsPage.tsx';
-import HomePage from '../pages/HomePage.tsx';
-import { ProfilePage } from '../pages/ProfilePage.tsx';
-import { DoctorDashboardPage } from '../pages/DoctorDashboardPage.tsx';
-import { RouterLayoutMedico } from './common/RoutherLayoutMedico.tsx';
-import DashboardPage from '../pages/DashboardPage.tsx';
-import AppointmentStepperPage from '../pages/AppointmentStepperPage.tsx';
-import DoctorProfilePage from '../pages/DoctorProfilePage.tsx';
-import SettingsPage from '../pages/SettingsPage.tsx';
-import SettingsPageMedico from '../pages/SettingsPageMedico.tsx';
-import DoctorDiaryPage from '../pages/DoctorDiaryPage.tsx';
+import { ProtectedRoute } from './ProtectedRoute';
+import { RoleRoute } from './RoleRoute';
+import { LoginPage } from '../pages/LoginPage';
+import { RegisterPage } from '../pages/RegisterPage';
+import HomePage from '../pages/HomePage';
+import DashboardPage from '../pages/DashboardPage';
+import AppointmentStepperPage from '../pages/AppointmentStepperPage';
+import ClinicalRecordsPage from '../pages/ClinicalRecordsPage';
+import { ProfilePage } from '../pages/ProfilePage';
+import SettingsPage from '../pages/SettingsPage';
+import { DoctorDashboardPage } from '../pages/DoctorDashboardPage';
+import DoctorProfilePage from '../pages/DoctorProfilePage';
+import SettingsPageMedico from '../pages/SettingsPageMedico';
+import DoctorDiaryPage from '../pages/DoctorDiaryPage';
+import { RouterLayout } from './RouterLayout';
+import { NotFoundPage } from '../pages/NotFoundPage';
 
 export const AppRouter = () => {
   return (
     <Routes>
-      {/* Layout que incluye sidebar */}
-      <Route path="/" element={<RouterLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="appointment" element={<AppointmentStepperPage />} />
-        <Route path="clinical-records" element={<ClinicalRecordsPage />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="settings" element={<SettingsPage />} />
-      </Route>
-
-      <Route path="/" element={<RouterLayoutMedico />}>
-        <Route path="dashboardMedico" element={<DoctorDashboardPage />} />
-        <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
-        <Route path="settings-medico" element={<SettingsPageMedico />} />
-        <Route path="doctor-diary" element={<DoctorDiaryPage />} />
-      </Route>
-
-      {/* Rutas sin sidebar */}
+      {/* Rutas públicas */}
+      <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+
+      {/* Rutas protegidas */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<RouterLayout />}>
+          {/* Rutas PACIENTE */}
+          <Route element={<RoleRoute allowedRoles={['paciente']} />}>
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="appointment" element={<AppointmentStepperPage />} />
+            <Route path="clinical-records" element={<ClinicalRecordsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+
+          {/* Rutas MÉDICO */}
+          <Route element={<RoleRoute allowedRoles={['medico']} />}>
+            <Route path="dashboardMedico" element={<DoctorDashboardPage />} />
+            <Route path="doctor-profile/:id" element={<DoctorProfilePage />} />
+            <Route path="settings-medico" element={<SettingsPageMedico />} />
+            <Route path="doctor-diary" element={<DoctorDiaryPage />} />
+          </Route>
+        </Route>
+      </Route>
+
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

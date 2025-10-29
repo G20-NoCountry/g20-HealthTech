@@ -1,42 +1,41 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { api } from '../api';
-import type { PatientUser, MedicUser } from '../api/models/user.interface';
+import type { MedicUser, PatientUser } from '../api/models/user.interface';
+
+type User = MedicUser | PatientUser | null;
 
 interface AuthContextType {
-  user: PatientUser | MedicUser | null;
-  isLoading: boolean;
-  isMedico: boolean;
+  user: User;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<User>;
+  logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  return ctx;
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<PatientUser | MedicUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User>(null);
+  const [loading, setLoading] = useState(true);
 
   const refreshUser = async () => {
     try {
-      setIsLoading(true);
-      console.log('🔄 AuthContext: Obteniendo usuario actual...');
-      const response = await api.users.getCurrentUser();
-      console.log('📥 AuthContext: Respuesta recibida:', response);
-      if (response.success && response.data?.user) {
-        console.log('✅ AuthContext: Usuario cargado:', response.data.user);
-        setUser(response.data.user);
+      const res = await api.users.getCurrentUser();
+      if (res.success) {
+        setUser(res.data.user);
       } else {
-        console.warn('⚠️ AuthContext: No se pudo cargar el usuario');
-      }
-    } catch (error: any) {
-      // Error 401 es normal cuando no hay sesión, no lo logueamos como error
-      if (error?.response?.status === 401) {
-        console.log('ℹ️ AuthContext: No hay sesión activa (esto es normal si no has iniciado sesión)');
         setUser(null);
-      } else {
-        console.error('❌ AuthContext: Error al cargar usuario:', error);
       }
+    } catch {
+      setUser(null);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -44,20 +43,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     refreshUser();
   }, []);
 
-  const isMedico = user ? 'specialty' in user : false;
+  const login = async (email: string, password: string) => {
+    setLoading(true);
+    try {
+      const res = await api.auth.login({ email, password });
+      if (!res.success) throw new Error(res.message);
 
-  return (
-    <AuthContext.Provider value={{ user, isLoading, isMedico, refreshUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+      // actualiza el usuario después de loguearse
+      const refreshed = await api.users.getCurrentUser();
+
+      if (refreshed.success) {
+        setUser(refreshed.data.user);
+        return refreshed.data.user; // devolvemos el usuario
+      } else {
+        throw new Error('No se pudo obtener el usuario');
+      }
+    } catch (err) {
+      console.error('Login failed', err);
+      setUser(null);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    await api.auth.logout();
+    setUser(null);
+  };
+
+  const value = useMemo(() => ({ user, loading, login, logout, refreshUser }), [user, loading]);
+
+  return <AuthContext value={value}>{children}</AuthContext>;
 };
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth debe usarse dentro de un AuthProvider');
-  }
-  return context;
-};
-

@@ -3,7 +3,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { useAuth } from '../../contexts/AuthContext';
 
 type FormData = {
   email: string;
@@ -16,29 +17,52 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const toast = useRef<Toast>(null);
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     setLoading(true);
-    setTimeout(() => {
-      if (toast.current) {
-        toast.current.show({
-          severity: 'success',
-          summary: 'Inicio de sesión exitoso',
-          detail: `Bienvenido, ${data.email}`,
-          life: 2000,
-        });
-      }
+    try {
+      const user = await login(data.email, data.password);
+      if (!user) return;
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Inicio de sesión exitoso',
+        detail: `Bienvenido, ${user.first_name || data.email}`,
+        life: 2000,
+      });
+
+      setTimeout(() => {
+        if (!user) return;
+        if (user.rol === 'paciente') {
+          navigate('/dashboard', { replace: true });
+        } else if (user.rol === 'medico') {
+          navigate('/dashboardMedico', { replace: true });
+        } else {
+          navigate('/', { replace: true });
+        }
+      }, 1000);
+    } catch (error) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error de autenticación',
+        detail: 'Credenciales inválidas o sesión expirada',
+        life: 3000,
+      });
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
+
   const inputStyleClasses =
     'w-full h-12 rounded-2xl shadow-sm text-black border-0 px-4 py-3 pr-10 bg-[#ffffff] focus:outline-none focus:ring-2 focus:ring-purple-400';
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
+
+  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+
   return (
     <>
       <Toast ref={toast} position="top-right" />
@@ -51,6 +75,7 @@ export const Login = () => {
             Medic App
           </h1>
         </div>
+
         <form onSubmit={handleSubmit(onSubmit)} className="flex w-full max-w-sm flex-col gap-5">
           <div className="flex flex-col">
             <label
@@ -85,6 +110,7 @@ export const Login = () => {
               <small className="mt-1 text-xs text-red-600">{errors.email.message}</small>
             )}
           </div>
+
           <div className="flex flex-col">
             <label
               htmlFor="inputContrasena"

@@ -3,11 +3,23 @@ import { Sidebar } from 'primereact/sidebar';
 import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Ripple } from 'primereact/ripple';
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import Logo from '../../assets/logo.png';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function SidebarNav() {
   const [visible, setVisible] = useState<boolean>(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (err) {
+      console.error('Error al cerrar sesión:', err);
+    }
+  };
 
   const customHeader = (
     <div className="flex items-center gap-3">
@@ -26,7 +38,7 @@ export default function SidebarNav() {
         <div className="overflow-y-auto">
           <nav className="flex flex-col gap-1">
             <NavLink
-              to="/"
+              to="/dashboard"
               className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-home mr-3"></i>
               <span className="font-medium">Inicio</span>
@@ -60,13 +72,13 @@ export default function SidebarNav() {
               <span className="font-medium">Ajustes</span>
               <Ripple />
             </NavLink>
-            <NavLink
-              to="/"
-              className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold transition-colors duration-150 hover:bg-black/10">
+            <button
+              onClick={handleLogout}
+              className="p-ripple flex w-full cursor-pointer items-center rounded-xl p-3 font-bold text-red-600 transition-colors duration-150 hover:bg-black/10">
               <i className="pi pi-sign-out mr-3"></i>
               <span className="font-medium">Cerrar sesión</span>
               <Ripple />
-            </NavLink>
+            </button>
           </nav>
         </div>
       </Sidebar>

@@ -2,8 +2,9 @@ import { AppointmentHeader } from './AppointmentHeader';
 import { AppointmentStepper } from './AppointmentStepper';
 import type { AppointmentData } from './AppointmentScheduler';
 import { Controller } from 'react-hook-form';
-import { useEffect } from 'react';
-import { doctors } from '../../models/doctorProfile.model';
+import { useEffect, useMemo, useState } from 'react';
+import { api } from '../../api';
+import type { MedicListItem } from '../../api/models/medic-list-item.interface';
 import { specialties } from '../../api/models/medic.interface';
 
 interface Step1Props {
@@ -23,10 +24,25 @@ export const AppointmentStep1 = ({
   control,
   errors,
 }: Step1Props) => {
-  // Lógica para filtrar los médicos según la especialidad seleccionada en data
-  const availableDoctors = data.specialityId
-    ? doctors.filter((doc) => doc.specialityId === data.specialityId)
-    : [];
+  const [medics, setMedics] = useState<MedicListItem[]>([]);
+
+  useEffect(() => {
+    // cargar resumen de médicos desde backend
+    const load = async () => {
+      try {
+        const res = await api.users.getMedicsSummary();
+        if (res.success && res.data) setMedics(res.data);
+      } catch {
+        setMedics([]);
+      }
+    };
+    load();
+  }, []);
+
+  const availableDoctors = useMemo(() => {
+    if (!data.specialityId) return [] as MedicListItem[];
+    return medics.filter((m) => m.speciality === data.specialityId);
+  }, [medics, data.specialityId]);
 
   useEffect(() => {
     if (data.specialityId !== '') {
@@ -39,17 +55,20 @@ export const AppointmentStep1 = ({
     }
   }, [data.specialityId, setValue]);
 
-  const handleDataChange = (field: keyof AppointmentData, value: any) => {
-    setData((prevData) => {
-      const newData = { ...prevData, [field]: value };
+    const handleDataChange = (field: keyof AppointmentData, value: any) => {
+      setData((prevData) => {
+        const newData = { ...prevData, [field]: value };
 
-      if (field === 'specialityId') {
-        newData.doctorId = ''; // Resetear doctor al cambiar la especialidad
-      }
+        if (field === 'specialityId') {
+          newData.doctorId = ''; // Resetear doctor al cambiar especialidad
+        }
 
-      return newData;
-    });
-  };
+        return newData;
+      });
+
+
+    setValue(field as any, value);
+    };
 
   const handleDoctorChange = (value: string) => {
     setData((prevData) => ({ ...prevData, doctorId: value }));
@@ -126,8 +145,8 @@ export const AppointmentStep1 = ({
                   className="w-full appearance-none rounded-lg border border-[#AFAAAA] bg-white p-4 uppercase focus:ring-2 focus:ring-[#734F96] focus:outline-none disabled:bg-gray-100">
                   <option value="">Seleccionar médico</option>
                   {availableDoctors.map((doc) => (
-                    <option key={doc.id} value={doc.id}>
-                      {doc.name}
+                    <option key={doc.medic_id} value={doc.medic_id}>
+                      {doc.first_name} {doc.last_name}
                     </option>
                   ))}
                 </select>

@@ -35,9 +35,9 @@ export const NextAppointmentCard = ({ appointment }: NextAppointmentCardProps) =
   return (
     <><div className="bg-[#734F96]  p-6 rounded-3xl border   flex flex-col md:flex-row justify-between items-center ">
       <div className="mb-4 md:mb-0 text-white">
-        <p className="text-sm uppercase">Iniciar Video Llamada - Próxima Cita -</p>
-        <p className="text-2xl font-bold">Hoy - {appointment.time}</p>
-        <p className="text-lg">{appointment.patientName} ({appointment.reason})</p>
+        <p className="text-sm uppercase">Próxima Cita</p>
+        <p className="text-2xl font-bold">{appointment.isToday ? 'Hoy' : 'Próximamente'} - {appointment.time}</p>
+        <p className="text-lg">{appointment.patientName}{appointment.reason && ` (${appointment.reason})`}</p>
       </div>
 
       <div className="flex flex-col gap-2 w-full md:w-auto">

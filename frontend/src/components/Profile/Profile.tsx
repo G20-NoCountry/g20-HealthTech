@@ -8,6 +8,7 @@ import type { SubmitHandler, FieldError, UseFormRegister, Path } from 'react-hoo
 import type { ReactNode } from 'react';
 import { api } from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
+import { Link } from 'react-router';
 
 const nameRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/;
 const bloodTypes = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'] as const;
@@ -38,7 +39,7 @@ const profileSchema = z.object({
     .max(15, 'Máximo 15 dígitos.')
     .regex(/^\d+$/, 'Solo números.'),
   obraSocialParticular: z.enum(socialOptions, { error: 'Campo requerido.' }),
-  email: z.string().email('Email inválido.'),
+  email: z.email('Email inválido.'),
   tipoSangre: z.enum(bloodTypes, { error: 'Campo requerido.' }),
   alergias: z.string().trim().min(1, 'Campo requerido.'),
   condicionesCronicas: z.string().trim().min(1, 'Campo requerido.'),
@@ -90,8 +91,8 @@ export const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { user, refreshUser } = useAuth();
 
-  const isMedico = true;
-  
+  const isMedico = user?.rol === 'medico';
+
   const {
     register,
     handleSubmit,
@@ -189,7 +190,7 @@ export const Profile = () => {
     });
   };
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-10">
+    <div className="flex min-h-dvh flex-col items-center justify-center p-4 sm:p-10">
       <Toast ref={toast} />
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-3xl space-y-8">
         <div className="rounded-[2.5rem] bg-pink-50 p-6 shadow-[0_30px_60px_rgba(0,0,0,0.08)] sm:p-10 md:p-12">
@@ -407,17 +408,17 @@ export const Profile = () => {
           </div>
         )}
         {isMedico && (
-          <div className="flex w-full gap-6 pt-6">
-            <button
-              type="button"
-              className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
-              HISTORIAL MEDICO
-            </button>
-            <button
-              type="button"
-              className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
-              HISTORIAL DE TURNOS
-            </button>
+          <div className="flex w-full flex-col gap-6 pt-6 md:flex-row">
+            <Link
+              to="/"
+              className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-center text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
+              Historial médico
+            </Link>
+            <Link
+              to="/"
+              className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-center text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
+              Historial de turnos
+            </Link>
           </div>
         )}
       </form>

@@ -1,4 +1,4 @@
-import type { speciality } from './speciality.model';
+import type { speciality } from './specialty.model';
 
 export interface PersonalData {
   full_name: string;

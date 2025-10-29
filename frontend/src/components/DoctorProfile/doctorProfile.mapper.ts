@@ -1,57 +1,56 @@
-import type { DoctorProfile } from '../../models/doctorProfile.model';
+import type { MedicUser } from '../../api/models/user.interface';
 import type { DoctorProfileFormData } from './doctorProfile.schema';
-import type { speciality } from '../../models/speciality.model';
+import type { speciality } from '../../models/specialty.model';
 
-/**
- * Convierte un DoctorProfile del backend al formato del formulario (DoctorProfileFormData)
- */
-export function doctorToFormData(doctor: DoctorProfile): DoctorProfileFormData {
+export function doctorToFormData(doctor: MedicUser): DoctorProfileFormData {
   return {
     personal_data: {
-      full_name: doctor.personal_data.full_name,
-      license_number: doctor.personal_data.license_number,
-      speciality: doctor.personal_data.speciality.id, // 👈 string
-      years_experience: doctor.personal_data.years_experience,
-      phone: doctor.personal_data.phone,
-      email: doctor.personal_data.email,
+      full_name: `${doctor.first_name} ${doctor.last_name}`,
+      license_number: doctor.licence_num ?? '',
+      speciality: String(doctor.speciality?.id ?? ''),
+      years_experience: String(doctor.years_experience ?? '0'),
+      phone: doctor.phone ?? '',
+      email: doctor.email ?? '',
     },
-    academic_background: doctor.academic_background.map((a) => ({
-      id: a.id,
-      title: a.title,
-      institution: a.institution,
-    })),
+    academic_background:
+      doctor.academic_background?.map((a) => ({
+        id: String(a.id ?? crypto.randomUUID()),
+        title: a.title,
+        institution: a.institution,
+      })) ?? [],
     about_me: {
-      description: doctor.about_me.description,
-      areas_of_expertise: [...doctor.about_me.areas_of_expertise],
+      description: doctor.about_me ?? '',
+      areas_of_expertise: doctor.areas_of_expertise ?? [],
     },
   };
 }
 
-/**
- * Convierte los datos del formulario al formato del modelo DoctorProfile (para guardar o enviar al backend)
- */
 export function formDataToDoctor(
   formData: DoctorProfileFormData,
-  baseDoctor: DoctorProfile,
+  baseDoctor: MedicUser,
   specialties: speciality[],
-): DoctorProfile {
+): MedicUser {
   const specialityObj =
-    specialties.find((s) => s.id === formData.personal_data.speciality) ??
-    baseDoctor.personal_data.speciality;
+    specialties.find((s) => String(s.id) === formData.personal_data.speciality) ??
+    baseDoctor.speciality;
 
   return {
     ...baseDoctor,
-    personal_data: {
-      ...formData.personal_data,
-      speciality: specialityObj,
-    },
-    academic_background: formData.academic_background.map((item, index) => ({
-      id: baseDoctor.academic_background[index]?.id ?? crypto.randomUUID(),
-      ...item,
+    first_name: formData.personal_data.full_name.split(' ')[0] ?? baseDoctor.first_name,
+    last_name:
+      formData.personal_data.full_name.split(' ').slice(1).join(' ') ?? baseDoctor.last_name,
+    license_number: formData.personal_data.license_number,
+    speciality: specialityObj,
+    years_experience: Number(formData.personal_data.years_experience),
+    phone: formData.personal_data.phone,
+    email: formData.personal_data.email,
+    academic_background: formData.academic_background.map((a) => ({
+      id: a.id ? Number(a.id) : undefined,
+      title: a.title,
+      institution: a.institution,
     })),
-    about_me: {
-      ...formData.about_me,
-    },
+    about_me: formData.about_me.description,
+    areas_of_expertise: formData.about_me.areas_of_expertise,
     updated_at: new Date().toISOString(),
   };
 }

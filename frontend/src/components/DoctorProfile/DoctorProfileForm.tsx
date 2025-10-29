@@ -5,17 +5,17 @@ import { Chip } from 'primereact/chip';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { doctorProfileSchema, type DoctorProfileFormData } from './doctorProfile.schema';
-import type { DoctorProfile } from '../../models/doctorProfile.model';
 import { doctorToFormData, formDataToDoctor } from './doctorProfile.mapper';
 import { specialties } from '../../api/models/medic.interface';
+import type { MedicUser } from '../../api/models/user.interface';
 
 export function DoctorProfileForm({
   doctor,
   onSave,
   onCancel,
 }: {
-  doctor: DoctorProfile;
-  onSave: (updated: DoctorProfile) => void;
+  doctor: MedicUser;
+  onSave: (updated: MedicUser) => void;
   onCancel: () => void;
 }) {
   const defaultValues = doctorToFormData(doctor);

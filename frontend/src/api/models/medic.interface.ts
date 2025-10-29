@@ -24,3 +24,16 @@ export const specialties: Specialty[] = [
   { id: 'psiquiatria', name: 'Psiquiatría' },
   { id: 'medicina_general', name: 'Medicina General' },
 ];
+
+export interface DoctorProfileData {
+  academic_background: {
+    id: string;
+    title: string;
+    institution: string;
+    year_completed?: number;
+  }[];
+  about_me: {
+    description: string;
+    areas_of_expertise: string[];
+  };
+}

@@ -1,4 +1,4 @@
-import type { Medic } from './medic.interface';
+import type { DoctorProfileData, Medic } from './medic.interface';
 import type { Patient } from './patient.interface';
 
 export interface User {
@@ -15,5 +15,4 @@ export interface User {
 }
 
 export interface PatientUser extends User, Patient {}
-export interface MedicUser extends User, Medic {
-}
+export interface MedicUser extends User, Medic, DoctorProfileData {}

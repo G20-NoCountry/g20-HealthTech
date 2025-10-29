@@ -15,4 +15,5 @@ export interface User {
 }
 
 export interface PatientUser extends User, Patient {}
-export interface MedicUser extends User, Medic {}
+export interface MedicUser extends User, Medic {
+}

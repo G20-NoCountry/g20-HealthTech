@@ -5,6 +5,7 @@ import { NotificationBell } from '../Notifications/NotificationBell';
 import { useAuth } from '../../contexts/AuthContext';
 import { patientNotifications, doctorNotifications } from '../../services/mockNotifications';
 import type { MedicUser } from '../../api/models/user.interface';
+import { Link } from 'react-router';
 
 export default function Navbar() {
   const { user } = useAuth();
@@ -12,17 +13,21 @@ export default function Navbar() {
   const notifications = role === 'medico' ? doctorNotifications : patientNotifications;
 
   function isMedicUser(user: any): user is MedicUser {
-    return user?.rol === 'medico' && 'specialty' in user;
+    return user?.rol === 'medico' && 'speciality' in user;
   }
 
   return (
     <header className="flex h-18 w-full items-center justify-between gap-5 px-3 py-5 md:px-10">
       <SidebarNav />
       <div className="flex w-full items-center justify-between gap-3">
+      <Link 
+      to="/dashboard" 
+>
         <div className="flex items-center gap-3">
           <Avatar image={Logo} shape="circle" />
           <p className="font-lemonada text-accent text-xl uppercase">Medic App</p>
         </div>
+      </Link>
 
         <div className="flex items-center gap-4">
           <div className="hidden text-right md:block">
@@ -31,7 +36,7 @@ export default function Navbar() {
             </p>
             {isMedicUser(user) && (
               <p className="inline-block rounded-full bg-[#EABAFF] px-2 py-0.5 text-xs">
-                {user.specialty}
+                {user.speciality}
               </p>
             )}
           </div>

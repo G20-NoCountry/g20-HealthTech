@@ -30,7 +30,7 @@ export const DoctorDashboardPage = () => {
             <h3 className="text-xl font-bold">CITAS DE HOY</h3>
 
             <Link
-              to="/" //AGREGAR RUTA DE AGENDA COMPLETA CUANDO ESTE LISTA
+              to="/doctor-diary" 
               className="rounded-3xl border border-[#AFAAAA] p-3 shadow-lg transition-colors hover:bg-gray-200">
               <i className="pi pi-calendar text-[#734F96]"></i>
               <span className="p-2">VER AGENDA COMPLETA</span>

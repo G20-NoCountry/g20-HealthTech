@@ -128,11 +128,11 @@ export default function ClinicalRecords() {
         </div>
 
         <div className="flex w-full flex-col gap-2 sm:max-w-md">
-          <label htmlFor="specialtyFilter">Filtrar por especialidad</label>
+          <label htmlFor="specialityFilter">Filtrar por especialidad</label>
           <Dropdown
-            inputId="specialtyFilter"
-            value={selectedSpecialty}
-            onChange={onSpecialtyChange}
+            inputId="specialityFilter"
+            value={selectedspeciality}
+            onChange={onspecialityChange}
             options={specialties}
             optionLabel="name"
             placeholder="Todas las especialidades"

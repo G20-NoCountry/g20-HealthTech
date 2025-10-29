@@ -4,7 +4,7 @@ import type { AppointmentData } from './AppointmentScheduler';
 import { Controller } from 'react-hook-form';
 import { useEffect } from 'react';
 import { doctors } from '../../models/doctorProfile.model';
-import { specialties } from '../../models/specialty.model';
+import { specialties } from '../../models/speciality.model';
 
 interface Step1Props {
   onNext: () => void;
@@ -24,26 +24,26 @@ export const AppointmentStep1 = ({
   errors,
 }: Step1Props) => {
   // Lógica para filtrar los médicos según la especialidad seleccionada en data
-  const availableDoctors = data.specialtyId
-    ? doctors.filter((doc) => doc.specialtyId === data.specialtyId)
+  const availableDoctors = data.specialityId
+    ? doctors.filter((doc) => doc.specialityId === data.specialityId)
     : [];
 
   useEffect(() => {
-    if (data.specialtyId !== '') {
-      setValue('specialtyId', data.specialtyId); // Establece el valor en react-hook-form solo cuando specialtyId cambia
+    if (data.specialityId !== '') {
+      setValue('specialityId', data.specialityId); // Establece el valor en react-hook-form solo cuando specialityId cambia
     }
 
     // Solo reseteamos el doctorId después de que la especialidad haya cambiado.
-    if (data.specialtyId === '') {
+    if (data.specialityId === '') {
       setValue('doctorId', ''); // Resetea el doctorId si la especialidad está vacía
     }
-  }, [data.specialtyId, setValue]);
+  }, [data.specialityId, setValue]);
 
   const handleDataChange = (field: keyof AppointmentData, value: any) => {
     setData((prevData) => {
       const newData = { ...prevData, [field]: value };
 
-      if (field === 'specialtyId') {
+      if (field === 'specialityId') {
         newData.doctorId = ''; // Resetear doctor al cambiar la especialidad
       }
 
@@ -85,13 +85,13 @@ export const AppointmentStep1 = ({
           <label className="text-sm font-semibold text-gray-600">Especialidad</label>
           <div className="relative">
             <Controller
-              name="specialtyId"
+              name="specialityId"
               control={control}
               render={({ field }) => (
                 <select
                   {...field}
-                  onChange={(e) => handleDataChange('specialtyId', e.target.value)} // Actualizar el estado local
-                  value={data.specialtyId} // Vincula el valor seleccionado con el estado de 'data'
+                  onChange={(e) => handleDataChange('specialityId', e.target.value)} // Actualizar el estado local
+                  value={data.specialityId} // Vincula el valor seleccionado con el estado de 'data'
                   className="w-full appearance-none rounded-lg border border-[#AFAAAA] bg-white p-4 uppercase focus:ring-2 focus:ring-[#734F96] focus:outline-none">
                   <option value="">Seleccionar especialidad</option>
                   {specialties.map((spec) => (
@@ -106,8 +106,8 @@ export const AppointmentStep1 = ({
               <i className="pi pi-chevron-down text-gray-400"></i>
             </div>
           </div>
-          {errors.specialtyId && (
-            <span className="text-sm text-red-500 normal-case">{errors.specialtyId.message}</span>
+          {errors.specialityId && (
+            <span className="text-sm text-red-500 normal-case">{errors.specialityId.message}</span>
           )}
         </div>
 
@@ -120,7 +120,7 @@ export const AppointmentStep1 = ({
               render={({ field }) => (
                 <select
                   {...field}
-                  disabled={!data.specialtyId} // Solo habilitar si hay una especialidad seleccionada
+                  disabled={!data.specialityId} // Solo habilitar si hay una especialidad seleccionada
                   onChange={(e) => handleDoctorChange(e.target.value)} // Actualiza el estado y react-hook-form
                   value={data.doctorId} // Vincula el valor seleccionado con el estado de 'data'
                   className="w-full appearance-none rounded-lg border border-[#AFAAAA] bg-white p-4 uppercase focus:ring-2 focus:ring-[#734F96] focus:outline-none disabled:bg-gray-100">

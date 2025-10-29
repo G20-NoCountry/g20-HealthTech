@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { doctorProfileSchema, type DoctorProfileFormData } from './doctorProfile.schema';
 import type { DoctorProfile } from '../../models/doctorProfile.model';
 import { doctorToFormData, formDataToDoctor } from './doctorProfile.mapper';
-import { specialties } from '../../models/specialty.model';
+import { specialties } from '../../models/speciality.model';
 
 export function DoctorProfileForm({
   doctor,
@@ -81,8 +81,8 @@ export function DoctorProfileForm({
         />
         <InputField
           label="Especialidad"
-          error={errors.personal_data?.specialty?.message}
-          {...register('personal_data.specialty')}
+          error={errors.personal_data?.speciality?.message}
+          {...register('personal_data.speciality')}
         />
 
         <InputField

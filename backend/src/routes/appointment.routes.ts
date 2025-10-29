@@ -4,11 +4,11 @@ import { createAppointmentValidator } from "../validators/appointment/createAppo
 import { updateAppointmentValidator } from "../validators/appointment/updateAppointment.validator";
 import { validationResult } from "express-validator";
 import { isAuthenticated } from "../middlewares/auth/authenticated.middleware";
-import { 
-  canDeleteMedicAppointment, 
+import {
+  canDeleteMedicAppointment,
   canDeletePatientAppointment,
   canUpdateMedicAppointment,
-  canUpdatePatientAppointment 
+  canUpdatePatientAppointment,
 } from "../middlewares/appointment/appointmentAuthorization.middleware";
 
 const router = Router();
@@ -18,10 +18,7 @@ const appointmentController = new AppointmentController();
 router.use(isAuthenticated);
 
 // Ruta para verificar disponibilidad de citas
-router.get(
-  "/appointments/availability",
-  appointmentController.getAvailability
-);
+router.get("/appointments/availability", appointmentController.getAvailability);
 
 // Middleware to handle validation errors
 const handleValidationErrors = (req: any, res: any, next: any) => {

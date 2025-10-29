@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Calendar, type CalendarDateTemplateEvent } from 'primereact/calendar';
-import { AppointmentsService } from '../../services/AppointmentService';
 import AppointmentCard from './AppointmentCard';
 import {
   EditAppointmentModal,
@@ -10,6 +9,7 @@ import {
 import { isSameDay } from '../../utils/date';
 import type { Appointment } from '../../models/appointment.model';
 import { useAuth } from '../../contexts/AuthContext';
+import { api } from '../../api';
 
 export default function Dashboard() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -22,7 +22,6 @@ export default function Dashboard() {
 
   const today = new Date();
 
-  // Filtrado por fecha seleccionada
   const filtered = useMemo(() => {
     if (!date) return appointments;
     return appointments.filter((a) => isSameDay(a.start_at, date));
@@ -30,17 +29,54 @@ export default function Dashboard() {
 
   const appointmentDates = useMemo(() => appointments.map((a) => a.start_at), [appointments]);
 
-  // Carga inicial
   useEffect(() => {
-    AppointmentsService.getAppointments().then((data) => {
-      const parsed = data.map((a) => ({
-        ...a,
-        start_at: new Date(a.start_at),
-        end_at: new Date(a.end_at),
-      }));
-      setAppointments(parsed.sort((a, b) => a.start_at.getTime() - b.start_at.getTime()));
-    });
-  }, []);
+    const fetchAppointments = async () => {
+      try {
+        if (rol === 'medico') {
+          const res = await api.appointments.searchAppointmentsAsMedic({});
+          const items = res.data ?? [];
+          const parsed: Appointment[] = items.map((it) => {
+            const start = new Date(it.start_at);
+            const end = new Date(it.end_at);
+            return {
+              id: it.id ?? 0,
+              patient: { id: it.patient_id, name: `Paciente #${it.patient_id}` },
+              doctor: { id: it.medic_id, name: `Médico #${it.medic_id}` },
+              start_at: start,
+              end_at: end,
+              status: 'scheduled',
+              type: it.type === 'virtual' ? 'virtual' : 'in_person',
+              location: it.location ?? '#',
+              created_at: start,
+              updated_at: end,
+            };
+          });
+          setAppointments(parsed.sort((a, b) => a.start_at.getTime() - b.start_at.getTime()));
+        } else {
+          const res = await api.appointments.searchPatientAppointments({});
+          const items = res.data ?? [];
+          const parsed: Appointment[] = items.map((it) => {
+            const start = new Date(it.start_at);
+            const end = new Date(it.end_at);
+            return {
+              id: it.id ?? 0,
+              patient: { id: it.patient_id, name: `Paciente #${it.patient_id}` },
+              doctor: { id: it.medic_id, name: `Médico #${it.medic_id}` },
+              start_at: start,
+              end_at: end,
+              status: 'scheduled',
+              type: it.type === 'virtual' ? 'virtual' : 'in_person',
+              location: it.location ?? '#',
+              created_at: start,
+              updated_at: end,
+            };
+          });
+          setAppointments(parsed.sort((a, b) => a.start_at.getTime() - b.start_at.getTime()));
+        }
+      } catch (e) {}
+    };
+    fetchAppointments();
+  }, [rol]);
 
   const nextAppointmentId = filtered.find((a) => a.start_at >= today)?.id;
 
@@ -55,7 +91,6 @@ export default function Dashboard() {
     );
   };
 
-  // Abrir modal
   const openEditModal = (appointment: Appointment) => {
     const hours = appointment.start_at.getHours().toString().padStart(2, '0');
     const minutes = appointment.start_at.getMinutes().toString().padStart(2, '0');
@@ -67,14 +102,53 @@ export default function Dashboard() {
     setEditModalVisible(true);
   };
 
-  // Guardar cambios
-  const handleSave = (updated: EditableAppointmentModalData) => {
-    console.log('Datos enviados:', updated);
-    setAppointments((prev) =>
-      prev.map((a) => (a.id === updated.id ? toAppointment(updated, a) : a)),
-    );
-    setEditModalVisible(false);
-    setEditableData(null);
+  const handleSave = async (updated: EditableAppointmentModalData) => {
+    try {
+      const existing = appointments.find((a) => a.id === updated.id);
+      if (!existing) return;
+
+      const [h, m] = updated.time.split(':').map(Number);
+      const start = new Date(updated.date);
+      start.setHours(h, m, 0, 0);
+      const end = new Date(start.getTime() + 30 * 60 * 1000);
+
+      const payload = {
+        id: existing.id,
+        patient_id: existing.patient.id,
+        medic_id: existing.doctor.id,
+        start_at: start.toISOString(),
+        end_at: end.toISOString(),
+        type: existing.type,
+        location: existing.location,
+      } as any;
+
+      if (rol === 'medico') {
+        await api.appointments.updateMedicAppointment(payload);
+      } else {
+        await api.appointments.updatePatientAppointment(payload);
+      }
+
+      setAppointments((prev) =>
+        prev.map((a) => (a.id === updated.id ? toAppointment(updated, a) : a)),
+      );
+    } finally {
+      setEditModalVisible(false);
+      setEditableData(null);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      if (rol === 'medico') {
+        await api.appointments.deleteMedicAppointment(id);
+      } else {
+        await api.appointments.deletePatientAppointment(id);
+      }
+      setAppointments((prev) => prev.filter((a) => a.id !== id));
+    } finally {
+      setEditModalVisible(false);
+      setEditableData(null);
+    }
   };
 
   return (
@@ -119,6 +193,7 @@ export default function Dashboard() {
           data={editableData}
           setData={setEditableData}
           onSave={handleSave}
+          onDelete={handleDelete}
         />
       )}
     </>

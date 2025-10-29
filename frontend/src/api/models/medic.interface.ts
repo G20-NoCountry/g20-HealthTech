@@ -1,7 +1,7 @@
 export interface Medic {
   id?: number;
   speciality: Specialty['id'];
-  licence_num: number;
+  license_num: number;
   schedule_from?: Date;
   schedule_at?: Date;
   created_at?: Date;

@@ -21,20 +21,19 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
     const fetchDoctor = async () => {
       try {
         const response = await api.users.getMedicById(Number(doctorId));
-        if (response.success && response.data) {
+        if (response.success) {
           const enriched = enrichMedicWithMockData(response.data);
           setDoctor(enriched);
         } else {
           setDoctor(null);
         }
-      } catch (err) {
-        console.error('Error cargando el perfil del doctor:', err);
+      } catch (error) {
+        console.error('Error cargando el perfil del doctor:', error);
         setDoctor(null);
       } finally {
         setLoading(false);
       }
     };
-
     fetchDoctor();
   }, [doctorId]);
 
@@ -54,12 +53,12 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
 
   const personalData = {
     full_name: `${doctor.first_name} ${doctor.last_name}`,
-    license_number: doctor.licence_num?.toString() ?? '—',
+    license_num: doctor.license_num ?? 0,
     speciality: specialties.find((s) => s.id === doctor.speciality) ?? {
       id: 'na',
       name: 'Sin especialidad',
     },
-    years_experience: '—',
+    // years_experience: '—',
     phone: doctor.phone ?? '—',
     email: doctor.email,
   };
@@ -83,8 +82,7 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
         <DoctorProfileForm
           doctor={doctor}
           onSave={(updatedDoctor: MedicUser) => {
-            // por ahora simula actualización local
-            setDoctor({ ...doctor, ...updatedDoctor });
+            setDoctor(updatedDoctor);
             setEditVisible(false);
             toast.current?.show({
               severity: 'success',

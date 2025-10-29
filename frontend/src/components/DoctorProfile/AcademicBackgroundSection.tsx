@@ -1,11 +1,17 @@
-import type { AcademicFormation } from '../../models/doctorProfile.model';
+import type { MedicUser } from '../../api/models/user.interface';
 
-export const AcademicBackgroundSection = ({ background }: { background: AcademicFormation[] }) => {
+export const AcademicBackgroundSection = ({
+  background,
+}: {
+  background: MedicUser['academic_background'];
+}) => {
   return (
     <section className="flex flex-col gap-3">
       <h2 className="flex items-center gap-3 text-2xl">
-        <i className="pi pi-graduation-cap" style={{ fontSize: '1.5rem' }}></i> Formación Académica
+        <i className="pi pi-graduation-cap" style={{ fontSize: '1.5rem' }}></i>
+        Formación Académica
       </h2>
+
       <ul className="space-y-4 rounded-3xl border bg-white p-5">
         {background.map((item) => (
           <li

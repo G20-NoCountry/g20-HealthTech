@@ -1,6 +1,6 @@
 export interface MedicListItem {
     medic_id: string;
-    specialty: string;
+    speciality: string;
     first_name: string;
     last_name: string;
 }

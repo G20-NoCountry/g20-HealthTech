@@ -43,7 +43,7 @@ export const AuthService = {
     email: string;
     phone: string;
     password: string;
-    specialty: string;
+    speciality: string;
     licence_num: string;
     schedule_from: string;
     schedule_at: string;

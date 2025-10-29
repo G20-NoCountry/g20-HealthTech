@@ -1,6 +1,6 @@
 import type { DoctorProfile } from '../../models/doctorProfile.model';
 import type { DoctorProfileFormData } from './doctorProfile.schema';
-import type { Specialty } from '../../models/specialty.model';
+import type { speciality } from '../../models/speciality.model';
 
 /**
  * Convierte un DoctorProfile del backend al formato del formulario (DoctorProfileFormData)
@@ -10,7 +10,7 @@ export function doctorToFormData(doctor: DoctorProfile): DoctorProfileFormData {
     personal_data: {
       full_name: doctor.personal_data.full_name,
       license_number: doctor.personal_data.license_number,
-      specialty: doctor.personal_data.specialty.id, // 👈 string
+      speciality: doctor.personal_data.speciality.id, // 👈 string
       years_experience: doctor.personal_data.years_experience,
       phone: doctor.personal_data.phone,
       email: doctor.personal_data.email,
@@ -33,17 +33,17 @@ export function doctorToFormData(doctor: DoctorProfile): DoctorProfileFormData {
 export function formDataToDoctor(
   formData: DoctorProfileFormData,
   baseDoctor: DoctorProfile,
-  specialties: Specialty[],
+  specialties: speciality[],
 ): DoctorProfile {
-  const specialtyObj =
-    specialties.find((s) => s.id === formData.personal_data.specialty) ??
-    baseDoctor.personal_data.specialty;
+  const specialityObj =
+    specialties.find((s) => s.id === formData.personal_data.speciality) ??
+    baseDoctor.personal_data.speciality;
 
   return {
     ...baseDoctor,
     personal_data: {
       ...formData.personal_data,
-      specialty: specialtyObj,
+      speciality: specialityObj,
     },
     academic_background: formData.academic_background.map((item, index) => ({
       id: baseDoctor.academic_background[index]?.id ?? crypto.randomUUID(),

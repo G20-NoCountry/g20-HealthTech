@@ -13,7 +13,7 @@ interface Toast {
 
 export interface AppointmentData {
   appointmentType: 'Presencial' | 'Virtual';
-  specialtyId: string | '';
+  specialityId: string | '';
   doctorId: string | '';
   date: Date | null;
   time: string | '';
@@ -22,7 +22,7 @@ export interface AppointmentData {
 export const AppointmentScheduler = ({ toast }: Toast) => {
   const [appointmentData, setAppointmentData] = useState<AppointmentData>({
     appointmentType: 'Presencial',
-    specialtyId: '',
+    specialityId: '',
     doctorId: '',
     date: null,
     time: '',
@@ -47,7 +47,7 @@ export const AppointmentScheduler = ({ toast }: Toast) => {
     let isValid = false;
 
     if (currentStep === 1) {
-      isValid = await trigger(['appointmentType', 'specialtyId', 'doctorId']);
+      isValid = await trigger(['appointmentType', 'specialityId', 'doctorId']);
     }
 
     if (currentStep === 2) {

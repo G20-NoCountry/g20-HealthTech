@@ -1,7 +1,7 @@
 import { AppointmentHeader } from './AppointmentHeader';
 import { AppointmentStepper } from './AppointmentStepper';
 import type { AppointmentData } from './AppointmentScheduler';
-import { specialties } from '../../models/specialty.model';
+import { specialties } from '../../models/speciality.model';
 import { doctors } from '../../models/doctorProfile.model';
 
 interface Step3Props {
@@ -11,9 +11,9 @@ interface Step3Props {
 }
 
 export const AppointmentStep3 = ({ onPrev, onConfirm, data }: Step3Props) => {
-  const getSpecialtyName = () => {
-    const specialty = specialties.find((s) => s.id === data.specialtyId);
-    return specialty ? specialty.name : 'No seleccionada';
+  const getspecialityName = () => {
+    const speciality = specialties.find((s) => s.id === data.specialityId);
+    return speciality ? speciality.name : 'No seleccionada';
   };
 
   const getDoctorName = () => {
@@ -39,7 +39,7 @@ export const AppointmentStep3 = ({ onPrev, onConfirm, data }: Step3Props) => {
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
             <div>
               <p className="mb-1 text-sm font-semibold text-gray-500">ESPECIALIDAD</p>
-              <p className="text-lg font-bold text-gray-800">{getSpecialtyName()}</p>
+              <p className="text-lg font-bold text-gray-800">{getspecialityName()}</p>
             </div>
             <div>
               <p className="mb-1 text-sm font-semibold text-gray-500">FECHA</p>

@@ -19,7 +19,7 @@ export default function Navbar() {
           <div className="hidden text-right md:block">
             <p className="hidden uppercase md:block">{doctorInfo.name}</p>
             <p className="inline-block rounded-full bg-[#EABAFF] px-2 py-0.5 text-xs">
-              {doctorInfo.specialty}
+              {doctorInfo.speciality}
             </p>
           </div>
           <NotificationBell notifications={doctorNotifications} />

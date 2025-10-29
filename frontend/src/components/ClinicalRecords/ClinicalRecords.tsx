@@ -10,13 +10,13 @@ import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
 import { ClinicalRecordsService } from '../../services/ClinicalRecordsService';
 import type { ClinicalRecord } from '../../models/clinicalRecords';
-import { specialties } from '../../models/specialty.model';
+import { specialties } from '../../models/speciality.model';
 import { doctors } from '../../models/doctorProfile.model';
 
 export default function ClinicalRecords() {
   const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
   const [selectedMonth, setSelectedMonth] = useState<any>(null);
-  const [selectedSpecialty, setSelectedSpecialty] = useState<any>(null);
+  const [selectedspeciality, setSelectedspeciality] = useState<any>(null);
   const [clinicalRecords, setClinicalRecords] = useState<ClinicalRecord[]>([]);
   const [expandedRows, setExpandedRows] = useState<
     DataTableExpandedRows | DataTableValueArray | undefined
@@ -72,8 +72,8 @@ export default function ClinicalRecords() {
   };
 
   // Aplicar filtros al seleccionar especialidad
-  const onSpecialtyChange = (e: DropdownChangeEvent) => {
-    setSelectedSpecialty(e.value);
+  const onspecialityChange = (e: DropdownChangeEvent) => {
+    setSelectedspeciality(e.value);
     setFilters((prev) => ({
       ...prev,
       'especialidad.id': {
@@ -130,11 +130,11 @@ export default function ClinicalRecords() {
           />
         </div>
         <div className="flex w-full flex-col gap-2 sm:max-w-md">
-          <label htmlFor="specialtyFilter">Filtrar por especialidad</label>
+          <label htmlFor="specialityFilter">Filtrar por especialidad</label>
           <Dropdown
-            inputId="specialtyFilter"
-            value={selectedSpecialty}
-            onChange={onSpecialtyChange}
+            inputId="specialityFilter"
+            value={selectedspeciality}
+            onChange={onspecialityChange}
             options={specialties}
             optionLabel="name"
             placeholder="Todas las especialidades"

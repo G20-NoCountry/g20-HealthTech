@@ -23,10 +23,10 @@ api.interceptors.response.use(
   (error) => {
     console.error('API error:', error.response?.data || error.message);
     // Ejemplo: Si el token expira
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login'; // redirige al login
-    }
+    // if (error.response?.status === 401) {
+    //   localStorage.removeItem('token');
+    //   window.location.href = '/login'; // redirige al login
+    // }
     return Promise.reject(error);
   },
 );

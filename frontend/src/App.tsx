@@ -42,8 +42,6 @@ addLocale('es', {
 
 const App = () => {
   return (
-
-    
     <BrowserRouter>
       <div className="bg-primary font-kanit flex min-h-dvh w-full justify-center uppercase">
         <AppRouter />

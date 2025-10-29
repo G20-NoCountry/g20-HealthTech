@@ -1,45 +1,29 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Toast } from 'primereact/toast';
 import * as z from 'zod';
 import type { SubmitHandler, FieldError, UseFormRegister, Path } from 'react-hook-form';
 import type { ReactNode } from 'react';
-
-const MAX_AGE = 120;
-
-const parseDDMMYYYY = (s: string) => {
-  const parts = s.split('/');
-  if (parts.length !== 3) return null;
-  const [d, m, y] = parts.map(Number);
-  if ([d, m, y].some(isNaN)) return null;
-  return { day: d, month: m, year: y };
-};
-
-const isRealDate = (s: string) => {
-  const parsed = parseDDMMYYYY(s);
-  if (!parsed) return false;
-  const { day, month, year } = parsed;
-  const date = new Date(year, month - 1, day);
-  return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
-};
-
-const calcAge = (s: string) => {
-  const parsed = parseDDMMYYYY(s);
-  if (!parsed) return null;
-  const { day, month, year } = parsed;
-  const today = new Date();
-  let age = today.getFullYear() - year;
-  const hasBirthday =
-    today.getMonth() + 1 > month || (today.getMonth() + 1 === month && today.getDate() >= day);
-  if (!hasBirthday) age--;
-  return age;
-};
+import { api } from '../../api';
+import { useAuth } from '../../contexts/AuthContext';
+import { Link } from 'react-router';
 
 const nameRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/;
 const bloodTypes = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'] as const;
-const socialOptions = ['Sindicales', 'Provinciales', 'OSDE', 'Otros'] as const;
+const socialOptions = [
+  'OSECAC',
+  'OSPRERA',
+  'UPCN',
+  'OBSBA',
+  'OSDEPYM',
+  'OSUTHGRA',
+  'OSPE',
+  'OSPECON',
+  'OSIAD',
+  'OSSEG',
+] as const;
 
 const profileSchema = z.object({
   nombreCompleto: z
@@ -47,24 +31,7 @@ const profileSchema = z.object({
     .trim()
     .min(3, 'Debe tener al menos 3 caracteres.')
     .regex(nameRegex, 'Solo letras y espacios.'),
-  fechaNacimiento: z.string().superRefine((val, ctx) => {
-    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(val)) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Formato requerido: DD/MM/AAAA.' });
-      return;
-    }
-    if (!isRealDate(val)) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Fecha inválida.' });
-      return;
-    }
-    const age = calcAge(val);
-    if (age === null || age < 0) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Edad inválida.' });
-      return;
-    }
-    if (age > MAX_AGE) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: `Edad mayor a ${MAX_AGE} años.` });
-    }
-  }),
+  fechaNacimiento: z.string().min(1, 'Fecha de nacimiento requerida.'),
   direccion: z.string().trim().min(5, 'Dirección requerida.'),
   telefono: z
     .string()
@@ -72,25 +39,13 @@ const profileSchema = z.object({
     .max(15, 'Máximo 15 dígitos.')
     .regex(/^\d+$/, 'Solo números.'),
   obraSocialParticular: z.enum(socialOptions, { error: 'Campo requerido.' }),
-  email: z.string().email('Email inválido.'),
+  email: z.email('Email inválido.'),
   tipoSangre: z.enum(bloodTypes, { error: 'Campo requerido.' }),
   alergias: z.string().trim().min(1, 'Campo requerido.'),
   condicionesCronicas: z.string().trim().min(1, 'Campo requerido.'),
   medicamentosActuales: z.string().trim().min(1, 'Campo requerido.'),
 });
 type ProfileData = z.infer<typeof profileSchema>;
-const defaultValues: ProfileData = {
-  nombreCompleto: 'SUSANA RAMIREZ',
-  fechaNacimiento: '15/03/1970',
-  direccion: 'AV. LIBERTAD, CIUDAD EVITA. BS AS',
-  telefono: '01136992010',
-  obraSocialParticular: 'OSDE',
-  email: 'SUSANA_RAM40@GMAIL.COM',
-  tipoSangre: 'O+',
-  alergias: 'PENICILINA, POLEN',
-  condicionesCronicas: 'NINGUNA',
-  medicamentosActuales: 'BETAMETASONA',
-};
 interface FormFieldProps {
   label: string;
   name: Path<ProfileData>;
@@ -109,12 +64,12 @@ const FormField = ({
   error,
   disabled,
 }: FormFieldProps) => (
-  <div className="flex flex-col space-y-3">
-    <label className="text-2xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
+  <div className="flex flex-col space-y-2">
+    <label className="text-xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
       {label}
     </label>
     <div
-      className={`flex h-20 items-center space-x-4 rounded-[2rem] border-2 p-6 transition duration-150 ${error ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${disabled ? 'bg-gray-50' : 'bg-white'}`}>
+      className={`flex h-16 items-center space-x-3 rounded-[2rem] border-2 p-4 transition duration-150 ${error ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${disabled ? 'bg-gray-50' : 'bg-white'}`}>
       <div
         className={`flex-shrink-0 ${disabled ? 'text-purple-300' : 'text-purple-600'} opacity-80`}>
         {icon}
@@ -123,7 +78,7 @@ const FormField = ({
         type={type}
         {...register(name)}
         disabled={disabled}
-        className={`w-full bg-transparent text-2xl focus:outline-none ${
+        className={`w-full bg-transparent text-xl focus:outline-none ${
           disabled ? 'cursor-not-allowed text-gray-500' : 'text-gray-900'
         }`}
       />
@@ -134,6 +89,10 @@ const FormField = ({
 export const Profile = () => {
   const toast = useRef<Toast>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const { user, refreshUser } = useAuth();
+
+  const isMedico = user?.rol === 'medico';
+
   const {
     register,
     handleSubmit,
@@ -142,20 +101,86 @@ export const Profile = () => {
     reset,
   } = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
-    defaultValues,
   });
-  const onSubmit: SubmitHandler<ProfileData> = (data) => {
-    console.log('Datos actualizados:', data);
-    setIsEditing(false);
-    toast.current?.show({
-      severity: 'success',
-      summary: '¡Éxito!',
-      detail: 'Cambios guardados con éxito',
-      life: 3000,
-    });
+
+  useEffect(() => {
+    if (user && 'location' in user) {
+      const nombres = (user.first_name + ' ' + user.last_name).trim();
+      const defaultValues = {
+        nombreCompleto: nombres || '',
+        fechaNacimiento: '01/01/1990',
+        direccion: user.location || '',
+        telefono: user.phone || '',
+        obraSocialParticular: (user.health_insurance as any) || 'OSECAC',
+        email: user.email || '',
+        tipoSangre: (user.blood_type as any) || 'O+',
+        alergias: user.alergias || '',
+        condicionesCronicas: user.cronicas_condition || '',
+        medicamentosActuales: user.actual_medication || '',
+      };
+      reset(defaultValues);
+    }
+  }, [user, reset]);
+
+  const onSubmit: SubmitHandler<ProfileData> = async (data) => {
+    if (!user || !('location' in user)) return;
+
+    try {
+      const nombres = data.nombreCompleto.trim().split(' ');
+      const last_name = nombres.pop() || '';
+      const first_name = nombres.join(' ') || last_name;
+
+      const updateData = {
+        id: user.id,
+        first_name,
+        last_name,
+        email: data.email,
+        phone: data.telefono,
+        location: data.direccion,
+        health_insurance: data.obraSocialParticular,
+        blood_type: data.tipoSangre,
+        alergias: data.alergias,
+        cronicas_condition: data.condicionesCronicas,
+        actual_medication: data.medicamentosActuales,
+      };
+
+      await api.users.updatePatientUser(updateData);
+      await refreshUser();
+
+      setIsEditing(false);
+      toast.current?.show({
+        severity: 'success',
+        summary: '¡Éxito!',
+        detail: 'Cambios guardados con éxito',
+        life: 3000,
+      });
+    } catch (error: any) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: error?.response?.data?.message || 'No se pudieron guardar los cambios',
+        life: 3000,
+      });
+    }
   };
+
   const handleCancel = () => {
-    reset(defaultValues);
+    if (user && 'location' in user) {
+      const nombres = (user.first_name + ' ' + user.last_name).trim();
+      const defaultValues = {
+        nombreCompleto: nombres || '',
+        fechaNacimiento: '01/01/1990',
+        direccion: user.location || '',
+        telefono: user.phone || '',
+        obraSocialParticular: (user.health_insurance as any) || 'OSECAC',
+        email: user.email || '',
+        tipoSangre: (user.blood_type as any) || 'O+',
+        alergias: user.alergias || '',
+        condicionesCronicas: user.cronicas_condition || '',
+        medicamentosActuales: user.actual_medication || '',
+      };
+      reset(defaultValues);
+    }
     setIsEditing(false);
     toast.current?.show({
       severity: 'info',
@@ -165,12 +190,12 @@ export const Profile = () => {
     });
   };
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-10">
+    <div className="flex min-h-dvh flex-col items-center justify-center p-4 sm:p-10">
       <Toast ref={toast} />
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-7xl space-y-12">
-        <div className="rounded-[2.5rem] bg-pink-50 p-8 shadow-[0_30px_60px_rgba(0,0,0,0.08)] sm:p-16 md:p-24">
-          <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-3xl font-extrabold text-gray-800 sm:text-4xl">DATOS PERSONALES</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-3xl space-y-8">
+        <div className="rounded-[2.5rem] bg-pink-50 p-6 shadow-[0_30px_60px_rgba(0,0,0,0.08)] sm:p-10 md:p-12">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-2xl font-extrabold text-gray-800 sm:text-3xl">DATOS PERSONALES</h2>
             <button
               type="button"
               onClick={() => setIsEditing((prev) => !prev)}
@@ -189,14 +214,14 @@ export const Profile = () => {
               </svg>
             </button>
           </div>
-          <div className="grid grid-cols-1 gap-x-16 gap-y-12 md:grid-cols-2">
-            <div className="col-span-1 space-y-10">
+          <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
+            <div className="col-span-1 space-y-6">
               <FormField
                 label="NOMBRE COMPLETO"
                 name="nombreCompleto"
                 register={register}
                 error={errors.nombreCompleto}
-                icon={<i className="pi pi-user text-3xl" />}
+                icon={<i className="pi pi-user text-2xl" />}
                 disabled={!isEditing}
               />
               <FormField
@@ -204,11 +229,11 @@ export const Profile = () => {
                 name="direccion"
                 register={register}
                 error={errors.direccion}
-                icon={<i className="pi pi-map-marker text-3xl" />}
+                icon={<i className="pi pi-map-marker text-2xl" />}
                 disabled={!isEditing}
               />
-              <div className="flex flex-col space-y-3">
-                <label className="text-2xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
+              <div className="flex flex-col space-y-2">
+                <label className="text-xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
                   OBRA SOCIAL / PARTICULAR
                 </label>
                 <Controller
@@ -216,14 +241,14 @@ export const Profile = () => {
                   control={control}
                   render={({ field }) => (
                     <div
-                      className={`flex h-20 items-center space-x-4 rounded-[2rem] border-2 p-6 transition duration-150 ${errors.obraSocialParticular ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
+                      className={`flex h-16 items-center space-x-3 rounded-[2rem] border-2 p-4 transition duration-150 ${errors.obraSocialParticular ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
                       <i
-                        className={`pi pi-briefcase text-3xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
+                        className={`pi pi-check text-2xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
                       />
                       <select
                         {...field}
                         disabled={!isEditing}
-                        className={`w-full bg-transparent text-2xl focus:outline-none ${
+                        className={`w-full bg-transparent text-xl focus:outline-none ${
                           !isEditing ? 'cursor-not-allowed text-gray-500' : 'text-gray-900'
                         }`}>
                         <option value="">Selecciona obra social...</option>
@@ -238,9 +263,9 @@ export const Profile = () => {
                 />
               </div>
             </div>
-            <div className="col-span-1 space-y-10">
-              <div className="flex flex-col space-y-3">
-                <label className="text-2xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
+            <div className="col-span-1 space-y-6">
+              <div className="flex flex-col space-y-2">
+                <label className="text-xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
                   FECHA DE NACIMIENTO
                 </label>
                 <Controller
@@ -248,9 +273,9 @@ export const Profile = () => {
                   control={control}
                   render={({ field }) => (
                     <div
-                      className={`flex h-20 items-center space-x-4 rounded-[2rem] border-2 p-6 transition duration-150 ${errors.fechaNacimiento ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
+                      className={`flex h-16 items-center space-x-3 rounded-[2rem] border-2 p-4 transition duration-150 ${errors.fechaNacimiento ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
                       <i
-                        className={`pi pi-calendar text-3xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
+                        className={`pi pi-calendar text-2xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
                       />
                       <Calendar
                         {...field}
@@ -273,10 +298,10 @@ export const Profile = () => {
                         }}
                         dateFormat="dd/mm/yy"
                         placeholder="Selecciona una fecha..."
-                        className="w-full border-0 bg-transparent text-2xl shadow-none focus:outline-none"
+                        className="w-full border-0 bg-transparent text-xl shadow-none focus:outline-none"
                         pt={{
                           input: {
-                            className: `text-2xl bg-transparent border-0 shadow-none focus:outline-none w-full ${
+                            className: `text-xl bg-transparent border-0 shadow-none focus:outline-none w-full ${
                               !isEditing ? 'text-gray-500' : 'text-gray-900 placeholder-gray-400'
                             }`,
                           },
@@ -292,7 +317,7 @@ export const Profile = () => {
                 name="telefono"
                 register={register}
                 error={errors.telefono}
-                icon={<i className="pi pi-phone text-3xl" />}
+                icon={<i className="pi pi-phone text-2xl" />}
                 disabled={!isEditing}
               />
               <FormField
@@ -300,19 +325,19 @@ export const Profile = () => {
                 name="email"
                 register={register}
                 error={errors.email}
-                icon={<i className="pi pi-envelope text-3xl" />}
+                icon={<i className="pi pi-envelope text-2xl" />}
                 disabled={!isEditing}
               />
             </div>
           </div>
         </div>
-        <div className="rounded-[2.5rem] bg-pink-50 p-8 shadow-[0_30px_60px_rgba(0,0,0,0.08)] sm:p-16 md:p-24">
-          <h2 className="mb-8 text-3xl font-extrabold text-gray-800 sm:text-4xl">
+        <div className="rounded-[2.5rem] bg-pink-50 p-6 shadow-[0_30px_60px_rgba(0,0,0,0.08)] sm:p-10 md:p-12">
+          <h2 className="mb-6 text-2xl font-extrabold text-gray-800 sm:text-3xl">
             INFORMACIÓN MÉDICA
           </h2>
-          <div className="grid grid-cols-1 gap-y-8">
-            <div className="flex flex-col space-y-3">
-              <label className="text-2xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
+          <div className="grid grid-cols-1 gap-y-6">
+            <div className="flex flex-col space-y-2">
+              <label className="text-xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
                 TIPO DE SANGRE
               </label>
               <Controller
@@ -320,14 +345,14 @@ export const Profile = () => {
                 control={control}
                 render={({ field }) => (
                   <div
-                    className={`flex h-20 items-center space-x-4 rounded-[2rem] border-2 p-6 transition duration-150 ${errors.tipoSangre ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
+                    className={`flex h-16 items-center space-x-3 rounded-[2rem] border-2 p-4 transition duration-150 ${errors.tipoSangre ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
                     <i
-                      className={`pi pi-heart-fill text-3xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
+                      className={`pi pi-heart-fill text-2xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
                     />
                     <select
                       {...field}
                       disabled={!isEditing}
-                      className={`w-full bg-transparent text-2xl focus:outline-none ${
+                      className={`w-full bg-transparent text-xl focus:outline-none ${
                         !isEditing ? 'cursor-not-allowed text-gray-500' : 'text-gray-900'
                       }`}>
                       <option value="">Selecciona tipo de sangre...</option>
@@ -346,7 +371,7 @@ export const Profile = () => {
               name="alergias"
               register={register}
               error={errors.alergias}
-              icon={<i className="pi pi-exclamation-circle text-3xl" />}
+              icon={<i className="pi pi-exclamation-circle text-2xl" />}
               disabled={!isEditing}
             />
             <FormField
@@ -354,7 +379,7 @@ export const Profile = () => {
               name="condicionesCronicas"
               register={register}
               error={errors.condicionesCronicas}
-              icon={<i className="pi pi-heart text-3xl" />}
+              icon={<i className="pi pi-heart text-2xl" />}
               disabled={!isEditing}
             />
             <FormField
@@ -362,24 +387,38 @@ export const Profile = () => {
               name="medicamentosActuales"
               register={register}
               error={errors.medicamentosActuales}
-              icon={<i className="pi pi-briefcase text-3xl" />}
+              icon={<i className="pi pi-briefcase text-2xl" />}
               disabled={!isEditing}
             />
           </div>
         </div>
         {isEditing && (
-          <div className="flex w-full flex-col justify-center space-y-6 pt-6 sm:flex-row sm:space-y-0 sm:space-x-8">
+          <div className="flex w-full flex-col justify-center space-y-4 pt-4 sm:flex-row sm:space-y-0 sm:space-x-6">
             <button
               type="submit"
-              className="h-20 w-full rounded-3xl bg-purple-500 text-2xl font-extrabold text-white shadow-2xl transition-all hover:bg-purple-600 sm:w-80">
+              className="h-14 w-full rounded-3xl bg-purple-500 text-xl font-extrabold text-white shadow-2xl transition-all hover:bg-purple-600 sm:w-64">
               GUARDAR CAMBIOS
             </button>
             <button
               type="button"
               onClick={handleCancel}
-              className="h-20 w-full rounded-3xl border-2 border-gray-200 bg-white text-2xl font-extrabold text-gray-800 shadow-md transition-all hover:bg-gray-50 sm:w-80">
+              className="h-14 w-full rounded-3xl border-2 border-gray-200 bg-white text-xl font-extrabold text-gray-800 shadow-md transition-all hover:bg-gray-50 sm:w-64">
               CANCELAR
             </button>
+          </div>
+        )}
+        {isMedico && (
+          <div className="flex w-full flex-col gap-6 pt-6 md:flex-row">
+            <Link
+              to="/"
+              className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-center text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
+              Historial médico
+            </Link>
+            <Link
+              to="/"
+              className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-center text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
+              Historial de turnos
+            </Link>
           </div>
         )}
       </form>

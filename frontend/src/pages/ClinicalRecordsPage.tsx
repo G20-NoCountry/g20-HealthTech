@@ -5,9 +5,9 @@ export default function ClinicalRecordsPage() {
     <section className="flex w-full flex-col items-center gap-2 p-3 md:p-10">
       <div className="flex w-full max-w-7xl flex-col space-y-6 overflow-y-auto rounded-3xl border border-[#AFAAAA] p-6 shadow-lg md:p-10">
         <header>
-          <h1 className="text-2xl font-semibold md:text-3xl">Historial clínico</h1>
+          <h1 className="text-2xl font-semibold md:text-3xl">Historial de turnos</h1>
           <p className="text-accent text-sm font-medium md:text-base">
-            Consulta tus registros médicos anteriores y diagnósticos
+            Consulta tus registros médicos y diagnósticos
           </p>
         </header>
         <ClinicalRecords />

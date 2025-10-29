@@ -438,7 +438,7 @@ export const Profile = () => {
         {isMedico && (
           <div className="flex w-full flex-col gap-6 pt-6 md:flex-row">
             <Link
-              to="/"
+              to={isMedicoViewingPatient && patientIdFromParams ? `/medical-history/${patientIdFromParams}` : "/"}
               className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-center text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
               Historial médico
             </Link>

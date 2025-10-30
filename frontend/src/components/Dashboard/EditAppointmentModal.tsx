@@ -1,7 +1,8 @@
 import { Dialog } from 'primereact/dialog';
 import { Calendar } from 'primereact/calendar';
 import { Controller, useForm } from 'react-hook-form';
-import { availableTimes, type Appointment } from '../../models/appointment.model';
+import { availableTimes } from '../../models/appointment.model';
+import type { AppointmentWithUsers } from '../../api/models/appointment.interface';
 
 export interface EditableAppointmentModalData {
   id: number;
@@ -125,12 +126,16 @@ export const EditAppointmentModal = ({
 // Función auxiliar para transformar al tipo Appointment
 export function toAppointment(
   editable: EditableAppointmentModalData,
-  existing: Appointment,
-): Appointment {
+  existing: AppointmentWithUsers,
+): AppointmentWithUsers {
   const [hours, minutes] = editable.time.split(':').map(Number);
   const start_at = new Date(editable.date);
   start_at.setHours(hours, minutes, 0, 0);
   const end_at = new Date(start_at.getTime() + 30 * 60 * 1000);
 
-  return { ...existing, start_at, end_at };
+  return {
+    ...existing,
+    start_at: start_at.toISOString(), // Convertir start_at a string ISO
+    end_at: end_at.toISOString(), // Convertir end_at a string ISO
+  };
 }

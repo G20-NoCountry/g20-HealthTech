@@ -52,15 +52,20 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
   }
 
   const personalData = {
-    full_name: `${doctor.first_name} ${doctor.last_name}`,
+    first_name: doctor.first_name ?? '',
+    last_name: doctor.last_name ?? '',
     license_num: doctor.license_num ?? 0,
     speciality: specialties.find((s) => s.id === doctor.speciality) ?? {
       id: 'na',
       name: 'Sin especialidad',
     },
-    // years_experience: '—',
     phone: doctor.phone ?? '—',
-    email: doctor.email,
+    email: doctor.email ?? '',
+  };
+
+  const doctorAboutMe = doctor?.about_me ?? {
+    description: 'No disponible',
+    areas_of_expertise: [],
   };
 
   return (
@@ -71,7 +76,7 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
 
       <AcademicBackgroundSection background={doctor.academic_background} />
 
-      <AboutMeSection about={doctor.about_me} />
+      <AboutMeSection about={doctorAboutMe} />
 
       <Dialog
         header="Editar Perfil"
@@ -81,15 +86,51 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
         breakpoints={{ '960px': '75vw', '641px': '95vw' }}>
         <DoctorProfileForm
           doctor={doctor}
-          onSave={(updatedDoctor: MedicUser) => {
-            setDoctor(updatedDoctor);
-            setEditVisible(false);
-            toast.current?.show({
-              severity: 'success',
-              summary: 'Éxito',
-              detail: 'Perfil guardado correctamente',
-              life: 3000,
-            });
+          onSave={async (updatedDoctor: MedicUser) => {
+            try {
+              // Preparar los datos para enviar solo los datos personales
+              const personalDataToUpdate = {
+                first_name: updatedDoctor.first_name,
+                last_name: updatedDoctor.last_name,
+                license_num: updatedDoctor.license_num,
+                phone: updatedDoctor.phone,
+                email: updatedDoctor.email,
+              };
+
+              // Enviar los datos actualizados a la base de datos
+              const response = await api.users.updateMedicUser({
+                ...personalDataToUpdate,
+              });
+
+              if (response.success) {
+                setDoctor(updatedDoctor);
+                setEditVisible(false);
+
+                // Mostrar mensaje de éxito
+                toast.current?.show({
+                  severity: 'success',
+                  summary: 'Éxito',
+                  detail: 'Perfil guardado correctamente',
+                  life: 3000,
+                });
+              } else {
+                // Si la actualización falla, puedes manejar el error aquí
+                toast.current?.show({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'No se pudo guardar el perfil. Intenta nuevamente.',
+                  life: 3000,
+                });
+              }
+            } catch (error) {
+              console.error('Error al actualizar el perfil del doctor:', error);
+              toast.current?.show({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Hubo un problema con la actualización. Intenta nuevamente.',
+                life: 3000,
+              });
+            }
           }}
           onCancel={() => setEditVisible(false)}
         />

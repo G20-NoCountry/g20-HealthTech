@@ -5,6 +5,11 @@ export const AcademicBackgroundSection = ({
 }: {
   background: MedicUser['academic_background'];
 }) => {
+  // Si `background` es undefined o null, asignamos un array vacío por defecto
+  if (!background || !Array.isArray(background)) {
+    return <p>No hay formación académica disponible.</p>;
+  }
+
   return (
     <section className="flex flex-col gap-3">
       <h2 className="flex items-center gap-3 text-2xl">

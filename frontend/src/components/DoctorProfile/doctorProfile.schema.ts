@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const personalDataSchema = z.object({
-  full_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres.'),
+  first_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres.'),
+  last_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres.'),
   license_num: z.number().min(1, 'La matrícula es obligatoria.'),
   speciality: z.string().min(1, 'La especialidad es obligatoria.'),
   // years_experience: z

@@ -18,7 +18,7 @@ export function enrichMedicWithMockData(medic: MedicUser): MedicUser {
     ...medic,
     academic_background: mock?.academic_background ?? [
       {
-        id: 'default',
+        id: '1',
         title: 'Especialización en Cardiología',
         institution: 'Hospital Italiano de Buenos Aires',
       },

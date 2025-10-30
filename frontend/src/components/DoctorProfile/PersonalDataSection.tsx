@@ -2,7 +2,8 @@ import type { Specialty } from '../../api/models/medic.interface';
 
 interface PersonalDataProps {
   data: {
-    full_name: string;
+    first_name: string;
+    last_name: string;
     license_num: number;
     speciality: Specialty;
     phone: string;
@@ -25,7 +26,8 @@ export const PersonalDataSection = ({ data, onEdit }: PersonalDataProps) => {
       </header>
 
       <div className="grid w-full gap-6 md:grid-cols-2">
-        <Field label="Nombre completo" value={data.full_name} icon="pi-user" />
+        <Field label="Nombre" value={data.first_name} icon="pi-user" />
+        <Field label="Apellido" value={data.last_name} icon="pi-user" />
         <Field label="Matrícula" value={data.license_num} icon="pi-id-card" />
         <Field label="Especialidad" value={data.speciality.name} icon="pi-heart" />
         {/* <Field

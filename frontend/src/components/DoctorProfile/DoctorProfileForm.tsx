@@ -71,9 +71,14 @@ export function DoctorProfileForm({
       <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
         <h3 className="text-xl font-semibold md:col-span-2">Datos personales</h3>
         <InputField
-          label="Nombre completo"
-          error={errors.personal_data?.full_name?.message}
-          {...register('personal_data.full_name')}
+          label="Nombre"
+          error={errors.personal_data?.first_name?.message}
+          {...register('personal_data.first_name')}
+        />
+        <InputField
+          label="Apellido"
+          error={errors.personal_data?.last_name?.message}
+          {...register('personal_data.last_name')}
         />
         <InputField
           label="Matrícula"

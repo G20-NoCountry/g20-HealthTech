@@ -22,6 +22,7 @@ const validateLicenseNum = async (value: string, { req, path }: any) => {
 
 export const updateMedicValidator = [
     body("speciality")
+        .optional()
         .notEmpty()
         .withMessage("speciality es obligatorio")
         .bail()

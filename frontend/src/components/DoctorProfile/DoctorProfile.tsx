@@ -97,7 +97,6 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
                 email: updatedDoctor.email,
               };
 
-              // Enviar los datos actualizados a la base de datos
               const response = await api.users.updateMedicUser({
                 ...personalDataToUpdate,
               });
@@ -106,20 +105,20 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
                 setDoctor(updatedDoctor);
                 setEditVisible(false);
 
-                // Mostrar mensaje de éxito
                 toast.current?.show({
                   severity: 'success',
                   summary: 'Éxito',
                   detail: 'Perfil guardado correctamente',
                   life: 3000,
+                  className: 'normal-case',
                 });
               } else {
-                // Si la actualización falla, puedes manejar el error aquí
                 toast.current?.show({
                   severity: 'error',
                   summary: 'Error',
                   detail: 'No se pudo guardar el perfil. Intenta nuevamente.',
                   life: 3000,
+                  className: 'normal-case',
                 });
               }
             } catch (error) {
@@ -129,6 +128,7 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
                 summary: 'Error',
                 detail: 'Hubo un problema con la actualización. Intenta nuevamente.',
                 life: 3000,
+                className: 'normal-case',
               });
             }
           }}

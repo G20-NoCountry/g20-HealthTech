@@ -308,13 +308,14 @@ export class UserController {
       const body = request.body as UpdateMedicDto;
       body.id = authUser.id;
       const medicUpdated = await this.userService.editUser(body, "medico");
+      const userUpdated = await User.findByPk(body.id);
       const medic = await Medic.findByPk(body.id);
 
-      if (!medicUpdated || !medic) {
+      if (!userUpdated || !medicUpdated || !medic) {
         throw new Error("No se pudo actualizar el usuario");
       }
 
-      const medicResource = MedicResource.toResponse(authUser, medic);
+      const medicResource = MedicResource.toResponse(userUpdated, medic);
 
       return response.status(200).json({
         success: true,
@@ -405,13 +406,15 @@ export class UserController {
       const body = request.body as UpdatePatientDto;
       body.id = authUser.id;
       const patientUpdated = await this.userService.editUser(body, "paciente");
+
+      const userUpdated = await User.findByPk(body.id);
       const patient = await Patient.findByPk(body.id);
 
-      if (!patientUpdated || !patient) {
+      if (!userUpdated || !patientUpdated || !patient) {
         throw new Error("No se pudo actualizar el usuario");
       }
 
-      const patientResource = PatientResource.toResponse(authUser, patient)
+      const patientResource = PatientResource.toResponse(userUpdated, patient)
 
       return response.status(200).json({
         success: true,

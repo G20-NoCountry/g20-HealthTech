@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { body, param, validationResult, check } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import { User } from "../../models";
 
 const validateEmailExist = async (email: string) => {
@@ -16,13 +16,11 @@ const validatePhoneExist = async (phone: string) => {
     }
 };
 
-const validateEqualName = async (name: string, { req, path }: any) => {
+const validateEqualValue = (name: string, { req, path }: any) => {
     const user = req.user;
     if (!user) throw new Error('Usuario no autenticado');
 
-    if (user[path] == name) {
-        throw new Error(`${path} no puede ser igual`);
-    }
+    if (user[path] != name) return true;
 };
 
 export const userIdValidator = [
@@ -33,7 +31,9 @@ export const userIdValidator = [
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
-                errors: errors.array()
+                success: false,
+                message: "Errores de validación",
+                data: errors.array(),
             });
         }
         next();
@@ -53,8 +53,7 @@ export const updateUserValidator = [
         .withMessage('first_name de contener caracteres alfabeticos')
         .bail()
         .isLength({ min: 3 })
-        .withMessage('first_name debe tener mínimo 3 caracteres')
-        .custom(validateEqualName).withMessage("first_name debe ser diferente"),
+        .withMessage('first_name debe tener mínimo 3 caracteres'),
     body('last_name')
         .optional()
         .notEmpty()
@@ -64,8 +63,7 @@ export const updateUserValidator = [
         .withMessage('last_name debe contener caracteres alfabeticos')
         .bail()
         .isLength({ min: 3 })
-        .withMessage('last_name debe tener mínimo 3 caracteres')
-        .custom(validateEqualName).withMessage("last_name debe ser diferente"),
+        .withMessage('last_name debe tener mínimo 3 caracteres'),
     body('email')
         .optional()
         .notEmpty()
@@ -74,7 +72,8 @@ export const updateUserValidator = [
         .isEmail()
         .withMessage('email no válido')
         .bail()
-        .custom(validateEmailExist),
+        .if(validateEqualValue)
+        .custom(validateEmailExist).withMessage("email ya está registrado"),
     body('phone')
         .optional()
         .notEmpty()
@@ -85,15 +84,6 @@ export const updateUserValidator = [
         .isNumeric()
         .withMessage("phone no válido")
         .bail()
-        .custom(validatePhoneExist),
-
-    (req: Request, res: Response, next: NextFunction) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                errors: errors.array()
-            });
-        }
-        next();
-    }
+        .if(validateEqualValue)
+        .custom(validatePhoneExist).withMessage("phone ya esta registrado"),
 ];

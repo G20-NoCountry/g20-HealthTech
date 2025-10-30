@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { doctorProfileSchema, type DoctorProfileFormData } from './doctorProfile.schema';
 import { doctorToFormData, formDataToDoctor } from './doctorProfile.mapper';
-import { specialties } from '../../api/models/medic.interface';
+// import { specialties } from '../../api/models/medic.interface';
 import type { MedicUser } from '../../api/models/user.interface';
 
 export function DoctorProfileForm({
@@ -36,7 +36,7 @@ export function DoctorProfileForm({
   const form = watch();
 
   const onSubmit = (data: DoctorProfileFormData) => {
-    const updatedDoctor = formDataToDoctor(data, doctor, specialties);
+    const updatedDoctor = formDataToDoctor(data, doctor);
     onSave(updatedDoctor);
   };
 

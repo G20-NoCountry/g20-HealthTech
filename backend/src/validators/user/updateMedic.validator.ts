@@ -8,7 +8,7 @@ const validateLicenseNum = async (value: string, { req, path }: any) => {
     const medic: any = await Medic.findByPk(user.id);
     if (!medic) throw new Error('Médico no encontrado');
 
-    if (medic[path] === value) {
+    if (medic[path] == value) {
         return true;
     }
 

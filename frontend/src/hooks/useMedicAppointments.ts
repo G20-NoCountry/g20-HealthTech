@@ -83,7 +83,9 @@ export const useMedicAppointments = () => {
 
           // Convertir la fecha a hora
           const startDate = new Date(appointment.start_at);
-          const timeString = startDate.toLocaleTimeString('es-ES', {
+          // Sumar 3 horas para presentación
+          const displayDate = new Date(startDate.getTime() + 3 * 60 * 60 * 1000);
+          const timeString = displayDate.toLocaleTimeString('es-ES', {
             hour: '2-digit',
             minute: '2-digit',
             hour12: true
@@ -134,6 +136,11 @@ export const useMedicAppointments = () => {
             reason: 'Consulta médica',
             time: firstPending.time,
             isToday: true,
+            dateLabel: new Date().toLocaleDateString('es-ES', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+            }).replace(/^./, (c) => c.toUpperCase()),
             patientId: firstPending.patientId,
             meetLink: firstPending.type === 'Virtual' ? 'https://meet.google.com/new' : undefined,
           };
@@ -150,6 +157,11 @@ export const useMedicAppointments = () => {
               reason: 'Consulta médica',
               time: next.time,
               isToday: false,
+              dateLabel: next.startDate.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+              }).replace(/^./, (c) => c.toUpperCase()),
               patientId: next.patientId,
               meetLink: next.type === 'Virtual' ? 'https://meet.google.com/new' : undefined,
             };

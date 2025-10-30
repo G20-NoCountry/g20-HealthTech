@@ -43,7 +43,6 @@ export default function Dashboard() {
             : await api.appointments.searchPatientAppointments({});
 
         const items = res.data ?? [];
-        console.log(items);
 
         // Obtener el resumen de médicos de una sola vez
         const medicsSummary = await api.users.getMedicsSummary();

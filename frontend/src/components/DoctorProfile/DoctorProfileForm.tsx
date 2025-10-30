@@ -82,10 +82,8 @@ export function DoctorProfileForm({
         />
         <InputField
           label="Matrícula"
-          type="number"
           error={errors.personal_data?.license_num?.message}
-          value={watch('personal_data.license_num')}
-          {...register('personal_data.license_num', { valueAsNumber: true })}
+          {...register('personal_data.license_num')}
         />
 
         <InputField

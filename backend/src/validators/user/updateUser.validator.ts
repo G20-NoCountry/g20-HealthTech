@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { body, param, validationResult } from "express-validator";
+import { body, param, validationResult, check } from "express-validator";
 import { User } from "../../models";
 
 const validateEmailExist = async (email: string) => {
@@ -13,6 +13,15 @@ const validatePhoneExist = async (phone: string) => {
     const existingPhone = await User.findOne({ where: { phone: phone } });
     if (existingPhone) {
         throw new Error('phone ya está registrado');
+    }
+};
+
+const validateEqualName = async (name: string, { req, path }: any) => {
+    const user = req.user;
+    if (!user) throw new Error('Usuario no autenticado');
+
+    if (user[path] == name) {
+        throw new Error(`${path} no puede ser igual`);
     }
 };
 
@@ -44,7 +53,8 @@ export const updateUserValidator = [
         .withMessage('first_name de contener caracteres alfabeticos')
         .bail()
         .isLength({ min: 3 })
-        .withMessage('first_name debe tener mínimo 3 caracteres'),
+        .withMessage('first_name debe tener mínimo 3 caracteres')
+        .custom(validateEqualName).withMessage("first_name debe ser diferente"),
     body('last_name')
         .optional()
         .notEmpty()
@@ -54,7 +64,8 @@ export const updateUserValidator = [
         .withMessage('last_name debe contener caracteres alfabeticos')
         .bail()
         .isLength({ min: 3 })
-        .withMessage('last_name debe tener mínimo 3 caracteres'),
+        .withMessage('last_name debe tener mínimo 3 caracteres')
+        .custom(validateEqualName).withMessage("last_name debe ser diferente"),
     body('email')
         .optional()
         .notEmpty()

@@ -36,8 +36,11 @@ const profileSchema = z.object({
   telefono: z
     .string()
     .min(7, 'Mínimo 7 dígitos.')
-    .max(15, 'Máximo 15 dígitos.')
-    .regex(/^\d+$/, 'Solo números.'),
+    .max(18, 'Máximo 18 dígitos.')
+    .regex(
+      /^\+?[\d\s()-]{6,18}$/,
+      'Formato de teléfono no válido. Ejemplo: +54 9 11 5555-1234 o 2995339976',
+    ),
   obraSocialParticular: z.enum(socialOptions, { error: 'Campo requerido.' }),
   email: z.email('Email inválido.'),
   tipoSangre: z.enum(bloodTypes, { error: 'Campo requerido.' }),
@@ -179,6 +182,7 @@ export const Profile = () => {
         summary: '¡Éxito!',
         detail: 'Cambios guardados con éxito',
         life: 3000,
+        className: 'normal-case',
       });
     } catch (error: any) {
       toast.current?.show({
@@ -186,6 +190,7 @@ export const Profile = () => {
         summary: 'Error',
         detail: error?.response?.data?.message || 'No se pudieron guardar los cambios',
         life: 3000,
+        className: 'normal-case',
       });
     }
   };
@@ -213,6 +218,7 @@ export const Profile = () => {
       summary: 'Cancelado',
       detail: 'Cambios descartados',
       life: 3000,
+      className: 'normal-case',
     });
   };
   return (
@@ -438,7 +444,11 @@ export const Profile = () => {
         {isMedico && (
           <div className="flex w-full flex-col gap-6 pt-6 md:flex-row">
             <Link
-              to={isMedicoViewingPatient && patientIdFromParams ? `/medical-history/${patientIdFromParams}` : "/"}
+              to={
+                isMedicoViewingPatient && patientIdFromParams
+                  ? `/medical-history/${patientIdFromParams}`
+                  : '/'
+              }
               className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-center text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
               Historial médico
             </Link>

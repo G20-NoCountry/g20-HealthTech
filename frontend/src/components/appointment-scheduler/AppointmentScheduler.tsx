@@ -69,7 +69,8 @@ export const AppointmentScheduler = ({ toast }: Toast) => {
   const finish: SubmitHandler<AppointmentData> = async (data: AppointmentData) => {
     try {
       if (!user || user.rol !== 'paciente') throw new Error('Debes iniciar sesión como paciente');
-      if (!data.date || !data.time || !data.doctorId || !data.specialityId) throw new Error('Faltan datos');
+      if (!data.date || !data.time || !data.doctorId || !data.specialityId)
+        throw new Error('Faltan datos');
 
       // Construir start_at y end_at (sumamos 30 minutos por defecto)
       const [hh, mm] = data.time.split(':').map((n) => parseInt(n, 10));
@@ -93,11 +94,12 @@ export const AppointmentScheduler = ({ toast }: Toast) => {
       if (!res.success) throw new Error(res.message || 'Error al crear la cita');
 
       console.log(payload);
-      
+
       toast.current?.show({
         severity: 'success',
         summary: '¡Cita agendada correctamente!',
         life: 2500,
+        className: 'normal-case',
       });
       setTimeout(() => navigate('/dashboard', { replace: true }), 1200);
     } catch (err: any) {
@@ -106,6 +108,7 @@ export const AppointmentScheduler = ({ toast }: Toast) => {
         summary: 'No se pudo crear la cita',
         detail: err?.message || 'Intenta nuevamente',
         life: 3000,
+        className: 'normal-case',
       });
     }
   };

@@ -37,7 +37,6 @@ export function DoctorProfileForm({
   const form = watch();
 
   const onSubmit = (data: DoctorProfileFormData) => {
-    console.log('Formulario enviado con los datos:', data);
     const updatedDoctor = formDataToDoctor(data, doctor, specialties);
     onSave(updatedDoctor);
   };

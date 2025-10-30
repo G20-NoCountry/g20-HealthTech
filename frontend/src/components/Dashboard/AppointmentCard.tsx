@@ -1,10 +1,10 @@
 import VirtualAppointmentActions from './VirtualAppointmentActions';
-import { isAppointmentEditable } from './appointments';
+import { isAppointmentScheduled } from './appointments';
 import { formatDateTime } from '../../utils/date';
-import type { Appointment } from '../../models/appointment.model';
+import type { AppointmentWithUsers } from '../../api/models/appointment.interface';
 
 interface AppointmentCardProps {
-  appointment: Appointment;
+  appointment: AppointmentWithUsers;
   isNext: boolean;
   onEdit: () => void;
   rol: 'paciente' | 'medico';
@@ -16,15 +16,16 @@ export default function AppointmentCard({
   onEdit,
   rol,
 }: AppointmentCardProps) {
-  const { doctor, patient, start_at, type, status, end_at } = appointment;
-  const { date, time } = formatDateTime(start_at);
-  const isEditable = isAppointmentEditable(status);
+  const { doctor, patient, type, status, start_at, end_at } = appointment;
+  const startAtDate = new Date(appointment.start_at);
+  const { date, time } = formatDateTime(startAtDate);
+  const isEditable = isAppointmentScheduled(status!);
 
   return (
     <div
       className={`relative flex flex-col gap-2 rounded-lg p-3 shadow-lg lg:p-5 ${
         rol === 'paciente'
-          ? 'bg-button-primary/40 shadow-button-primary/80'
+          ? 'bg-button-primary/40 shadow-button-primary/80 shadow-md'
           : 'bg-white shadow-black/20'
       } `}>
       {isNext && (
@@ -75,7 +76,9 @@ export default function AppointmentCard({
       </div>
 
       {/* Acciones adicionales si es cita virtual */}
-      {type === 'virtual' && <VirtualAppointmentActions startAt={start_at} endAt={end_at} />}
+      {type === 'virtual' && (
+        <VirtualAppointmentActions startAt={new Date(start_at)} endAt={new Date(end_at)} />
+      )}
     </div>
   );
 }

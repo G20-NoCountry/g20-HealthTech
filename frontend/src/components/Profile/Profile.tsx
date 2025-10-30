@@ -234,7 +234,7 @@ export const Profile = () => {
               <button
                 type="button"
                 onClick={() => setIsEditing((prev) => !prev)}
-                className="cursor-pointer rounded-full border border-gray-300 p-2 transition hover:bg-white md:p-4">
+                className="cursor-pointer rounded-full border border-gray-300 p-2 transition hover:bg-white lg:p-4">
                 <svg
                   className={`h-4 w-4 md:h-8 md:w-8 ${isEditing ? 'text-purple-400' : 'text-purple-600'}`}
                   fill="none"

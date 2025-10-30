@@ -301,7 +301,9 @@ export const RegistrationForm = () => {
           }
         />
         <div className="flex flex-col space-y-1">
-          <label className="mb-2 text-sm font-bold tracking-wide text-black uppercase opacity-80">
+          <label
+            htmlFor="obraSocialParticular"
+            className="mb-2 text-sm font-bold tracking-wide text-black uppercase opacity-80">
             Obra social / Particular
           </label>
           <Controller
@@ -312,6 +314,7 @@ export const RegistrationForm = () => {
                 className={`flex h-12 items-center space-x-2 rounded-2xl border-2 bg-white px-3 transition duration-150 ${errors.tipoSangre ? 'border-red-500' : 'border-gray-200 hover:border-purple-300'}`}>
                 <i className={`pi pi-check h-5 w-5 text-purple-500`} />
                 <select
+                  id="obraSocialParticular"
                   {...field}
                   className={`w-full bg-transparent text-sm text-gray-900 focus:outline-none`}>
                   <option value="">Selecciona obra social</option>
@@ -329,7 +332,9 @@ export const RegistrationForm = () => {
           )}
         </div>
         <div className="flex flex-col space-y-1">
-          <label className="mb-2 text-sm font-bold tracking-wide text-black uppercase opacity-80">
+          <label
+            htmlFor="tipoSangre"
+            className="mb-2 text-sm font-bold tracking-wide text-black uppercase opacity-80">
             Tipo de sangre
           </label>
           <Controller
@@ -340,6 +345,7 @@ export const RegistrationForm = () => {
                 className={`flex h-12 items-center space-x-2 rounded-2xl border-2 bg-white px-3 transition duration-150 ${errors.tipoSangre ? 'border-red-500' : 'border-gray-200 hover:border-purple-300'}`}>
                 <i className={`pi pi-heart-fill h-5 w-5 text-purple-500`} />
                 <select
+                  id="tipoSangre"
                   {...field}
                   className={`w-full bg-transparent text-sm text-gray-900 focus:outline-none`}>
                   <option value="">Selecciona tipo de sangre</option>

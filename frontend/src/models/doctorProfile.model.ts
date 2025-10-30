@@ -1,8 +1,8 @@
-import type { speciality } from './speciality.model';
+import type { speciality } from './specialty.model';
 
 export interface PersonalData {
   full_name: string;
-  license_number: string;
+  license_number: number;
   speciality: speciality;
   years_experience: string;
   phone: string;

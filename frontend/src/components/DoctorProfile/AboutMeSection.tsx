@@ -2,6 +2,11 @@ import { Divider } from 'primereact/divider';
 import type { AboutMe } from '../../models/doctorProfile.model';
 
 export const AboutMeSection = ({ about }: { about: AboutMe }) => {
+  // Verificar si 'about' tiene la estructura esperada
+  if (!about || !about.description) {
+    return <p>No se ha proporcionado información sobre mí.</p>;
+  }
+
   return (
     <section className="flex flex-col gap-3">
       <h2 className="flex items-center gap-3 text-2xl">
@@ -14,7 +19,7 @@ export const AboutMeSection = ({ about }: { about: AboutMe }) => {
           <h3>Áreas de especialización</h3>
 
           <div className="flex flex-wrap gap-2">
-            {about.areas_of_expertise.map((area, i) => (
+            {about.areas_of_expertise?.map((area, i) => (
               <span
                 key={i}
                 className="border-accent bg-primary rounded-xl border px-3 py-1 text-sm shadow-md">

@@ -1,7 +1,7 @@
 export interface Medic {
   id?: number;
   speciality: Specialty['id'];
-  licence_num: number;
+  license_num: number;
   schedule_from?: Date;
   schedule_at?: Date;
   created_at?: Date;
@@ -24,3 +24,16 @@ export const specialties: Specialty[] = [
   { id: 'psiquiatria', name: 'Psiquiatría' },
   { id: 'medicina_general', name: 'Medicina General' },
 ];
+
+export interface DoctorProfileData {
+  academic_background: {
+    id: string;
+    title: string;
+    institution: string;
+    year_completed?: number;
+  }[];
+  about_me: {
+    description: string;
+    areas_of_expertise: string[];
+  };
+}

@@ -44,7 +44,7 @@ export const AuthService = {
     phone: string;
     password: string;
     speciality: string;
-    licence_num: string;
+    license_num: string;
     schedule_from: string;
     schedule_at: string;
   }): Promise<AuthResponse> {

@@ -1,14 +1,15 @@
 import { z } from 'zod';
 
 export const personalDataSchema = z.object({
-  full_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres.'),
-  license_number: z.string().min(1, 'La matrícula es obligatoria.'),
+  first_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres.'),
+  last_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres.'),
+  license_num: z.number().min(1, 'La matrícula es obligatoria.'),
   speciality: z.string().min(1, 'La especialidad es obligatoria.'),
-  years_experience: z
-    .string()
-    .min(1, 'Debe ser un número positivo.')
-    .max(2, 'Debe tener 2 dígitos como máximo.')
-    .regex(/^\d+$/, 'Solo se aceptan números.'),
+  // years_experience: z
+  //   .string()
+  //   .min(1, 'Debe ser un número positivo.')
+  //   .max(2, 'Debe tener 2 dígitos como máximo.')
+  //   .regex(/^\d+$/, 'Solo se aceptan números.'),
   phone: z
     .string()
     .min(7, 'Mínimo 7 dígitos.')

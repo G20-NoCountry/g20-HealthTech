@@ -8,6 +8,7 @@ export interface NextAppointment {
   reason: string;
   time: string;
   isToday: boolean;
+  dateLabel?: string;
   meetLink?: string; 
   patientId?: string; 
 }
@@ -26,7 +27,7 @@ export const NextAppointmentCard = ({ appointment }: NextAppointmentCardProps) =
 
   const handleVerPerfil = () => {
     if (appointment.patientId) {
-      navigate(`/pacientes/${appointment.patientId}`);
+      navigate(`/patient-profile/${appointment.patientId}`);
     } else {
       alert('ID del paciente no encontrado.');
     }
@@ -36,7 +37,7 @@ export const NextAppointmentCard = ({ appointment }: NextAppointmentCardProps) =
     <><div className="bg-[#734F96]  p-6 rounded-3xl border   flex flex-col md:flex-row justify-between items-center ">
       <div className="mb-4 md:mb-0 text-white">
         <p className="text-sm uppercase">Próxima Cita</p>
-        <p className="text-2xl font-bold">{appointment.isToday ? 'Hoy' : 'Próximamente'} - {appointment.time}</p>
+        <p className="text-2xl font-bold">{appointment.isToday ? 'Hoy' : (appointment.dateLabel || 'Próximamente')} - {appointment.time}</p>
         <p className="text-lg">{appointment.patientName}{appointment.reason && ` (${appointment.reason})`}</p>
       </div>
 

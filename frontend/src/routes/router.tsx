@@ -3,7 +3,6 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { RoleRoute } from './RoleRoute';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
-import HomePage from '../pages/HomePage';
 import DashboardPage from '../pages/DashboardPage';
 import AppointmentStepperPage from '../pages/AppointmentStepperPage';
 import ClinicalRecordsPage from '../pages/ClinicalRecordsPage';
@@ -16,15 +15,16 @@ import DoctorDiaryPage from '../pages/DoctorDiaryPage';
 import { RouterLayout } from './RouterLayout';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { PatientHistoryPage } from '../pages/PatientHistoryPage';
+import LandingPage from '../pages/LandingPage';
 
 export const AppRouter = () => {
   return (
     <Routes>
       {/* Rutas públicas */}
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-
+      
       {/* Rutas protegidas */}
       <Route element={<ProtectedRoute />}>
         <Route element={<RouterLayout />}>

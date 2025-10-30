@@ -149,3 +149,7 @@ span.p-button-icon.p-c.pi.pi-bars {
 .scrollable::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-accent);
 }
+
+html {
+  scroll-behavior: smooth;
+}

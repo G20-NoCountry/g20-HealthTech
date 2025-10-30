@@ -8,7 +8,7 @@ export const menuItems = {
   ],
   medico: [
     { to: '/dashboardMedico', icon: 'pi pi-home', label: 'Inicio' },
-    { to: '/profile-medico', icon: 'pi pi-user', label: 'Perfil' },
+    { to: '/doctor-profile', icon: 'pi pi-user', label: 'Perfil' },
     { to: '/payments-history', icon: 'pi pi-credit-card', label: 'Historial de Pagos' },
     { to: '/settings-medico', icon: 'pi pi-cog', label: 'Ajustes' },
   ],

@@ -1,57 +1,54 @@
-import type { DoctorProfile } from '../../models/doctorProfile.model';
+import type { MedicUser } from '../../api/models/user.interface';
+import type { Specialty } from '../../api/models/medic.interface';
 import type { DoctorProfileFormData } from './doctorProfile.schema';
-import type { speciality } from '../../models/speciality.model';
 
-/**
- * Convierte un DoctorProfile del backend al formato del formulario (DoctorProfileFormData)
- */
-export function doctorToFormData(doctor: DoctorProfile): DoctorProfileFormData {
+export function doctorToFormData(doctor: MedicUser): DoctorProfileFormData {
   return {
     personal_data: {
-      full_name: doctor.personal_data.full_name,
-      license_number: doctor.personal_data.license_number,
-      speciality: doctor.personal_data.speciality.id, // 👈 string
-      years_experience: doctor.personal_data.years_experience,
-      phone: doctor.personal_data.phone,
-      email: doctor.personal_data.email,
+      first_name: doctor.first_name,
+      last_name: doctor.last_name,
+      license_num: doctor.license_num ?? 0,
+      speciality: String(doctor.speciality ?? ''),
+      phone: doctor.phone ?? '',
+      email: doctor.email ?? '',
     },
-    academic_background: doctor.academic_background.map((a) => ({
-      id: a.id,
-      title: a.title,
-      institution: a.institution,
-    })),
+    academic_background:
+      Array.isArray(doctor.academic_background) && doctor.academic_background.length > 0
+        ? doctor.academic_background.map(({ id, title, institution }) => ({
+            id: String(id ?? crypto.randomUUID()), // Asegura que el ID siempre sea válido
+            title: title ?? 'Título no disponible', // Agregar valor por defecto si es undefined
+            institution: institution ?? 'Institución no disponible', // Agregar valor por defecto si es undefined
+          }))
+        : [], // Asegura que si no es un array o es vacío, se use un array vacío
     about_me: {
-      description: doctor.about_me.description,
-      areas_of_expertise: [...doctor.about_me.areas_of_expertise],
+      description: doctor.about_me?.description ?? 'Descripción no disponible', // Valor predeterminado si no existe
+      areas_of_expertise: doctor.about_me?.areas_of_expertise ?? [],
     },
   };
 }
 
-/**
- * Convierte los datos del formulario al formato del modelo DoctorProfile (para guardar o enviar al backend)
- */
 export function formDataToDoctor(
   formData: DoctorProfileFormData,
-  baseDoctor: DoctorProfile,
-  specialties: speciality[],
-): DoctorProfile {
-  const specialityObj =
-    specialties.find((s) => s.id === formData.personal_data.speciality) ??
-    baseDoctor.personal_data.speciality;
+  baseDoctor: MedicUser,
+  specialties: Specialty[],
+): MedicUser {
+  const specialityId =
+    specialties.find((s) => String(s.id) === formData.personal_data.speciality)?.id ??
+    baseDoctor.speciality;
 
   return {
     ...baseDoctor,
-    personal_data: {
-      ...formData.personal_data,
-      speciality: specialityObj,
-    },
-    academic_background: formData.academic_background.map((item, index) => ({
-      id: baseDoctor.academic_background[index]?.id ?? crypto.randomUUID(),
-      ...item,
+    first_name: formData.personal_data.first_name,
+    last_name: formData.personal_data.last_name,
+    license_num: formData.personal_data.license_num,
+    speciality: specialityId,
+    phone: formData.personal_data.phone,
+    email: formData.personal_data.email,
+    academic_background: formData.academic_background.map((a) => ({
+      id: String(a.id ?? crypto.randomUUID()),
+      title: a.title,
+      institution: a.institution,
     })),
-    about_me: {
-      ...formData.about_me,
-    },
-    updated_at: new Date().toISOString(),
+    about_me: formData.about_me,
   };
 }

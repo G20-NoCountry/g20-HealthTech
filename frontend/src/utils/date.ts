@@ -23,3 +23,15 @@ export function canJoinVirtualAppointment(startAt: Date, endAt: Date): boolean {
 
   return isToday && now >= fiveMinutesBefore && now <= endAt;
 }
+
+// Validación del formulario (Fecha válida, Contraseña con reglas)
+export const isValidDate = (dateString: string): boolean => {
+  const parts = dateString.split('/');
+  if (parts.length !== 3) return false;
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+  const date = new Date(year, month - 1, day);
+  return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+};

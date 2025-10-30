@@ -1,7 +1,6 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef, useState, useEffect } from 'react';
-import { Calendar } from 'primereact/calendar';
 import { Toast } from 'primereact/toast';
 import * as z from 'zod';
 import type { SubmitHandler, FieldError, UseFormRegister, Path } from 'react-hook-form';
@@ -26,12 +25,16 @@ const socialOptions = [
 ] as const;
 
 const profileSchema = z.object({
-  nombreCompleto: z
+  nombre: z
     .string()
     .trim()
     .min(3, 'Debe tener al menos 3 caracteres.')
     .regex(nameRegex, 'Solo letras y espacios.'),
-  fechaNacimiento: z.string().min(1, 'Fecha de nacimiento requerida.'),
+  apellido: z
+    .string()
+    .trim()
+    .min(3, 'Debe tener al menos 3 caracteres.')
+    .regex(nameRegex, 'Solo letras y espacios.'),
   direccion: z.string().trim().min(5, 'Dirección requerida.'),
   telefono: z
     .string()
@@ -68,7 +71,9 @@ const FormField = ({
   disabled,
 }: FormFieldProps) => (
   <div className="flex flex-col space-y-2">
-    <label className="text-xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
+    <label
+      htmlFor={name}
+      className="text-lg font-semibold tracking-wide text-gray-800 uppercase opacity-95 lg:text-xl">
       {label}
     </label>
     <div
@@ -78,6 +83,7 @@ const FormField = ({
         {icon}
       </div>
       <input
+        id={name}
         type={type}
         {...register(name)}
         disabled={disabled}
@@ -134,9 +140,9 @@ export const Profile = () => {
   useEffect(() => {
     const subject: any = externalPatient ?? user;
     if (subject && 'location' in subject) {
-      const nombres = (subject.first_name + ' ' + subject.last_name).trim();
       const defaultValues = {
-        nombreCompleto: nombres || '',
+        nombre: subject.first_name || '',
+        apellido: subject.last_name || '',
         fechaNacimiento: '01/01/1990',
         direccion: subject.location || '',
         telefono: subject.phone || '',
@@ -155,14 +161,10 @@ export const Profile = () => {
     if (!user || !('location' in user)) return;
 
     try {
-      const nombres = data.nombreCompleto.trim().split(' ');
-      const last_name = nombres.pop() || '';
-      const first_name = nombres.join(' ') || last_name;
-
       const updateData = {
         id: user.id,
-        first_name,
-        last_name,
+        first_name: data.nombre,
+        last_name: data.apellido,
         email: data.email,
         phone: data.telefono,
         location: data.direccion,
@@ -197,9 +199,9 @@ export const Profile = () => {
 
   const handleCancel = () => {
     if (user && 'location' in user) {
-      const nombres = (user.first_name + ' ' + user.last_name).trim();
       const defaultValues = {
-        nombreCompleto: nombres || '',
+        nombre: user.first_name || '',
+        apellido: user.last_name || '',
         fechaNacimiento: '01/01/1990',
         direccion: user.location || '',
         telefono: user.phone || '',
@@ -222,7 +224,7 @@ export const Profile = () => {
     });
   };
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center p-4 sm:p-10">
+    <div className="flex min-h-dvh flex-col items-center justify-center sm:p-10">
       <Toast ref={toast} />
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-3xl space-y-8">
         <div className="rounded-[2.5rem] bg-pink-50 p-6 shadow-[0_30px_60px_rgba(0,0,0,0.08)] sm:p-10 md:p-12">
@@ -232,9 +234,9 @@ export const Profile = () => {
               <button
                 type="button"
                 onClick={() => setIsEditing((prev) => !prev)}
-                className="rounded-full border border-gray-300 p-4 transition hover:bg-white">
+                className="cursor-pointer rounded-full border border-gray-300 p-2 transition hover:bg-white lg:p-4">
                 <svg
-                  className={`h-8 w-8 ${isEditing ? 'text-purple-400' : 'text-purple-600'}`}
+                  className={`h-4 w-4 md:h-8 md:w-8 ${isEditing ? 'text-purple-400' : 'text-purple-600'}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor">
@@ -249,118 +251,61 @@ export const Profile = () => {
             )}
           </div>
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-            <div className="col-span-1 space-y-6">
-              <FormField
-                label="NOMBRE COMPLETO"
-                name="nombreCompleto"
-                register={register}
-                error={errors.nombreCompleto}
-                icon={<i className="pi pi-user text-2xl" />}
-                disabled={!isEditing}
-              />
-              <FormField
-                label="DIRECCIÓN"
-                name="direccion"
-                register={register}
-                error={errors.direccion}
-                icon={<i className="pi pi-map-marker text-2xl" />}
-                disabled={!isEditing}
-              />
-              <div className="flex flex-col space-y-2">
-                <label className="text-xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
-                  OBRA SOCIAL / PARTICULAR
-                </label>
-                <Controller
-                  name="obraSocialParticular"
-                  control={control}
-                  render={({ field }) => (
-                    <div
-                      className={`flex h-16 items-center space-x-3 rounded-[2rem] border-2 p-4 transition duration-150 ${errors.obraSocialParticular ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
-                      <i
-                        className={`pi pi-check text-2xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
-                      />
-                      <select
-                        {...field}
-                        disabled={!isEditing}
-                        className={`w-full bg-transparent text-xl focus:outline-none ${
-                          !isEditing ? 'cursor-not-allowed text-gray-500' : 'text-gray-900'
-                        }`}>
-                        <option value="">Selecciona obra social...</option>
-                        {socialOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                />
-              </div>
-            </div>
-            <div className="col-span-1 space-y-6">
-              <div className="flex flex-col space-y-2">
-                <label className="text-xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
-                  FECHA DE NACIMIENTO
-                </label>
-                <Controller
-                  name="fechaNacimiento"
-                  control={control}
-                  render={({ field }) => (
-                    <div
-                      className={`flex h-16 items-center space-x-3 rounded-[2rem] border-2 p-4 transition duration-150 ${errors.fechaNacimiento ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
-                      <i
-                        className={`pi pi-calendar text-2xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
-                      />
-                      <Calendar
-                        {...field}
-                        disabled={!isEditing}
-                        value={
-                          field.value
-                            ? (() => {
-                                const [d, m, y] = field.value.split('/');
-                                return new Date(+y, +m - 1, +d);
-                              })()
-                            : null
-                        }
-                        onChange={(e) => {
-                          if (e.value instanceof Date) {
-                            const d = e.value.getDate().toString().padStart(2, '0');
-                            const m = (e.value.getMonth() + 1).toString().padStart(2, '0');
-                            const y = e.value.getFullYear();
-                            field.onChange(`${d}/${m}/${y}`);
-                          }
-                        }}
-                        dateFormat="dd/mm/yy"
-                        placeholder="Selecciona una fecha..."
-                        className="w-full border-0 bg-transparent text-xl shadow-none focus:outline-none"
-                        pt={{
-                          input: {
-                            className: `text-xl bg-transparent border-0 shadow-none focus:outline-none w-full ${
-                              !isEditing ? 'text-gray-500' : 'text-gray-900 placeholder-gray-400'
-                            }`,
-                          },
-                          dropdownButton: { className: 'hidden' },
-                        }}
-                      />
-                    </div>
-                  )}
-                />
-              </div>
-              <FormField
-                label="TELÉFONO"
-                name="telefono"
-                register={register}
-                error={errors.telefono}
-                icon={<i className="pi pi-phone text-2xl" />}
-                disabled={!isEditing}
-              />
-              <FormField
-                label="EMAIL"
-                name="email"
-                register={register}
-                error={errors.email}
-                icon={<i className="pi pi-envelope text-2xl" />}
-                disabled={!isEditing}
+            <FormField
+              label="Nombre"
+              name="nombre"
+              register={register}
+              error={errors.nombre}
+              icon={<i className="pi pi-user text-2xl" />}
+              disabled={!isEditing}
+            />
+            <FormField
+              label="Apellido"
+              name="apellido"
+              register={register}
+              error={errors.apellido}
+              icon={<i className="pi pi-user text-2xl" />}
+              disabled={!isEditing}
+            />
+            <FormField
+              label="DIRECCIÓN"
+              name="direccion"
+              register={register}
+              error={errors.direccion}
+              icon={<i className="pi pi-map-marker text-2xl" />}
+              disabled={!isEditing}
+            />
+            <div className="flex flex-col space-y-2">
+              <label
+                htmlFor="obraSocialParticular"
+                className="text-lg font-semibold tracking-wide text-gray-800 uppercase opacity-95 lg:text-xl">
+                OBRA SOCIAL / PARTICULAR
+              </label>
+              <Controller
+                name="obraSocialParticular"
+                control={control}
+                render={({ field }) => (
+                  <div
+                    className={`flex h-16 items-center space-x-3 rounded-[2rem] border-2 p-4 transition duration-150 ${errors.obraSocialParticular ? 'border-red-500' : 'border-gray-200 hover:border-purple-400'} ${!isEditing ? 'bg-gray-50' : 'bg-white'}`}>
+                    <i
+                      className={`pi pi-check text-2xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
+                    />
+                    <select
+                      id="obraSocialParticular"
+                      {...field}
+                      disabled={!isEditing}
+                      className={`w-full bg-transparent text-xl focus:outline-none ${
+                        !isEditing ? 'cursor-not-allowed text-gray-500' : 'text-gray-900'
+                      }`}>
+                      <option value="">Selecciona obra social...</option>
+                      {socialOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               />
             </div>
           </div>
@@ -371,7 +316,9 @@ export const Profile = () => {
           </h2>
           <div className="grid grid-cols-1 gap-y-6">
             <div className="flex flex-col space-y-2">
-              <label className="text-xl font-semibold tracking-wide text-gray-800 uppercase opacity-95">
+              <label
+                htmlFor="tipoSangre"
+                className="text-lg font-semibold tracking-wide text-gray-800 uppercase opacity-95 lg:text-xl">
                 TIPO DE SANGRE
               </label>
               <Controller
@@ -384,6 +331,7 @@ export const Profile = () => {
                       className={`pi pi-heart-fill text-2xl ${isEditing ? 'text-purple-600' : 'text-purple-300'} opacity-80`}
                     />
                     <select
+                      id="tipoSangre"
                       {...field}
                       disabled={!isEditing}
                       className={`w-full bg-transparent text-xl focus:outline-none ${

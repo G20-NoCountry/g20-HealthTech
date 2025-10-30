@@ -1,6 +1,6 @@
-import type { AxiosInstance } from "axios";
+import type { AxiosInstance } from 'axios';
 
 export interface ApiInstances {
-    public: AxiosInstance;
-    user: AxiosInstance;
-};
+  public: AxiosInstance;
+  user: AxiosInstance;
+}

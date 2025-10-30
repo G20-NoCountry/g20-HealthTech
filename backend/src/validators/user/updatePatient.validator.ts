@@ -65,6 +65,13 @@ export const updatePatientValidator = [
         .bail()
         .isLength({ min: 2 }).withMessage('alergias debe tener mínimo 2 caracteres')
     ,
+    body("actual_medication")
+        .optional()
+        .notEmpty().withMessage("actual_medication no puede estar vacio")
+        .isString().withMessage('actual_medication de contener caracteres alfanumericos')
+        .bail()
+        .isLength({ min: 2 }).withMessage('actual_medication debe tener mínimo 2 caracteres')
+    ,
 
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);

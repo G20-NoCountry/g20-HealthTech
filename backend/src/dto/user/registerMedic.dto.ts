@@ -18,7 +18,7 @@ export class RegisterMedicDto extends RegisterUserDto {
       | "traumatologia"
       | "psiquiatria"
       | "medicina_general",
-    public licence_num: number,
+    public license_num: number,
     public schedule_at: Date
   ) {
     super(first_name, last_name, email, password, rol, phone);

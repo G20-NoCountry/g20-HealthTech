@@ -7,11 +7,8 @@ export class UpdateMedicDto extends UpdateUserDto {
     last_name?: string,
     email?: string,
     phone?: string,
-    // public speciality?: "oftalmologia" | "etc",
-    public licence_num?: number
-  ) // public schedule_from: Date,
-  // public schedule_at: Date
-  {
+    public license_num?: number
+  ) {
     super(id, first_name, last_name, email, phone);
   }
 }

@@ -31,12 +31,12 @@ export const registerMedicValidator = [
     .withMessage("speciality es obligatorio")
     .bail()
     .custom(validateSpeciality),
-  body("licence_num")
+  body("license_num")
     .notEmpty()
-    .withMessage("licence_num es obligatorio")
+    .withMessage("license_num es obligatorio")
     .bail()
     .isNumeric()
-    .withMessage("licence_num debe ser numerico")
+    .withMessage("license_num debe ser numerico")
     .bail()
     .custom(validateLicenseNum),
   body("schedule_at")

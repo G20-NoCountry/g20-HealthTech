@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import { User } from "../../models";
 
 const validateEmail = async (email: string) => {
@@ -65,14 +64,4 @@ export const registerValidator = [
     .withMessage("phone no válido")
     .bail()
     .custom(validatePhoneExist),
-
-  (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-      });
-    }
-    next();
-  },
 ];

@@ -203,6 +203,7 @@ export class UserService {
   private async updateMedic(dto: UpdateMedicDto) {
     const rows = await Medic.update(
       {
+        speciality: dto.speciality,
         license_num: dto.license_num,
       },
       { where: { id: dto.id } }

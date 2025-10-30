@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
-import { InputNumber, type InputNumberProps } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Chip } from 'primereact/chip';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -74,27 +73,23 @@ export function DoctorProfileForm({
           error={errors.personal_data?.first_name?.message}
           {...register('personal_data.first_name')}
         />
+
         <InputField
           label="Apellido"
           error={errors.personal_data?.last_name?.message}
           {...register('personal_data.last_name')}
         />
+
         <InputField
           label="Matrícula"
           error={errors.personal_data?.license_num?.message}
           {...register('personal_data.license_num')}
         />
 
-        <InputField
+        {/* <InputField
           label="Especialidad"
           error={errors.personal_data?.speciality?.message}
           {...register('personal_data.speciality')}
-        />
-
-        {/* <InputField
-          label="Años de experiencia"
-          error={errors.personal_data?.years_experience?.message}
-          {...register('personal_data.years_experience')}
         /> */}
 
         <InputField
@@ -237,34 +232,11 @@ export function DoctorProfileForm({
 
 type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string;
-  type?: 'text' | 'email' | 'number';
   error?: string;
 };
 
-function InputField({ label, name = '', type = 'text', error, value, ...props }: InputFieldProps) {
+function InputField({ label, name = '', error, value, ...props }: InputFieldProps) {
   const id = `input-${name}`;
-
-  if (type === 'number') {
-    const { onChange, ...validProps } = props; // <-- descartamos las props inválidas
-
-    return (
-      <span className="flex flex-col gap-1">
-        <label htmlFor={id} className="text-sm font-medium">
-          {label}
-        </label>
-        <InputNumber
-          inputId={id}
-          name={name}
-          value={value ? Number(value) : undefined}
-          onValueChange={(e) => onChange?.({ target: { name, value: e.value } } as any)}
-          className="w-full"
-          useGrouping={false}
-          {...(validProps as Partial<InputNumberProps>)}
-        />
-        {error && <p className="text-xs text-red-500">{error}</p>}
-      </span>
-    );
-  }
 
   return (
     <span className="flex flex-col gap-1">

@@ -54,7 +54,7 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
   const personalData = {
     first_name: doctor.first_name ?? '',
     last_name: doctor.last_name ?? '',
-    license_num: doctor.license_num ?? 0,
+    license_num: String(doctor.license_num ?? ''),
     speciality: specialties.find((s) => s.id === doctor.speciality) ?? {
       id: 'na',
       name: 'Sin especialidad',
@@ -93,6 +93,7 @@ export function DoctorProfileView({ doctorId }: { doctorId: string }) {
                 first_name: updatedDoctor.first_name,
                 last_name: updatedDoctor.last_name,
                 license_num: updatedDoctor.license_num,
+                speciality: updatedDoctor.speciality,
                 phone: updatedDoctor.phone,
                 email: updatedDoctor.email,
               };

@@ -4,7 +4,7 @@ interface PersonalDataProps {
   data: {
     first_name: string;
     last_name: string;
-    license_num: number;
+    license_num: string;
     speciality: Specialty;
     phone: string;
     email: string;
@@ -30,11 +30,6 @@ export const PersonalDataSection = ({ data, onEdit }: PersonalDataProps) => {
         <Field label="Apellido" value={data.last_name} icon="pi-user" />
         <Field label="Matrícula" value={data.license_num} icon="pi-id-card" />
         <Field label="Especialidad" value={data.speciality.name} icon="pi-heart" />
-        {/* <Field
-          label="Experiencia Laboral"
-          value={`${data.years_experience} años`}
-          icon="pi-briefcase"
-        /> */}
         <Field label="Teléfono" value={data.phone!} icon="pi-phone" />
         <Field label="Email" value={data.email} icon="pi-envelope" />
       </div>

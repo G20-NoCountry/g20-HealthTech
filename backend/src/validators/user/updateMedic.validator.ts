@@ -1,32 +1,48 @@
-import { NextFunction, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import Medic from "../../models/Medic";
 
-const validateLicenseNum = async (id: string) => {
-    if (await Medic.findOne({ where: { license_num: id } })) {
-        throw new Error('license_num ya está registrado');
+const validateLicenseNum = async (value: string, { req, path }: any) => {
+    const user = req.user;
+    if (!user) throw new Error('Usuario no autenticado');
+
+    const medic: any = await Medic.findByPk(user.id);
+    if (!medic) throw new Error('Médico no encontrado');
+
+    if (medic[path] === value) {
+        return true;
     }
+
+    const existing = await Medic.findOne({ where: { [path]: value } });
+    if (existing) {
+        throw new Error("license_num ya está registrado");
+    }
+
+    return true;
 };
 
 export const updateMedicValidator = [
+    body("speciality")
+        .notEmpty()
+        .withMessage("speciality es obligatorio")
+        .bail()
+        .isIn([
+            "oftalmologia",
+            "cardiologia",
+            "neurologia",
+            "dermatologia",
+            "pediatria",
+            "ginecologia",
+            "traumatologia",
+            "psiquiatria",
+            "medicina_general"
+        ]).withMessage("speciality no válido")
+    ,
     body('license_num')
         .optional()
-        .notEmpty()
-        .withMessage("license_num no puede estar vacío")
+        .notEmpty().withMessage("license_num no puede estar vacío")
         .bail()
-        .isNumeric()
-        .withMessage("license_num debe ser numerico")
+        .isNumeric().withMessage("license_num debe ser numerico")
         .bail()
         .custom(validateLicenseNum)
     ,
-
-    (req: Request, res: Response, next: NextFunction) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                errors: errors.array()
-            });
-        }
-        next();
-    }
 ];

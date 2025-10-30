@@ -9,7 +9,9 @@ export const patientIdValidator = [
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
-                errors: errors.array()
+                success: false,
+                message: "Errores de validación",
+                data: errors.array(),
             });
         }
         next();

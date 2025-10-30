@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 
 const validateHealthInsuranceId = async (healthInsurance: string) => {
     const healthInsurances = [
@@ -72,14 +71,4 @@ export const updatePatientValidator = [
         .bail()
         .isLength({ min: 2 }).withMessage('actual_medication debe tener mínimo 2 caracteres')
     ,
-
-    (req: Request, res: Response, next: NextFunction) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                errors: errors.array()
-            });
-        }
-        next();
-    }
 ];

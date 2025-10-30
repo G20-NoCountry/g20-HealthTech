@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 
 export const loginValidator = [
     body('email')
@@ -11,14 +10,4 @@ export const loginValidator = [
         .withMessage('password debe tener mínimo 4 caracteres')
         .isLength({ max: 60 })
         .withMessage('password debe tener máximo 60 caracteres'),
-
-    (req: Request, res: Response, next: NextFunction) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                errors: errors.array()
-            });
-        }
-        next();
-    }
 ];

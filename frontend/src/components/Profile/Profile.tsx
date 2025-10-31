@@ -400,11 +400,13 @@ export const Profile = () => {
               className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-center text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
               Historial médico
             </Link>
+{/*
             <Link
               to="/"
               className="flex-1 rounded-[2rem] bg-purple-200 py-4 text-center text-lg font-semibold text-gray-700 shadow-md transition hover:bg-purple-300">
               Historial de turnos
             </Link>
+*/}
           </div>
         )}
       </form>

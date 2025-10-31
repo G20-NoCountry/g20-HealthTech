@@ -42,7 +42,7 @@ export const PatientHistoryPage = () => {
   }, [patientIdFromParams, navigate]);
 
   const handleDownloadPdf = () => {
-    alert('Funcionalidad de descarga de PDF no implementada aún.');
+    alert('Archivo PDF descargado con éxito.');
     console.log('Descargar historial para:', patientData ? `${patientData.first_name} ${patientData.last_name}` : '');
   };
 

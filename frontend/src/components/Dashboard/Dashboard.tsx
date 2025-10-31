@@ -54,7 +54,23 @@ export default function Dashboard() {
           doctorsMap.set(Number(medic.medic_id), fullName);
         });
 
-        // Mapear las citas y asociarles los datos del médico
+        // Obtener los pacientes relacionados
+        const patientIds = items.map((it) => it.patient_id);
+        const uniquePatientIds = [...new Set(patientIds)];
+
+        // Obtener todos los pacientes a la vez
+        const patientsPromises = uniquePatientIds.map(
+          (id) => api.users.getPatientById(id), // Llamada para obtener el nombre completo del paciente
+        );
+        const patientsResponse = await Promise.all(patientsPromises);
+        const patientsMap = new Map(
+          patientsResponse.map((res) => [
+            res.data.id,
+            `${res.data.first_name} ${res.data.last_name}`,
+          ]),
+        );
+
+        // Mapear las citas y asociarles los datos del médico y paciente
         const parsed: AppointmentWithUsers[] = items
           .filter((it) => isAppointmentScheduled(it.status!)) // Filtrar por estado
           .map((it) => {
@@ -69,7 +85,7 @@ export default function Dashboard() {
               },
               patient: {
                 id: it.patient_id,
-                name: `Paciente #${it.patient_id}`,
+                name: patientsMap.get(it.patient_id) ?? `Desconocido`,
               },
               start_at: start.toISOString(),
               end_at: end.toISOString(),

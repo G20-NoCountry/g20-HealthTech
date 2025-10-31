@@ -1,8 +1,15 @@
+import { useEffect, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Calendar } from 'primereact/calendar';
 import { Controller, useForm } from 'react-hook-form';
-import { availableTimes } from '../../models/appointment.model';
-import type { AppointmentWithUsers } from '../../api/models/appointment.interface';
+import {
+  availableTimes,
+  type Appointment,
+  type AppointmentWithUsers,
+} from '../../api/models/appointment.interface';
+import { api } from '../../api';
+import { formatDateTime } from '../../utils/date';
+import { isTimeSlotOccupied } from './appointments';
 
 export interface EditableAppointmentModalData {
   id: number;
@@ -28,6 +35,8 @@ export const EditAppointmentModal = ({
   onDelete,
 }: EditAppointmentModalProps) => {
   const today = new Date();
+  const [occupiedTimes, setOccupiedTimes] = useState<string[]>([]);
+  // console.log(occupiedTimes);
 
   const {
     control,
@@ -36,6 +45,40 @@ export const EditAppointmentModal = ({
   } = useForm<EditableAppointmentModalData>({
     defaultValues: data,
   });
+
+  useEffect(() => {
+    if (!data) return;
+
+    const fetchAppointments = async () => {
+      const doctorAppointments = await api.appointments.searchAppointmentsAsMedic({
+        start_date: data.date.toISOString().split('T')[0], // Filtrar por la fecha seleccionada
+        end_date: data.date.toISOString().split('T')[0],
+      });
+
+      const occupied: string[] = [];
+
+      doctorAppointments.data?.forEach((appointment: Appointment) => {
+        const start = new Date(appointment.start_at);
+        const end = new Date(appointment.end_at);
+
+        // Convertir los intervalos de tiempo de la cita en formato 'HH:mm-HH:mm'
+        const formattedStart = formatDateTime(start).time;
+        const formattedEnd = formatDateTime(end).time;
+
+        occupied.push(`${formattedStart}-${formattedEnd}`);
+      });
+
+      // Filtrar los horarios disponibles
+      const availableFiltered = availableTimes.filter(
+        (time) => !isTimeSlotOccupied(time, occupied),
+      );
+
+      // Actualizar el estado con los horarios disponibles
+      setOccupiedTimes(availableFiltered);
+    };
+
+    fetchAppointments();
+  }, [data]);
 
   const handleDateChange = (e: any) => {
     const selectedDate = e.value;
@@ -82,18 +125,21 @@ export const EditAppointmentModal = ({
           <label className="mb-2 block font-semibold">HORA DISPONIBLE</label>
           <div className="custom-scrollbar scrollable h-72 overflow-y-auto pr-4">
             <div className="grid grid-cols-3 gap-3">
-              {availableTimes.map((time) => (
-                <button
-                  key={time}
-                  onClick={() => handleTimeChange(time)}
-                  className={`w-full rounded-lg border p-3 text-center transition-colors ${
-                    data.time === time
-                      ? 'border-[#734F96] bg-purple-50 font-semibold text-[#734F96]'
-                      : 'border-gray-300 text-gray-700 hover:border-[#734F96]'
-                  }`}>
-                  {time}
-                </button>
-              ))}
+              {availableTimes.map((time) => {
+                if (!occupiedTimes.includes(time)) return null; // Ocultar los horarios ocupados
+                return (
+                  <button
+                    key={time}
+                    onClick={() => handleTimeChange(time)}
+                    className={`w-full rounded-lg border p-3 text-center transition-colors ${
+                      data.time === time
+                        ? 'border-[#734F96] bg-purple-50 font-semibold text-[#734F96]'
+                        : 'border-gray-300 text-gray-700 hover:border-[#734F96]'
+                    }`}>
+                    {time}
+                  </button>
+                );
+              })}
             </div>
           </div>
           {errors.time && <span className="text-red-500">{errors.time.message}</span>}

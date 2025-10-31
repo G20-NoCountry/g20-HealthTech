@@ -152,7 +152,7 @@ export default function Dashboard() {
         start_at: start.toISOString(),
         end_at: end.toISOString(),
         type: existing.type,
-        location: existing.location,
+        location: existing.location || '',
       };
 
       if (rol === 'medico') {

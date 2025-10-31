@@ -34,6 +34,7 @@ export const Login = () => {
         summary: 'Inicio de sesión exitoso',
         detail: `Bienvenido, ${user.first_name || data.email}`,
         life: 2000,
+        className: 'normal-case',
       });
 
       setTimeout(() => {
@@ -52,6 +53,7 @@ export const Login = () => {
         summary: 'Error de autenticación',
         detail: 'Credenciales inválidas o sesión expirada',
         life: 3000,
+        className: 'normal-case',
       });
     } finally {
       setLoading(false);

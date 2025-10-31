@@ -113,7 +113,7 @@ export class UserService {
     const medic = Medic.build({
       id: userId,
       speciality: dto.speciality,
-      license_num: dto.licence_num,
+      license_num: dto.license_num,
       schedule_at: dto.schedule_at,
     });
     medic.save();
@@ -162,13 +162,14 @@ export class UserService {
       if (!patientUpdated) {
         throw new Error("No se pudo actualizar el paciente");
       }
+      return true;
     } else {
       const medicUpdated = await this.updateMedic(dto as UpdateMedicDto);
       if (!medicUpdated) {
         throw new Error("No se pudo actualizar el medico");
       }
+      return true;
     }
-    return dto;
   }
 
   private async updateUser(dto: UpdateUserDto) {
@@ -202,7 +203,8 @@ export class UserService {
   private async updateMedic(dto: UpdateMedicDto) {
     const rows = await Medic.update(
       {
-        license_num: dto.licence_num,
+        speciality: dto.speciality,
+        license_num: dto.license_num,
       },
       { where: { id: dto.id } }
     );

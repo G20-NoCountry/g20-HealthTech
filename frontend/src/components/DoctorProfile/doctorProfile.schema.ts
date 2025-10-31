@@ -1,14 +1,21 @@
 import { z } from 'zod';
 
+const nameRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/;
+
 export const personalDataSchema = z.object({
-  full_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres.'),
-  license_number: z.string().min(1, 'La matrícula es obligatoria.'),
-  speciality: z.string().min(1, 'La especialidad es obligatoria.'),
-  years_experience: z
+  first_name: z
     .string()
-    .min(1, 'Debe ser un número positivo.')
-    .max(2, 'Debe tener 2 dígitos como máximo.')
-    .regex(/^\d+$/, 'Solo se aceptan números.'),
+    .min(3, 'El nombre debe tener al menos 3 caracteres.')
+    .regex(nameRegex, 'Solo letras y espacios.'),
+  last_name: z
+    .string()
+    .min(3, 'El nombre debe tener al menos 3 caracteres.')
+    .regex(nameRegex, 'Solo letras y espacios.'),
+  license_num: z
+    .string()
+    .min(1, 'La matrícula es obligatoria.')
+    .regex(/^\d+$/, 'La matrícula solo puede contener números.'),
+  // speciality: z.string().min(1, 'La especialidad es obligatoria.'),
   phone: z
     .string()
     .min(7, 'Mínimo 7 dígitos.')

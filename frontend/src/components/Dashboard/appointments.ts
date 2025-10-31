@@ -1,5 +1,5 @@
-import type { AppointmentStatus } from '../../models/appointment.model';
+import type { AppointmentStatus } from '../../api/models/appointment.interface';
 
-export function isAppointmentEditable(status: AppointmentStatus): boolean {
+export function isAppointmentScheduled(status: AppointmentStatus): boolean {
   return status === 'scheduled' || status === 'confirmed';
 }

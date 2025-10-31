@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import appointmentSchema from './appointmentSteps.schema';
 import { useNavigate } from 'react-router';
+import { api } from '../../api';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface Toast {
   toast: any;
@@ -21,7 +23,7 @@ export interface AppointmentData {
 
 export const AppointmentScheduler = ({ toast }: Toast) => {
   const [appointmentData, setAppointmentData] = useState<AppointmentData>({
-    appointmentType: 'Presencial',
+    appointmentType: 'Virtual',
     specialityId: '',
     doctorId: '',
     date: null,
@@ -30,6 +32,7 @@ export const AppointmentScheduler = ({ toast }: Toast) => {
 
   const [currentStep, setCurrentStep] = useState(1);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const {
     control,
@@ -63,16 +66,51 @@ export const AppointmentScheduler = ({ toast }: Toast) => {
 
   const goToPrevStep = () => setCurrentStep((prev) => prev - 1);
 
-  const finish: SubmitHandler<AppointmentData> = (data: AppointmentData) => {
-    console.log('Cita Confirmada:', data);
-    toast.current?.show({
-      severity: 'success',
-      summary: '¡Cita agendada correctamente!',
-      life: 3000,
-    });
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 3000);
+  const finish: SubmitHandler<AppointmentData> = async (data: AppointmentData) => {
+    try {
+      if (!user || user.rol !== 'paciente') throw new Error('Debes iniciar sesión como paciente');
+      if (!data.date || !data.time || !data.doctorId || !data.specialityId)
+        throw new Error('Faltan datos');
+
+      // Construir start_at y end_at (sumamos 30 minutos por defecto)
+      const [hh, mm] = data.time.split(':').map((n) => parseInt(n, 10));
+      const startAt = new Date(data.date);
+      startAt.setHours(hh, mm, 0, 0);
+      const endAt = new Date(startAt.getTime() + 30 * 60 * 1000);
+
+      // Mapear tipo
+      const type = data.appointmentType === 'Presencial' ? 'in_person' : 'virtual';
+
+      const payload = {
+        start_at: startAt.toISOString(),
+        end_at: endAt.toISOString(),
+        type,
+        patient_id: Number(user.id),
+        medic_id: Number(data.doctorId),
+        location: type === 'in_person' ? 'Consultorio 1' : 'Virtual',
+      } as any;
+
+      const res = await api.appointments.createAppointmentAsPatient(payload);
+      if (!res.success) throw new Error(res.message || 'Error al crear la cita');
+
+      console.log(payload);
+
+      toast.current?.show({
+        severity: 'success',
+        summary: '¡Cita agendada correctamente!',
+        life: 2500,
+        className: 'normal-case',
+      });
+      setTimeout(() => navigate('/dashboard', { replace: true }), 1200);
+    } catch (err: any) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'No se pudo crear la cita',
+        detail: err?.message || 'Intenta nuevamente',
+        life: 3000,
+        className: 'normal-case',
+      });
+    }
   };
 
   // Decidimos qué componente mostrar según el estado 'currentStep'

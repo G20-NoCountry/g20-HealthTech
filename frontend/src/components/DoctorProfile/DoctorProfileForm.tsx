@@ -5,17 +5,17 @@ import { Chip } from 'primereact/chip';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { doctorProfileSchema, type DoctorProfileFormData } from './doctorProfile.schema';
-import type { DoctorProfile } from '../../models/doctorProfile.model';
 import { doctorToFormData, formDataToDoctor } from './doctorProfile.mapper';
-import { specialties } from '../../models/speciality.model';
+// import { specialties } from '../../api/models/medic.interface';
+import type { MedicUser } from '../../api/models/user.interface';
 
 export function DoctorProfileForm({
   doctor,
   onSave,
   onCancel,
 }: {
-  doctor: DoctorProfile;
-  onSave: (updated: DoctorProfile) => void;
+  doctor: MedicUser;
+  onSave: (updated: MedicUser) => void;
   onCancel: () => void;
 }) {
   const defaultValues = doctorToFormData(doctor);
@@ -36,8 +36,7 @@ export function DoctorProfileForm({
   const form = watch();
 
   const onSubmit = (data: DoctorProfileFormData) => {
-    console.log('Formulario enviado con los datos:', data);
-    const updatedDoctor = formDataToDoctor(data, doctor, specialties);
+    const updatedDoctor = formDataToDoctor(data, doctor);
     onSave(updatedDoctor);
   };
 
@@ -70,26 +69,28 @@ export function DoctorProfileForm({
       <section className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
         <h3 className="text-xl font-semibold md:col-span-2">Datos personales</h3>
         <InputField
-          label="Nombre completo"
-          error={errors.personal_data?.full_name?.message}
-          {...register('personal_data.full_name')}
-        />
-        <InputField
-          label="Matrícula"
-          error={errors.personal_data?.license_number?.message}
-          {...register('personal_data.license_number')}
-        />
-        <InputField
-          label="Especialidad"
-          error={errors.personal_data?.speciality?.message}
-          {...register('personal_data.speciality')}
+          label="Nombre"
+          error={errors.personal_data?.first_name?.message}
+          {...register('personal_data.first_name')}
         />
 
         <InputField
-          label="Años de experiencia"
-          error={errors.personal_data?.years_experience?.message}
-          {...register('personal_data.years_experience')}
+          label="Apellido"
+          error={errors.personal_data?.last_name?.message}
+          {...register('personal_data.last_name')}
         />
+
+        <InputField
+          label="Matrícula"
+          error={errors.personal_data?.license_num?.message}
+          {...register('personal_data.license_num')}
+        />
+
+        {/* <InputField
+          label="Especialidad"
+          error={errors.personal_data?.speciality?.message}
+          {...register('personal_data.speciality')}
+        /> */}
 
         <InputField
           label="Teléfono"

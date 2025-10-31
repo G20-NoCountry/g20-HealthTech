@@ -31,12 +31,12 @@ export const registerMedicValidator = [
     .withMessage("speciality es obligatorio")
     .bail()
     .custom(validateSpeciality),
-  body("licence_num")
+  body("license_num")
     .notEmpty()
-    .withMessage("licence_num es obligatorio")
+    .withMessage("license_num es obligatorio")
     .bail()
     .isNumeric()
-    .withMessage("licence_num debe ser numerico")
+    .withMessage("license_num debe ser numerico")
     .bail()
     .custom(validateLicenseNum),
   body("schedule_at")
@@ -45,14 +45,4 @@ export const registerMedicValidator = [
     .bail()
     .isISO8601()
     .withMessage("schedule_at debe ser una fecha"),
-
-  (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-      });
-    }
-    next();
-  },
 ];

@@ -1,8 +1,10 @@
 import { AppointmentHeader } from './AppointmentHeader';
 import { AppointmentStepper } from './AppointmentStepper';
 import type { AppointmentData } from './AppointmentScheduler';
-import { specialties } from '../../models/speciality.model';
-import { doctors } from '../../models/doctorProfile.model';
+import { specialties } from '../../api/models/medic.interface';
+import { useEffect, useState } from 'react';
+import { api } from '../../api';
+import type { MedicListItem } from '../../api/models/medic-list-item.interface';
 
 interface Step3Props {
   onPrev: () => void;
@@ -11,14 +13,26 @@ interface Step3Props {
 }
 
 export const AppointmentStep3 = ({ onPrev, onConfirm, data }: Step3Props) => {
+  const [medics, setMedics] = useState<MedicListItem[]>([]);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await api.users.getMedicsSummary();
+        if (res.success && res.data) setMedics(res.data);
+      } catch {
+        setMedics([]);
+      }
+    };
+    load();
+  }, []);
   const getspecialityName = () => {
     const speciality = specialties.find((s) => s.id === data.specialityId);
     return speciality ? speciality.name : 'No seleccionada';
   };
 
   const getDoctorName = () => {
-    const doctor = doctors.find((d) => d.id === data.doctorId);
-    return doctor ? doctor.name : 'No seleccionado';
+    const doctor = medics.find((d) => d.medic_id === data.doctorId);
+    return doctor ? `${doctor.first_name} ${doctor.last_name}` : 'No seleccionado';
   };
 
   const getFormattedDate = () => {

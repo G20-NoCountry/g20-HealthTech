@@ -1,12 +1,18 @@
-import type { PersonalData } from '../../models/doctorProfile.model';
+import type { Specialty } from '../../api/models/medic.interface';
 
-export const PersonalDataSection = ({
-  data,
-  onEdit,
-}: {
-  data: PersonalData;
+interface PersonalDataProps {
+  data: {
+    first_name: string;
+    last_name: string;
+    license_num: string;
+    speciality: Specialty;
+    phone: string;
+    email: string;
+  };
   onEdit: () => void;
-}) => {
+}
+
+export const PersonalDataSection = ({ data, onEdit }: PersonalDataProps) => {
   return (
     <section className="flex w-full flex-col gap-6">
       <header className="flex items-center justify-between">
@@ -20,22 +26,18 @@ export const PersonalDataSection = ({
       </header>
 
       <div className="grid w-full gap-6 md:grid-cols-2">
-        <Field label="Nombre completo" value={data.full_name} icon="pi-user" />
-        <Field label="Matrícula" value={data.license_number} icon="pi-id-card" />
+        <Field label="Nombre" value={data.first_name} icon="pi-user" />
+        <Field label="Apellido" value={data.last_name} icon="pi-user" />
+        <Field label="Matrícula" value={data.license_num} icon="pi-id-card" />
         <Field label="Especialidad" value={data.speciality.name} icon="pi-heart" />
-        <Field
-          label="Experiencia Laboral"
-          value={`${data.years_experience} años`}
-          icon="pi-briefcase"
-        />
-        <Field label="Teléfono" value={data.phone} icon="pi-phone" />
+        <Field label="Teléfono" value={data.phone!} icon="pi-phone" />
         <Field label="Email" value={data.email} icon="pi-envelope" />
       </div>
     </section>
   );
 };
 
-function Field({ label, value, icon }: { label: string; value: string; icon: string }) {
+function Field({ label, value, icon }: { label: string; value: string | number; icon: string }) {
   return (
     <div className="flex w-full flex-col gap-1">
       <label htmlFor={label} className="text-sm font-medium">
@@ -56,17 +58,4 @@ function Field({ label, value, icon }: { label: string; value: string; icon: str
       </div>
     </div>
   );
-}
-{
-  /* <IconField iconPosition="left">
-        <InputIcon className={`text-accent! pi text-xl! ${icon}`}> </InputIcon>
-        <InputText
-          id={label}
-          name={label}
-          value={value}
-          readOnly
-          autoComplete="false"
-          className="border-success! w-full rounded-2xl! px-3 py-2 uppercase"
-        />
-      </IconField> */
 }

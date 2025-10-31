@@ -1,7 +1,8 @@
 import { Dialog } from 'primereact/dialog';
 import { Calendar } from 'primereact/calendar';
 import { Controller, useForm } from 'react-hook-form';
-import { availableTimes, type Appointment } from '../../models/appointment.model';
+import { availableTimes } from '../../models/appointment.model';
+import type { AppointmentWithUsers } from '../../api/models/appointment.interface';
 
 export interface EditableAppointmentModalData {
   id: number;
@@ -15,6 +16,7 @@ interface EditAppointmentModalProps {
   data: EditableAppointmentModalData;
   setData: React.Dispatch<React.SetStateAction<EditableAppointmentModalData | null>>;
   onSave: (updated: EditableAppointmentModalData) => void;
+  onDelete?: (id: number) => void;
 }
 
 export const EditAppointmentModal = ({
@@ -23,6 +25,7 @@ export const EditAppointmentModal = ({
   data,
   setData,
   onSave,
+  onDelete,
 }: EditAppointmentModalProps) => {
   const today = new Date();
 
@@ -96,8 +99,14 @@ export const EditAppointmentModal = ({
           {errors.time && <span className="text-red-500">{errors.time.message}</span>}
         </div>
 
-        {/* Botones */}
-        <div className="flex justify-end gap-3 pt-6">
+        <div className="flex justify-between gap-3 pt-6">
+          {onDelete && (
+            <button
+              onClick={() => onDelete(data.id)}
+              className="rounded-full bg-red-100 px-6 py-3 font-bold text-red-600 hover:bg-red-200">
+              Eliminar
+            </button>
+          )}
           <button
             onClick={() => onSave(data)}
             className="rounded-full bg-[#734F96] px-10 py-3 font-bold text-white hover:bg-[#5f3d7c]">
@@ -117,12 +126,16 @@ export const EditAppointmentModal = ({
 // Función auxiliar para transformar al tipo Appointment
 export function toAppointment(
   editable: EditableAppointmentModalData,
-  existing: Appointment,
-): Appointment {
+  existing: AppointmentWithUsers,
+): AppointmentWithUsers {
   const [hours, minutes] = editable.time.split(':').map(Number);
   const start_at = new Date(editable.date);
   start_at.setHours(hours, minutes, 0, 0);
   const end_at = new Date(start_at.getTime() + 30 * 60 * 1000);
 
-  return { ...existing, start_at, end_at };
+  return {
+    ...existing,
+    start_at: start_at.toISOString(), // Convertir start_at a string ISO
+    end_at: end_at.toISOString(), // Convertir end_at a string ISO
+  };
 }

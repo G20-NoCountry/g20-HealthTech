@@ -19,7 +19,12 @@ export const SidebarNav = () => {
   };
 
   const role = user?.rol === 'medico' ? 'medico' : 'paciente';
-  const items = menuItems[role];
+
+  const items = menuItems[role].map((item) =>
+    role === 'medico' && item.to === '/doctor-profile'
+      ? { ...item, to: `/doctor-profile/${user?.id}` }
+      : item,
+  );
 
   const customHeader = (
     <div className="flex items-center gap-3">

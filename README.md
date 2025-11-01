@@ -6,9 +6,23 @@
 **Equipo :** 20
 
 **Miembros:**
+|<img src="https://avatars.githubusercontent.com/u/132398400?v=4" width=160>|<img src="https://avatars.githubusercontent.com/u/95634052?v=4" width=160>|<img src="https://avatars.githubusercontent.com/u/106390254?v=4" width=160>|
+|:--------:|:--------:|:--------:|
+| **Aylen Diaz** | **Facundo Alvarez** | **Pamela Pilotti** |
+| UX/UI | Tech Lead | Project Manager |
+| [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/aylendiazmayoral/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/07821-ga) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/facundo-alvarez-full-stack/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/FacuNeutral) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/pamela-sol-pilotti/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/Pamela198713) |
 
+|<img src="https://avatars.githubusercontent.com/u/38478391?v=4" width=160>|<img src="https://avatars.githubusercontent.com/u/98656007?v=4" width=160>|<img src="https://avatars.githubusercontent.com/u/81486146?v=4" width=160>|
+|:--------:|:--------:|:--------:|
+| **Enmanuel Rodriguez** | **Joel Barrera** | **Kevin Ruiz** |
+| Fullstack | Backend | Fullstack |
+| [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/enmanuelrodmac/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/Escrodri) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/joel-manuel-barrera/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/BarreraJoel) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/kevinagustin/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/kevirui) |
 
-
+|<img src="https://avatars.githubusercontent.com/u/91162334?v=4" width=160>|<img src="https://avatars.githubusercontent.com/u/137344917?v=4" width=160>|<img src="https://avatars.githubusercontent.com/u/70725851?v=4" width=160>|
+|:--------:|:--------:|:--------:|
+| **Eliana Guzman** | **Lorenzo Segada** | **Marcos Travaglini** |
+| Frontend | Frontend | Frontend |
+| [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/elianaguz/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/elianisdev) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/marcos-travaglini/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/Blackpachamame) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/lorenzo-segada-lopez/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/lorenzosegada) |
 
 ---
 

@@ -22,9 +22,9 @@
 |:--------:|:--------:|:--------:|
 | **Eliana Guzman** | **Lorenzo Segada** | **Marcos Travaglini** |
 | Frontend | Frontend | Frontend |
-| [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/elianaguz/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/elianisdev) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/marcos-travaglini/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/Blackpachamame) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/lorenzo-segada-lopez/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/lorenzosegada) |
+| [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/elianaguz/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/elianisdev) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/lorenzo-segada-lopez/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/lorenzosegada) | [![Linkedin](https://skillicons.dev/icons?i=linkedin)](https://www.linkedin.com/in/marcos-travaglini/) **&nbsp;** **&nbsp;**[![Linkedin](https://skillicons.dev/icons?i=github)](https://github.com/Blackpachamame) |
 
----
+--- 
 
 ## Necesidad del cliente
 

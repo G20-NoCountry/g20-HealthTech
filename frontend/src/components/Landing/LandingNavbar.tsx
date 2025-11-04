@@ -11,8 +11,8 @@ const LandingNavbar = () => {
         <h1 className="text-xl font-semibold text-accent">MEDIC APP</h1>
       </div>
       <div className="flex space-x-4">
-        <a href="#especialistas" className="rounded-3xl border shadow-lg border-[#AFAAAA] px-3 py-1  hover:bg-purple-300 ">ESPECIALISTAS</a>
-        <a href="#contacto" className=" rounded-3xl border shadow-lg border-[#AFAAAA] px-3 py-1  hover:bg-purple-300 ">CONTACTO</a>
+        <a href="#especialistas" className="hidden md:inline rounded-3xl border shadow-lg border-[#AFAAAA] px-3 py-1 hover:bg-purple-300">ESPECIALISTAS</a>
+        <a href="#contacto" className="hidden md:inline rounded-3xl border shadow-lg border-[#AFAAAA] px-3 py-1 hover:bg-purple-300">CONTACTO</a>
          <Link
           to="/login"
           className="rounded-3xl border shadow-lg border-[#AFAAAA] px-3 py-1  hover:bg-purple-300 transition"

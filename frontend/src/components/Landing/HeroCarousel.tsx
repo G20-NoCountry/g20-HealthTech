@@ -24,7 +24,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <section className="relative h-[350px] w-full overflow-hidden rounded-2xl shadow-lg">
+    <section className="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] w-full overflow-hidden rounded-2xl shadow-lg ">
       {/* Imagen actual */}
       <img
         src={images[currentIndex]}

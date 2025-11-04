@@ -5,7 +5,7 @@ const SpecialistsSection = () => {
   return (
     <section
       id="especialistas"
-      className="my-8 flex flex-col items-center justify-between rounded-3xl border border-[#AFAAAA] p-6 md:flex-row">
+      className="my-8 mx-4 sm:mx-6  flex flex-col items-center justify-between rounded-3xl border border-[#AFAAAA] p-6 md:flex-row">
       <div className="max-w-md">
         <h3 className="mb-2 text-2xl font-bold text-[#734F96]">
           Encuentra a tu especialista y pide una cita

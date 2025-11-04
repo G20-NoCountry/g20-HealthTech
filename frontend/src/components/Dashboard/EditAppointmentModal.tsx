@@ -35,8 +35,7 @@ export const EditAppointmentModal = ({
   onDelete,
 }: EditAppointmentModalProps) => {
   const today = new Date();
-  const [occupiedTimes, setOccupiedTimes] = useState<string[]>([]);
-  // console.log(occupiedTimes);
+  const [availableFiltered, setAvailableFiltered] = useState<string[]>([]);
 
   const {
     control,
@@ -47,38 +46,41 @@ export const EditAppointmentModal = ({
   });
 
   useEffect(() => {
-    if (!data) return;
+    if (!data?.date) return;
 
     const fetchAppointments = async () => {
-      const doctorAppointments = await api.appointments.searchAppointmentsAsMedic({
-        start_date: data.date.toISOString().split('T')[0], // Filtrar por la fecha seleccionada
-        end_date: data.date.toISOString().split('T')[0],
-      });
+      const selectedDate = data.date.toISOString().split('T')[0];
 
-      const occupied: string[] = [];
+      const doctorAppointments = await api.appointments.searchAppointmentsAsMedic({
+        start_date: selectedDate,
+        end_date: selectedDate,
+      });
+      console.log('selectedDate:', selectedDate);
+      console.log(
+        'doctorAppointments:',
+        doctorAppointments.data?.map((a) => a.start_at),
+      );
+
+      const occupiedRanges: string[] = [];
 
       doctorAppointments.data?.forEach((appointment: Appointment) => {
         const start = new Date(appointment.start_at);
         const end = new Date(appointment.end_at);
 
-        // Convertir los intervalos de tiempo de la cita en formato 'HH:mm-HH:mm'
         const formattedStart = formatDateTime(start).time;
         const formattedEnd = formatDateTime(end).time;
 
-        occupied.push(`${formattedStart}-${formattedEnd}`);
+        occupiedRanges.push(`${formattedStart}-${formattedEnd}`);
       });
 
-      // Filtrar los horarios disponibles
-      const availableFiltered = availableTimes.filter(
-        (time) => !isTimeSlotOccupied(time, occupied),
-      );
+      // Calcular los horarios disponibles correctamente
+      const filtered = availableTimes.filter((time) => !isTimeSlotOccupied(time, occupiedRanges));
 
-      // Actualizar el estado con los horarios disponibles
-      setOccupiedTimes(availableFiltered);
+      setAvailableFiltered(filtered);
     };
 
     fetchAppointments();
-  }, [data]);
+  }, [data.date]); // ✅ Solo depende de la fecha, no del objeto entero
 
   const handleDateChange = (e: any) => {
     const selectedDate = e.value;
@@ -125,9 +127,8 @@ export const EditAppointmentModal = ({
           <label className="mb-2 block font-semibold">HORA DISPONIBLE</label>
           <div className="custom-scrollbar scrollable h-72 overflow-y-auto pr-4">
             <div className="grid grid-cols-3 gap-3">
-              {availableTimes.map((time) => {
-                if (!occupiedTimes.includes(time)) return null; // Ocultar los horarios ocupados
-                return (
+              {availableFiltered.length > 0 ? (
+                availableFiltered.map((time) => (
                   <button
                     key={time}
                     onClick={() => handleTimeChange(time)}
@@ -138,13 +139,18 @@ export const EditAppointmentModal = ({
                     }`}>
                     {time}
                   </button>
-                );
-              })}
+                ))
+              ) : (
+                <p className="col-span-3 text-center text-gray-500">
+                  No hay horarios disponibles para esta fecha
+                </p>
+              )}
             </div>
           </div>
           {errors.time && <span className="text-red-500">{errors.time.message}</span>}
         </div>
 
+        {/* Botones */}
         <div className="flex justify-between gap-3 pt-6">
           {onDelete && (
             <button
@@ -181,7 +187,7 @@ export function toAppointment(
 
   return {
     ...existing,
-    start_at: start_at.toISOString(), // Convertir start_at a string ISO
-    end_at: end_at.toISOString(), // Convertir end_at a string ISO
+    start_at: start_at.toISOString(),
+    end_at: end_at.toISOString(),
   };
 }
